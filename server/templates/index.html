@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainaCore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="body-background">
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        <h1 class="navbar-title">SustainaCore</h1>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="#" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="#" class="navbar-item">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header class="header" style="background-image: url('{{ url_for('static', filename='assets/home1.gif') }}');">
+    <div class="header-overlay">
+        <h1 class="header-title">SustainaCore</h1>
+        <p class="header-subtitle">Innovating Agriculture with Advanced Technology</p>
+    </div>
+</header>
+
+<section class="horizontal-section">
+    <div class="section-content">
+        <div class="section-text">
+            <h2 class="section-title">Precision Irrigation</h2>
+            <p>Optimize water usage with real-time data to conserve resources while boosting crop yield.</p>
+        </div>
+        <div class="section-visual">
+            <img src="{{ url_for('static', filename='assets/presir.png') }}" alt="Precision Irrigation" class="section-image">
+        </div>
+    </div>
+</section>
+
+<section class="horizontal-section reverse">
+    <div class="section-content">
+        <div class="section-visual">
+            <img src="{{ url_for('static', filename='assets/metrics.png') }}" alt="Sustainability Metrics" class="section-image2">
+        </div>
+        <div class="section-text">
+            <h2 class="section-title">Sustainability Metrics</h2>
+            <p>Track key metrics like water usage, carbon footprint, and crop performance in an intuitive dashboard.</p>
+        </div>
+    </div>
+</section>
+
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<!--Start from here!-->
+<!-- Start from here -->
+
+<div class="mainframe">
+    <h1 class="mainframe-title">SustainaCore: Pioneering the Future of Agriculture</h1>
+    <p class="mainframe-subtitle">Explore how advanced technology is transforming agriculture with sustainability in mind.</p>
+
+    <!-- Call-to-Action Section -->
+    <div class="cta-container">
+        <a href="#precision-irrigation" class="cta-button">Learn About Precision Irrigation</a>
+        <a href="#sustainability-metrics" class="cta-button">Discover Sustainability Metrics</a>
+    </div>
+
+    <!-- Mission Statement with Parallax -->
+    <div class="mission-container">
+        <div class="parallax">
+            <h2>Our Mission</h2>
+            <p>To revolutionize agriculture through cutting-edge technology and a commitment to sustainability.</p>
+        </div>
+    </div>
+
+    <!-- Technology Section -->
+    <div class="tech-container">
+        <h2 class="tech-title">Our Technology in Action</h2>
+        <div class="tech-cards">
+            <!-- Cards for Technologies -->
+            <div class="tech-card">
+                <div class="tech-card-img">
+                    <img src="{{ url_for('static', filename='assets/technology1.jpg') }}" alt="Technology 1">
+                </div>
+                <div class="tech-card-body">
+                    <h3>Precision Irrigation</h3>
+                    <p>Maximize water efficiency by using real-time weather data to optimize irrigation schedules.</p>
+                    <a href="#learn-more" class="tech-link">Learn More</a>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-img">
+                    <img src="{{ url_for('static', filename='assets/technology2.jpg') }}" alt="Technology 2">
+                </div>
+                <div class="tech-card-body">
+                    <h3>AI Analytics</h3>
+                    <p>Use AI to analyze your farm's data for improved crop performance and cost optimization.</p>
+                    <a href="#learn-more" class="tech-link">Learn More</a>
+                </div>
+            </div>
+            <div class="tech-card">
+                <div class="tech-card-img">
+                    <img src="{{ url_for('static', filename='assets/technology3.jpg') }}" alt="Technology 3">
+                </div>
+                <div class="tech-card-body">
+                    <h3>Remote Monitoring</h3>
+                    <p>Monitor your farm's health and sustainability metrics remotely from anywhere, anytime.</p>
+                    <a href="#learn-more" class="tech-link">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Data Section -->
+    <div class="interactive-data">
+        <h2 class="interactive-title">Interactive Sustainability Metrics</h2>
+        <p class="interactive-subtitle">See how our technology improves key sustainability metrics.</p>
+        <canvas id="sustainabilityChart" aria-label="Sustainability Metrics Chart" role="img"></canvas> <!-- Chart Integration -->
+    </div>
+
+
+    <!-- Success Stories Section -->
+    <div class="success-stories">
+        <h2>Success Stories</h2>
+        <div class="carousel">
+            <div class="carousel-item">
+                <p>"SustainaCore helped our farm reduce water usage by 30%. Highly recommended!"</p>
+                <span>- Farmer John</span>
+            </div>
+            <div class="carousel-item">
+                <p>"The AI analytics completely transformed how we operate. Our yield is up 20%!"</p>
+                <span>- Agritech Inc.</span>
+            </div>
+            <div class="carousel-item">
+                <p>"Remote monitoring saved us during a critical drought period."</p>
+                <span>- GreenFields Co.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="team-container">
+        <h2>Meet Our Team</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='assets/team1.jpg') }}" alt="Team Member 1">
+                <h3>Jane Doe</h3>
+                <p>CEO & Founder</p>
+            </div>
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='assets/team2.jpg') }}" alt="Team Member 2">
+                <h3>John Smith</h3>
+                <p>CTO</p>
+            </div>
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='assets/team3.jpg') }}" alt="Team Member 3">
+                <h3>Susan Lee</h3>
+                <p>Lead Designer</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us Section -->
+    <div class="contact-us">
+        <h2>Get in Touch</h2>
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message"></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+</div>
+
+<!-- Till here -->
+
+<!--Till here!-->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <p>Email: support@agritech.com</p>
+            <p>Phone: +1 555 123 4567</p>
+        </div>
+    </div>
+    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

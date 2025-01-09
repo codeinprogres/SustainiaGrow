@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainaCore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.css" />
+</head>
+<body class="body-background">
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        <h1 class="navbar-title">SustainaCore</h1>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="#" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="#" class="navbar-item">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<!--start here!!!-->
+<!--start here!!!-->
+
+<div class="visual-section">
+    <h2 class="visual-title">SustainaCore: Growing Our Future</h2>
+    <img src="{{ url_for('static', filename='assets/earthy-landscape.jpg') }}" alt="Earthy Landscape" class="visual-image">
+    <p class="visual-description scroll-fade">
+        Join us in our mission to revolutionize sustainable agriculture. Through innovative tools and mindful farming practices, we’re ensuring a greener, healthier future for the planet.
+    </p>
+</div>
+
+<div class="long-background">
+    <h2>Building a Better Tomorrow</h2>
+    <p class="scroll-fade">
+        SustainaCore empowers farmers with the right tools and insights to optimize their crops, save resources, and reduce their environmental footprint. Our system brings together technology and nature, paving the way for regenerative agriculture practices.
+    </p>
+</div>
+
+<div class="visual-section">
+    <h2 class="visual-title">Tools for Sustainability</h2>
+    <img src="{{ url_for('static', filename='assets/innovative-tools.jpg') }}" alt="Innovative Tools" class="visual-image">
+    <p class="visual-description scroll-fade">
+        Our farm planner allows you to plan your crops, track weather patterns, and manage daily tasks seamlessly. It’s the perfect companion for any farmer dedicated to sustainable practices.
+    </p>
+</div>
+
+<div class="long-background">
+    <h2>Our Vision for a Greener World</h2>
+    <p class="scroll-fade">
+        Sustainability isn’t just about growing food; it’s about nurturing the earth. At SustainaCore, we’re committed to creating farming systems that support both the environment and the people who rely on it. Together, we can create a world where agriculture doesn’t just sustain us – it sustains the planet.
+    </p>
+</div>
+
+<!--end here!!!-->
+
+
+
+<!--end here!!!-->
+
+<div id="farm-planner" class="farm-planner">
+    <h2 class="planner-title">🌱 Farm Planner Tool</h2>
+    <p class="planner-subtitle">Enter your address to get started:</p>
+    <div class="input-container">
+        <input type="text" id="address-input" class="planner-input" placeholder="Enter your address" />
+        <button id="find-location" class="planner-button">Find My Location</button>
+    </div>
+
+    <div id="map-container" class="map-container">
+        <h3 class="section-title">Your Region</h3>
+        <div id="map" class="map-box"></div>
+    </div>
+
+    <div id="weather-info" class="weather-info">
+        <h3>Weather Information</h3>
+        <table class="weather-table">
+            <thead>
+            <tr>
+                <th>Temperature (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Precipitation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="temperature">Loading...</td>
+                <td id="humidity">Loading...</td>
+                <td id="precipitation">Loading...</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+<!--add the crops here so then i can generate the calender: -->
+    <div id="calendar-container" class="calendar-container">
+        <h3 class="section-title">365-Day Farming Plan</h3>
+        <div id="calendar"></div>
+    </div>
+
+    <div id="task-container" class="task-container">
+        <h3>Daily Task:</h3>
+        <p id="task-message">Select a day on the calendar to view tasks.</p>
+    </div>
+</div>
+<!--stop here!!!-->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <p>Email: support@agritech.com</p>
+            <p>Phone: +1 555 123 4567</p>
+        </div>
+    </div>
+    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Add jQuery first -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/program.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3wmHvCMTotbs2mYWdYU8_k1Lh73J6tuY&callback=initMap" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
+
+<script>
+    let map;
+    let marker;
+    const geocoder = new google.maps.Geocoder();
+    const apiKey = '2e97d647ec6dfcfac37a380185120286';  // OpenWeatherMap API Key
+    const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
+
+    function initMap() {
+        const centerLocation = { lat: 37.7749, lng: -122.4194 };
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: centerLocation,
+            zoom: 12,
+        });
+        marker = new google.maps.Marker({
+            position: centerLocation,
+            map: map,
+            title: "San Francisco",
+        });
+    }
+
+    document.getElementById('find-location').addEventListener('click', function() {
+        const address = document.getElementById('address-input').value;
+        if (address) {
+            geocodeAddress(address);
+        } else {
+            alert('Please enter a valid address');
+        }
+    });
+
+    function geocodeAddress(address) {
+        geocoder.geocode({ 'address': address }, function(results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                map.setZoom(12);
+
+                if (marker) {
+                    marker.setPosition(results[0].geometry.location);
+                } else {
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                    });
+                }
+
+                // Fetch the weather data for the location
+                fetchWeatherData(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+    function fetchWeatherData(lat, lon) {
+        const url = `${weatherUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Weather data not available');
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayWeatherInfo(data);
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+                alert('Could not retrieve weather data. Please try again later.');
+                document.getElementById('temperature').innerText = 'Data unavailable';
+                document.getElementById('humidity').innerText = 'Data unavailable';
+                document.getElementById('precipitation').innerText = 'Data unavailable';
+            });
+    }
+
+    function displayWeatherInfo(data) {
+        document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+        document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+        document.getElementById('precipitation').innerText = `${data.weather[0].description}`;
+    }
+
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            defaultView: 'year',
+            events: [],
+            selectable: true,
+            select: function(startDate, endDate) {
+                const date = startDate.format('YYYY-MM-DD');
+                displayTask(date);
+            },
+        });
+    });
+
+    function displayTask(date) {
+        document.getElementById('task-message').innerText = `Tasks for ${date}: Plant your crops!`;
+    }
+</script>
+
+</body>
+</html>
