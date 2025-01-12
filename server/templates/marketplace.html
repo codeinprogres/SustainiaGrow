@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainaCore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="body-background">
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        <h1 class="navbar-title">SustainaCore</h1>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="#" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="#" class="navbar-item">Contact</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+        </ul>
+    </div>
+</nav>
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+<div class="main-container">
+    <div class="toc-container">
+        <ul class="table-of-contents">
+            <li><a href="#marketplace-section">Marketplace</a></li>
+            <li><a href="#about-section">About</a></li>
+            <li><a href="#services-section">Services</a></li>
+            <li><a href="#contact-section">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="content-container">
+        <section id="marketplace-section">
+            <h2 class="marketplace-title">🌟 Marketplace</h2>
+            <div class="marketplace-description">
+                Explore sustainable tools, products, and innovations designed to support eco-friendly farming practices.
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search Marketplace...">
+            </div>
+
+            <div class="marketplace-items" id="marketplace-items">
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 1">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 1</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 2">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 2</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 3">
+                    <img src="{{ url_for('static', filename='assets/placeholder1.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 3</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+                <div class="marketplace-item" data-title="Placeholder Product 4">
+                    <img src="{{ url_for('static', filename='assets/placeholder2.jpg') }}" alt="Placeholder Product" class="item-image">
+                    <h3 class="item-title">Placeholder Product 4</h3>
+                    <p class="item-description">This is a placeholder product. Replace with your real items!</p>
+                    <button class="item-add-button">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="cart-section">
+            <h2>🛒 Your Cart</h2>
+            <ul id="cart-items">
+            </ul>
+        </section>
+
+        <section id="about-section">
+            <h2>About</h2>
+            <p>Learn more about us and our mission to revolutionize sustainable agriculture.</p>
+        </section>
+
+        <section id="services-section">
+            <h2>Services</h2>
+            <p>Explore the services we offer to support sustainable agriculture.</p>
+        </section>
+
+        <section id="contact-section">
+            <h2>Contact</h2>
+            <p>Get in touch with us for more information.</p>
+        </section>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <p>Email: support@agritech.com</p>
+            <p>Phone: +1 555 123 4567</p>
+        </div>
+    </div>
+    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/marketplace.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<script>
+    document.getElementById('search-bar').addEventListener('input', function(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        const marketplaceItems = document.querySelectorAll('.marketplace-item');
+
+        marketplaceItems.forEach(item => {
+            const title = item.getAttribute('data-title').toLowerCase();
+            if (title.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
