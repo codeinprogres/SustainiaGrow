@@ -4,17 +4,14 @@ import os
 
 app = Flask(
     __name__,
-    static_folder='static',  # Explicitly set static folder location
-    template_folder='templates'  # Explicitly set template folder location
+    static_folder='static',
+    template_folder='templates'
 )
 
-# OpenAI API key (replace with your actual key)
 OPENAI_API_KEY = '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'  # Replace with your actual OpenAI API Key
 
-# OpenAI API URL
 OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 
-# Home route
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -23,11 +20,14 @@ def index():
 def program():
     return render_template('program.html', google_maps_api_key=os.getenv('GOOGLE_MAPS_API_KEY'))
 
-# Route to handle chat messages
+@app.route('/market')
+def market():
+    return render_template('marketplace.html')
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:
-        user_message = request.json.get('message')  # Get user message from the request
+        user_message = request.json.get('message')
         if not user_message:
             return jsonify({'message': 'Message is required.'}), 400
 
@@ -38,7 +38,6 @@ def chat():
         return jsonify({'message': 'Server error. Please try again later.'}), 500
 
 
-# Function to interact with OpenAI API
 def get_openai_response(user_message):
     try:
         response = requests.post(
@@ -53,11 +52,9 @@ def get_openai_response(user_message):
             },
         )
 
-        # Check for successful response
         if response.status_code != 200:
             raise Exception(f"OpenAI request failed with status code {response.status_code}")
 
-        # Parse response and get the message
         data = response.json()
         bot_message = data['choices'][0]['message']['content']
         return bot_message

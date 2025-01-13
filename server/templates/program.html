@@ -23,6 +23,7 @@
             <li><a href="#" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="#" class="navbar-item">Contact</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
         </ul>
     </div>
 </nav>
@@ -41,9 +42,6 @@
         </div>
     </div>
 </div>
-
-<!--start here!!!-->
-<!--start here!!!-->
 
 <div class="visual-section">
     <h2 class="visual-title">SustainaCore: Growing Our Future</h2>
@@ -74,12 +72,6 @@
         Sustainability isn’t just about growing food; it’s about nurturing the earth. At SustainaCore, we’re committed to creating farming systems that support both the environment and the people who rely on it. Together, we can create a world where agriculture doesn’t just sustain us – it sustains the planet.
     </p>
 </div>
-
-<!--end here!!!-->
-
-
-
-<!--end here!!!-->
 
 <div id="farm-planner" class="farm-planner">
     <h2 class="planner-title">🌱 Farm Planner Tool</h2>
@@ -113,7 +105,7 @@
             </tbody>
         </table>
     </div>
-<!--add the crops here so then i can generate the calender: -->
+
     <div id="calendar-container" class="calendar-container">
         <h3 class="section-title">365-Day Farming Plan</h3>
         <div id="calendar"></div>
@@ -124,7 +116,7 @@
         <p id="task-message">Select a day on the calendar to view tasks.</p>
     </div>
 </div>
-<!--stop here!!!-->
+
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-column">
@@ -149,7 +141,7 @@
     <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Add jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/program.js') }}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3wmHvCMTotbs2mYWdYU8_k1Lh73J6tuY&callback=initMap" async defer></script>
@@ -159,7 +151,7 @@
     let map;
     let marker;
     const geocoder = new google.maps.Geocoder();
-    const apiKey = '2e97d647ec6dfcfac37a380185120286';  // OpenWeatherMap API Key
+    const apiKey = '2e97d647ec6dfcfac37a380185120286';
     const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
     function initMap() {
@@ -199,7 +191,6 @@
                     });
                 }
 
-                // Fetch the weather data for the location
                 fetchWeatherData(results[0].geometry.location.lat(), results[0].geometry.location.lng());
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Load Map
     const loadMap = (lat, lng) => {
         const mapElement = document.getElementById("map");
         if (mapElement) {
@@ -16,8 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Fetch Weather Data
-    const apiKey = '2e97d647ec6dfcfac37a380185120286';  // Your OpenWeatherMap API key
+    const apiKey = '23a5c90ba6c2d09d9332b206ff2d8459';
     const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
     const fetchWeatherData = (lat, lon) => {
@@ -61,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (status === "OK") {
                 const location = results[0].geometry.location;
                 loadMap(location.lat(), location.lng());
-                fetchWeatherData(location.lat(), location.lng());  // Fetch weather data after map load
+                fetchWeatherData(location.lat(), location.lng());
             } else {
                 alert("Geocode was not successful for the following reason: " + status);
             }
@@ -106,27 +104,26 @@ document.addEventListener("DOMContentLoaded", () => {
         calendarContainer.classList.remove("hidden");
     });
 
-    // FullCalendar Initialization for Interactive Calendar
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        events: [], // Populate events dynamically if needed
-        selectable: true, // Allow selecting days
+        events: [],
+        selectable: true,
         select: function(startDate, endDate) {
             const date = startDate.format('YYYY-MM-DD');
-            displayTask(date); // Display tasks for selected date
+            displayTask(date);
         },
         dayClick: function(date) {
             const selectedDate = date.format('YYYY-MM-DD');
-            displayTask(selectedDate); // Trigger task display for clicked date
+            displayTask(selectedDate);
         }
     });
 
     // Function to display tasks based on clicked date
     function displayTask(date) {
-        document.getElementById('task-message').innerText = `Tasks for ${date}: Plant your crops!`;  // Modify this based on your task logic
+        document.getElementById('task-message').innerText = `Tasks for ${date}: Plant your crops!`;
     }
 });
