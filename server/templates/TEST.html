@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainaCore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /*add styles here: */
+    </style>
+</head>
+<body>
+<div>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+            <h1 class="navbar-title">SustainaCore</h1>
+            <button class="navbar-toggle" id="navbar-toggle">
+                <span class="navbar-toggle-icon"></span>
+                <span class="navbar-toggle-icon"></span>
+                <span class="navbar-toggle-icon"></span>
+            </button>
+            <ul class="navbar-list" id="navbar-list">
+                <li><a href="/" class="navbar-item">Home</a></li>
+                <li><a href="/about" class="navbar-item">About</a></li>
+                <li><a href="/program" class="navbar-item">Services</a></li>
+                <li><a href="#" class="navbar-item">Contact</a></li>
+                <li><a href="/market" class="navbar-item">Marketplace</a></li>
+                <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div id="chatbot-popup">
+        <div id="chatbot-icon" class="chatbot-logo">
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+        </div>
+        <div id="chatbot" class="chatbot-container hidden">
+            <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+            <div id="chatbot-messages" class="chatbot-messages"></div>
+            <div class="chatbot-input-container">
+                <label for="chatbot-input" class="visually-hidden"></label>
+                <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+<!--start your code here-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--    end your code here-->
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <p>Email: support@agritech.com</p>
+            <p>Phone: +1 555 123 4567</p>
+        </div>
+    </div>
+    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
+</footer>
+
+    <script>
+        // add js here:
+    </script>
+</div>
+</body>
+</html>

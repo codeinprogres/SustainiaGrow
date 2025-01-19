@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Ensure that the map and weather data are loaded
     const loadMap = (lat, lng) => {
         const mapElement = document.getElementById("map");
         if (mapElement) {
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(data => {
                 displayWeatherInfo(data);
+                storeWeatherInfo(data);
             })
             .catch(error => {
                 console.error('Error fetching weather data:', error);
@@ -52,6 +54,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    const storeWeatherInfo = (data) => {
+        // Store weather data in a global variable for reuse
+        window.weatherInfo = {
+            temperature: data.main.temp,
+            humidity: data.main.humidity,
+            precipitation: data.weather[0].description,
+        };
+        console.log('Stored Weather Info:', window.weatherInfo);
+    };
+
     // Geocode Address
     const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();
@@ -66,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // Event Listener for Location
     document.getElementById("find-location").addEventListener("click", () => {
         const address = document.getElementById("address-input").value;
         if (address) geocodeAddress(address);
@@ -74,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Generate 30-Day Plan
-    document.getElementById("generate-plan").addEventListener("click", () => {
+    document.getElementById("section-title").addEventListener("click", () => {
         const selectedCrops = Array.from(document.querySelectorAll("#crop-options input:checked")).map(
             (checkbox) => checkbox.value
         );
@@ -104,26 +115,5 @@ document.addEventListener("DOMContentLoaded", () => {
         calendarContainer.classList.remove("hidden");
     });
 
-    $('#calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        events: [],
-        selectable: true,
-        select: function(startDate, endDate) {
-            const date = startDate.format('YYYY-MM-DD');
-            displayTask(date);
-        },
-        dayClick: function(date) {
-            const selectedDate = date.format('YYYY-MM-DD');
-            displayTask(selectedDate);
-        }
-    });
-
-    // Function to display tasks based on clicked date
-    function displayTask(date) {
-        document.getElementById('task-message').innerText = `Tasks for ${date}: Plant your crops!`;
-    }
+    // Removed FullCalendar functionality
 });

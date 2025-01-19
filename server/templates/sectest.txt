@@ -1,0 +1,112 @@
+<nav class="navbar">
+    <div class="navbar-container">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        <h1 class="navbar-title">SustainaCore</h1>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="#" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="#" class="navbar-item">Contact</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<div class="visual-section">
+    <h2 class="visual-title">SustainaCore: Growing Our Future</h2>
+    <img src="{{ url_for('static', filename='assets/earthy-landscape.jpg') }}" alt="Earthy Landscape" class="visual-image">
+    <p class="visual-description scroll-fade">
+        Join us in our mission to revolutionize sustainable agriculture. Through innovative tools and mindful farming practices, we’re ensuring a greener, healthier future for the planet.
+    </p>
+</div>
+
+<div class="long-background">
+    <h2>Building a Better Tomorrow</h2>
+    <p class="scroll-fade">
+        SustainaCore empowers farmers with the right tools and insights to optimize their crops, save resources, and reduce their environmental footprint. Our system brings together technology and nature, paving the way for regenerative agriculture practices.
+    </p>
+</div>
+
+<div class="visual-section">
+    <h2 class="visual-title">Tools for Sustainability</h2>
+    <img src="{{ url_for('static', filename='assets/innovative-tools.jpg') }}" alt="Innovative Tools" class="visual-image">
+    <p class="visual-description scroll-fade">
+        Our farm planner allows you to plan your crops, track weather patterns, and manage daily tasks seamlessly. It’s the perfect companion for any farmer dedicated to sustainable practices.
+    </p>
+</div>
+
+<div class="long-background">
+    <h2>Our Vision for a Greener World</h2>
+    <p class="scroll-fade">
+        Sustainability isn’t just about growing food; it’s about nurturing the earth. At SustainaCore, we’re committed to creating farming systems that support both the environment and the people who rely on it. Together, we can create a world where agriculture doesn’t just sustain us – it sustains the planet.
+    </p>
+</div>
+
+<div id="farm-planner" class="farm-planner">
+    <h2 class="planner-title">🌱 Farm Planner Tool</h2>
+    <p class="planner-subtitle">Enter your address to get started:</p>
+    <div class="input-container">
+        <input type="text" id="address-input" class="planner-input" placeholder="Enter your address" />
+        <button id="find-location" class="planner-button">Find My Location</button>
+    </div>
+
+    <div id="map-container" class="map-container">
+        <h3 class="section-title">Your Region</h3>
+        <div id="map" class="map-box"></div>
+    </div>
+
+    <div id="crop-options" class="crop-options">
+        <h3>Select Crops</h3>
+        <div>
+            <input type="checkbox" id="crop1" value="Tomato"> <label for="crop1">Tomato</label>
+        </div>
+        <div>
+            <input type="checkbox" id="crop2" value="Lettuce"> <label for="crop2">Lettuce</label>
+        </div>
+        <div>
+            <input type="checkbox" id="crop3" value="Carrot"> <label for="crop3">Carrot</label>
+        </div>
+        <div>
+            <input type="checkbox" id="crop4" value="Cucumber"> <label for="crop4">Cucumber</label>
+        </div>
+    </div>
+
+    <div id="weather-info" class="weather-info">
+        <h3>Weather Information</h3>
+        <table class="weather-table">
+            <thead>
+            <tr>
+                <th>Temperature (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Precipitation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="temperature">Loading...</td>
+                <td id="humidity">Loading...</td>
+                <td id="precipitation">Loading...</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>

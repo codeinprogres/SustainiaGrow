@@ -656,7 +656,8 @@ body {
     background: #45a049;
 }
 .farm-planner {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    /*background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);*/
+    background: linear-gradient(135deg, #181833, #2c5364);
     color: #ffffff;
     padding: 40px;
     border-radius: 15px;
@@ -826,7 +827,14 @@ body {
     position: relative;
     width: 100%;
 }
-
+.prog-background {
+    background: linear-gradient(135deg, #000000, #0d1c35);
+    background-size: cover;
+    background-attachment: fixed;
+    animation: backgroundMove 15s infinite linear;
+    position: relative;
+    width: 100%;
+}
 @keyframes backgroundMove {
     0% {
         background-position: 0 0;
@@ -1277,3 +1285,82 @@ section {
 .marketplace-item .item-add-button:hover {
     background-color: #2ecc71;
 }
+/* Calendar Section Styling */
+/* Calendar Section Styling */
+#calendar-container {
+    margin: 30px auto;
+    width: 80%;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#calendar {
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+    background-color: #ffffff;
+    width: 100%;
+    height: 500px; /* Ensure the calendar has a height */
+    box-sizing: border-box; /* Ensure padding doesn't affect the size */
+}
+
+/* FullCalendar Toolbar Styling */
+.fc-toolbar {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.fc-toolbar h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* FullCalendar Event Styling */
+.fc-day-grid-event {
+    background-color: #17a2b8;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.fc-day-grid-event:hover {
+    background-color: #138496;
+    cursor: pointer;
+}
+
+/* Day Number Styling */
+.fc-day-number {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Today's Day Styling */
+.fc-day.fc-day-today {
+    background-color: #f1f1f1;
+    border: 1px solid #28a745;
+}
+
+/* Other Days Styling */
+.fc-day.fc-day-other {
+    background-color: #f7f7f7;
+}
+
+/* Weekend Days (Saturday and Sunday) Styling */
+.fc-day.fc-day-saturday, .fc-day.fc-day-sunday {
+    background-color: #f2f2f2;
+}
+

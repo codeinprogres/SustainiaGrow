@@ -24,6 +24,14 @@ def program():
 def market():
     return render_template('marketplace.html')
 
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:

@@ -16,6 +16,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "flask": "^0.2.10",
+    "fullcalendar": "^6.1.15",
     "mongoose": "^8.9.3",
     "openai": "^4.77.3",
     "path": "^0.12.7",
