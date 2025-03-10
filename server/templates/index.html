@@ -93,14 +93,15 @@
         .feature {
             max-width: 400px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+            /* background: rgba(255, 255, 255, 0.1); */
             padding: 0; /* Remove padding to ensure image takes up the entire space */
             border-radius: 20px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            transition: transform 0.05s ease-out, box-shadow 0.25s ease-out; /* Reduced duration */
             margin: 20px;
             position: relative;
             overflow: hidden; /* Ensures the image doesn't overflow outside the card */
+            background-color: rgba(255, 255, 255, 0.1); /* ADD this line */
         }
 
         .feature img {
@@ -233,25 +234,26 @@
     </style>
 </head>
 <body>
-<nav class="navbar">
+<header class="navbar">
     <div class="navbar-container">
-        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
-        <h1 class="navbar-title">SustainaCore</h1>
+        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        </a>
         <button class="navbar-toggle" id="navbar-toggle">
             <span class="navbar-toggle-icon"></span>
             <span class="navbar-toggle-icon"></span>
             <span class="navbar-toggle-icon"></span>
         </button>
         <ul class="navbar-list" id="navbar-list">
-            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="/" class="navbar-item active">Home</a></li>
             <li><a href="/about" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
-            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="/market" class="navbar-item">Dashboard</a></li>
         </ul>
     </div>
-</nav>
+</header>
 <div id="chatbot-popup">
     <div id="chatbot-icon" class="chatbot-logo">
         <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
@@ -340,7 +342,7 @@
             <p>Phone: +1 555 123 4567</p>
         </div>
     </div>
-    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
+    <p class="footer-bottom">© 2025 SustainaCore. All rights reserved.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
