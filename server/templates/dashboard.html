@@ -277,11 +277,11 @@
     </style>
 </head>
 <body class="prog-background">
-
-<nav class="navbar">
+<header class="navbar">
     <div class="navbar-container">
-        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
-        <h1 class="navbar-title">SustainaCore</h1>
+        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        </a>
         <button class="navbar-toggle" id="navbar-toggle">
             <span class="navbar-toggle-icon"></span>
             <span class="navbar-toggle-icon"></span>
@@ -293,11 +293,10 @@
             <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
-            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="/dashboard" class="navbar-item active">Dashboard</a></li>
         </ul>
     </div>
-</nav>
-
+</header>
 <style>
     .custom-header {
         position: relative;

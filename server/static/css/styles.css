@@ -22,10 +22,16 @@ ul {
     padding: 0;
 }
 
-.navbar {
-    background: rgba(0, 0, 0, 0.4);
+.navbar-item.active {
     color: white;
-    padding: 1rem 2rem;
+}
+
+
+.navbar {
+    background: rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(6px);
+    color: white;
+    padding: 0rem, 0rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -42,7 +48,7 @@ ul {
     max-width: 1200px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .navbar-logo {
@@ -64,13 +70,13 @@ ul {
 }
 
 .navbar-item {
-    color: white;
+    color: darkgrey;
     font-size: 1rem;
     transition: color 0.3s;
 }
 
 .navbar-item:hover {
-    color: #3b7ad8;
+    color: white;
 }
 
 .navbar-toggle {
@@ -901,17 +907,6 @@ body {
     padding: 0 30px;
 }
 
-.planner-button, .navbar-item {
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 8px;
-    padding: 12px 30px;
-}
-
-.planner-button:hover, .navbar-item:hover {
-    background-color: #7CFC00;
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
 
 .scroll-fade {
     opacity: 0;
@@ -1422,7 +1417,8 @@ section {
 
 /* Navbar Section */
 .navbar {
-    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    font-family: 'Segoe UI Semibold', sans-serif;
 }
 
 /* Header Section */
@@ -1472,3 +1468,11 @@ section {
 }
 
 /* Footer Section */
+
+.navbar-logo-link {
+    transition: opacity 0.3s ease;
+}
+
+.navbar-logo-link:hover {
+    opacity: 0.6; /*Change the property here to fit the aesthetic*/
+}
