@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainaCore | About Us</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -203,7 +204,7 @@
             <li><a href="/" class="navbar-item">Home</a></li>
             <li><a href="/about" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
-            <li><a href="#" class="navbar-item">Contact</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
         </ul>
@@ -229,37 +230,34 @@
 <div class="background"></div>
 
 <!-- Main Header -->
-<header>
-    <h1>SustainaCore</h1>
-    <p>We are transforming agriculture to ensure a sustainable, greener future for all.</p>
+<header style="position: relative; top: -5rem;">
+    <img
+            style="width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; "
+            alt="background field image"
+            src="https://live.staticflickr.com/5832/23169901305_0d855c6b19_h.jpg">
+    <div style="
+    position: absolute;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    top: 18rem;
+    left: 0;">
+        <h1 style="color: white;">
+            SustainaCore
+        </h1>
+        <p style="color: white; width: 200%;">
+            "Transforming agriculture into a sustainable, greener future for all."
+        </p>
+    </div>
 </header>
 
-<!-- Team Section -->
-<div class="team-section">
-    <h2>Meet the Visionaries</h2>
-    <div class="team-members">
-        <div class="team-member">
-            <img src="https://via.placeholder.com/250" alt="Team Member 1">
-            <h3>Jane Doe</h3>
-            <p>Founder & CEO</p>
-        </div>
-        <div class="team-member">
-            <img src="https://via.placeholder.com/250" alt="Team Member 2">
-            <h3>John Smith</h3>
-            <p>Lead Engineer</p>
-        </div>
-        <div class="team-member">
-            <img src="https://via.placeholder.com/250" alt="Team Member 3">
-            <h3>Alice Johnson</h3>
-            <p>Sustainability Expert</p>
-        </div>
-    </div>
-</div>
+
 
 <!-- Vision Section -->
-<div class="vision-section">
-    <h2>Our Vision</h2>
-    <p>
+<div class="vision-section" style="margin-top: 30rem;">
+    <h2 style="text-align: center;">Our Vision</h2>
+    <p style="text-align: center;">
         At SustainaCore, we strive to create an agricultural ecosystem that not only thrives but also heals the planet. Our goal is to reshape how we farm—making it more sustainable, resource-efficient, and environmentally friendly.
     </p>
 </div>

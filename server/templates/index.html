@@ -3,11 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SustainaCore</title>
+    <title>SustainaCore - The Future of Farming</title>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body class="body-background">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #fff;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
 
+        /* HEADER */
+        .header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('{{ url_for('static', filename='assets/home1.gif') }}') no-repeat center center/cover;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+            font-size: 5rem;
+            font-weight: 1300;
+            text-transform: uppercase;
+            z-index: 2;
+            letter-spacing: 2px;
+            color: #ffffff; /* Set text color to white */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8); /* Add a stronger white shadow */
+        }
+
+
+        .header-subtitle {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-top: -20px;
+            z-index: 2;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            background: linear-gradient(135deg, #38bdf8, #1e40af);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 1);
+        }
+
+        /* FEATURES */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 80px 50px;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 5px solid #38bdf8;
+        }
+
+        .feature {
+            max-width: 400px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0; /* Remove padding to ensure image takes up the entire space */
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            margin: 20px;
+            position: relative;
+            overflow: hidden; /* Ensures the image doesn't overflow outside the card */
+        }
+
+        .feature img {
+            width: auto;
+            height: auto;
+            scale: 5;
+            object-fit: cover; /* Ensures the image covers the entire space without stretching */
+            border-radius: 20px; /* Ensure the image fits the rounded corners of the card */
+            position: absolute;
+            z-index: -1; /* Pushes the image behind the text */
+        }
+
+        .feature-content {
+            position: relative;
+            z-index: 1; /* Makes sure the text appears above the image */
+            padding: 20px; /* Adds space for the text */
+        }
+
+
+        .feature:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+        }
+
+        .feature img {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+
+        /* REVIEWS */
+        .reviews {
+            background: #1e293b;
+            padding: 80px 50px;
+            text-align: center;
+        }
+
+        .reviews h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .review-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            max-width: 350px;
+            margin: 20px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .review-card img {
+            width: 70px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .review-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .review-card p {
+            font-size: 1rem;
+            color: #ddd;
+        }
+
+        /* GALLERY */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 100px 50px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .gallery img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin: 15px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .interactive-data {
+            font-size: 4rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            text-align: center;
+            padding: 80px 50px;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 5px solid #38bdf8;
+        }
+
+        .interactive-data h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .interactive-data p {
+            font-size: 1.2rem;
+            color: #ddd;
+            margin-bottom: 40px;
+        }
+
+        .visual-title {
+            font-size: 4rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+    </style>
+</head>
+<body>
 <nav class="navbar">
     <div class="navbar-container">
         <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
@@ -21,44 +246,12 @@
             <li><a href="/" class="navbar-item">Home</a></li>
             <li><a href="/about" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
-            <li><a href="#" class="navbar-item">Contact</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
         </ul>
     </div>
 </nav>
-
-<header class="header" style="background-image: url('{{ url_for('static', filename='assets/home1.gif') }}');">
-    <div class="header-overlay">
-        <h1 class="header-title">SustainaCore</h1>
-        <p class="header-subtitle">Innovating Agriculture with Advanced Technology</p>
-    </div>
-</header>
-
-<section class="horizontal-section">
-    <div class="section-content">
-        <div class="section-text">
-            <h2 class="section-title">Precision Irrigation</h2>
-            <p>Optimize water usage with real-time data to conserve resources while boosting crop yield.</p>
-        </div>
-        <div class="section-visual">
-            <img src="{{ url_for('static', filename='assets/presir.png') }}" alt="Precision Irrigation" class="section-image">
-        </div>
-    </div>
-</section>
-
-<section class="horizontal-section reverse">
-    <div class="section-content">
-        <div class="section-visual">
-            <img src="{{ url_for('static', filename='assets/metrics.png') }}" alt="Sustainability Metrics" class="section-image2">
-        </div>
-        <div class="section-text">
-            <h2 class="section-title">Sustainability Metrics</h2>
-            <p>Track key metrics like water usage, carbon footprint, and crop performance in an intuitive dashboard.</p>
-        </div>
-    </div>
-</section>
-
 <div id="chatbot-popup">
     <div id="chatbot-icon" class="chatbot-logo">
         <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
@@ -73,115 +266,58 @@
         </div>
     </div>
 </div>
-
-<div class="mainframe">
-    <h1 class="mainframe-title">SustainaCore: Pioneering the Future of Agriculture</h1>
-    <p class="mainframe-subtitle">Explore how advanced technology is transforming agriculture with sustainability in mind.</p>
-
-    <div class="cta-container">
-        <a href="#precision-irrigation" class="cta-button">Learn About Precision Irrigation</a>
-        <a href="#sustainability-metrics" class="cta-button">Discover Sustainability Metrics</a>
+<header class="header">
+    <div>
+        <h1 class="header-title">SustainaCore</h1>
+        <p class="header-subtitle">Innovating Agriculture with Advanced Technology</p>
     </div>
+</header>
 
-    <div class="mission-container">
-        <div class="parallax">
-            <h2>Our Mission</h2>
-            <p>To revolutionize agriculture through cutting-edge technology and a commitment to sustainability.</p>
-        </div>
+<section class="features">
+    <div class="feature">
+        <img src="{{ url_for('static', filename='assets/presir.png') }}" alt="Precision Irrigation">
+        <h2>Precision Irrigation</h2>
+        <p>Optimize water usage and boost crop yield with real-time data.</p>
     </div>
-
-    <div class="tech-container">
-        <h2 class="tech-title">Our Technology in Action</h2>
-        <div class="tech-cards">
-            <div class="tech-card">
-                <div class="tech-card-img">
-                    <img src="{{ url_for('static', filename='assets/technology1.jpg') }}" alt="Technology 1">
-                </div>
-                <div class="tech-card-body">
-                    <h3>Precision Irrigation</h3>
-                    <p>Maximize water efficiency by using real-time weather data to optimize irrigation schedules.</p>
-                    <a href="#learn-more" class="tech-link">Learn More</a>
-                </div>
-            </div>
-            <div class="tech-card">
-                <div class="tech-card-img">
-                    <img src="{{ url_for('static', filename='assets/technology2.jpg') }}" alt="Technology 2">
-                </div>
-                <div class="tech-card-body">
-                    <h3>AI Analytics</h3>
-                    <p>Use AI to analyze your farm's data for improved crop performance and cost optimization.</p>
-                    <a href="#learn-more" class="tech-link">Learn More</a>
-                </div>
-            </div>
-            <div class="tech-card">
-                <div class="tech-card-img">
-                    <img src="{{ url_for('static', filename='assets/technology3.jpg') }}" alt="Technology 3">
-                </div>
-                <div class="tech-card-body">
-                    <h3>Remote Monitoring</h3>
-                    <p>Monitor your farm's health and sustainability metrics remotely from anywhere, anytime.</p>
-                    <a href="#learn-more" class="tech-link">Learn More</a>
-                </div>
-            </div>
-        </div>
+    <div class="feature">
+        <img src="{{ url_for('static', filename='assets/metrics.png') }}" alt="Sustainability Metrics">
+        <h2>Sustainability Metrics</h2>
+        <p>Track key metrics like water usage, carbon footprint, and crop performance.</p>
     </div>
-
-    <div class="interactive-data">
-        <h2 class="interactive-title">Interactive Sustainability Metrics</h2>
-        <p class="interactive-subtitle">See how our technology improves key sustainability metrics.</p>
-        <canvas id="sustainabilityChart" aria-label="Sustainability Metrics Chart" role="img"></canvas>
+    <div class="feature">
+        <img src="https://datapopalliance.org/wp-content/uploads/2021/11/shutterstock_1707038896-scaled.jpg" alt="AI-Powered Analytics">
+        <h2>AI-Powered Analytics</h2>
+        <p>Leverage AI to optimize farming decisions and enhance productivity.</p>
     </div>
+</section>
 
-
-    <div class="success-stories">
-        <h2>Success Stories</h2>
-        <div class="carousel">
-            <div class="carousel-item">
-                <p>"SustainaCore helped our farm reduce water usage by 30%. Highly recommended!"</p>
-                <span>- Farmer John</span>
-            </div>
-            <div class="carousel-item">
-                <p>"The AI analytics completely transformed how we operate. Our yield is up 20%!"</p>
-                <span>- Agritech Inc.</span>
-            </div>
-            <div class="carousel-item">
-                <p>"Remote monitoring saved us during a critical drought period."</p>
-                <span>- GreenFields Co.</span>
-            </div>
-        </div>
+<section class="reviews">
+    <h2>What People Are Saying</h2>
+    <div class="review-card">
+        <h3>Emily R.</h3>
+        <p>"SustainaCore has revolutionized our farming. The precision irrigation tool is a game-changer for us, saving water and increasing yield!"</p>
     </div>
-
-    <div class="team-container">
-        <h2>Meet Our Team</h2>
-        <div class="team-grid">
-            <div class="team-member">
-                <img src="{{ url_for('static', filename='assets/team1.jpg') }}" alt="Team Member 1">
-                <h3>Jane Doe</h3>
-                <p>CEO & Founder</p>
-            </div>
-            <div class="team-member">
-                <img src="{{ url_for('static', filename='assets/team2.jpg') }}" alt="Team Member 2">
-                <h3>John Smith</h3>
-                <p>CTO</p>
-            </div>
-            <div class="team-member">
-                <img src="{{ url_for('static', filename='assets/team3.jpg') }}" alt="Team Member 3">
-                <h3>Susan Lee</h3>
-                <p>Lead Designer</p>
-            </div>
-        </div>
+    <div class="review-card">
+        <h3>John D.</h3>
+        <p>"The AI-powered analytics gave us insights that transformed our approach to farming. We're seeing results faster than ever before!"</p>
     </div>
-
-    <div class="contact-us">
-        <h2>Get in Touch</h2>
-        <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message"></textarea>
-            <button type="submit">Send Message</button>
-        </form>
+    <div class="review-card">
+        <h3>Sarah W.</h3>
+        <p>"I love how user-friendly SustainaCore is. Tracking sustainability metrics has never been so easy, and the impact is clear."</p>
     </div>
-</div>
+</section>
+
+<section class="gallery">
+    <img src="https://media.istockphoto.com/id/859588346/photo/silhouette-of-farmer-in-tractor-preparing-land-with-seedbed-cultivator-sunset-shot.jpg?s=612x612&w=0&k=20&c=S8zUyWxjWdRWyP9RgrCSH79iqr8G0jK8tmyeWJ6F6jA=" alt="Farm Image 1">
+    <img src="https://ashevillepictures.com/wp-content/uploads/2021/11/Sunset-on-the-Farm-sRGB-Preview.jpg" alt="Farm Image 2">
+    <img src="https://admin.onlyinyourstate.com/wp-content/uploads/sites/2/2015/07/4sunset.jpg" alt="Farm Image 3">
+</section>
+
+<section class="interactive-data">
+    <h2>Interactive Sustainability Metrics</h2>
+    <p>See how our technology improves sustainability with real-time data.</p>
+    <canvas id="sustainabilityChart"></canvas>
+</section>
 
 <footer class="footer">
     <div class="footer-container">
@@ -207,8 +343,82 @@
     <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
 </footer>
 
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('sustainabilityChart').getContext('2d');
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(56, 189, 248, 0.8)');   // Light blue
+    gradient.addColorStop(0.5, 'rgba(30, 64, 175, 0.8)');  // Dark blue
+    gradient.addColorStop(1, 'rgba(147, 51, 234, 0.8)');   // Purple
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Water Usage', 'Carbon Footprint', 'Crop Yield'],
+            datasets: [{
+                label: 'Sustainability Metrics',
+                data: [75, 50, 90],
+                backgroundColor: gradient,
+                borderRadius: 8,
+                borderSkipped: false,
+                hoverBackgroundColor: '#9333ea',
+                hoverBorderColor: '#1e40af',
+                borderWidth: 1.5,
+                barThickness: 40,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: { weight: 'bold' },
+                        color: '#fff'
+                    },
+                    grid: {
+                        color: '#ffffff33',
+                        lineWidth: 1
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: { weight: 'bold' },
+                        color: '#fff'
+                    },
+                    grid: {
+                        color: '#ffffff33',
+                        lineWidth: 1
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    backgroundColor: '#38bdf8',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#38bdf8',
+                    borderWidth: 1,
+                    titleFont: { weight: 'bold' },
+                    bodyFont: { weight: 'bold' },
+                    padding: 10,
+                    cornerRadius: 5,
+                    displayColors: false
+                },
+                legend: {
+                    display: false
+                }
+            },
+            animation: {
+                duration: 1200,
+                easing: 'easeOutElastic'
+            }
+        }
+    });
+</script>
 
 </body>
 </html>

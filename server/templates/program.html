@@ -4,499 +4,252 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainaCore</title>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
+        /* Global Styles */
         body {
-            background-color: #1a1a1a;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #14143e, #0d1c35);
+            color: #fff;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
-        .month-header {
-            background-color: #2980b9;
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            padding: 15px 20px;
-            text-align: center;
-            border-radius: 10px;
-            margin: 20px auto;
-            text-transform: capitalize;
-            max-width: 400px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            overflow-x: hidden;
+            background-attachment: fixed;
         }
 
+        /* Hero Section */
+        .visual-section {
+            padding: 120px 50px;
+            text-align: center;
+            position: relative;
+            color: #fff;
+            background: linear-gradient(135deg, rgb(0, 0, 0), rgb(13, 28, 53)), url("https://www.mainegardens.org/wp-content/uploads/2020/11/NaturalLandscapeDesign.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .visual-title {
+            font-size: 4rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .visual-description {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.6);
+        }
+
+        .long-background {
+            padding: 100px 50px;
+            background-color: rgba(0, 0, 0, 0.85);
+            text-align: center;
+            background: linear-gradient(135deg, #14143e, #000000);
+        }
+
+        .long-background h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #38bdf8;
+            text-shadow: 0px 0px 15px rgba(56, 189, 248, 0.7);
+        }
+
+        .long-background p {
+            font-size: 1.3rem;
+            max-width: 950px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            color: #d1d1d1;
+        }
+
+        /* Image Formatting */
+        .visual-image {
+            width: 95%;
+            max-width: 1100px;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, filter 0.4s ease;
+        }
+
+        .visual-image:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        /* Scroll Fade Animation */
+        .scroll-fade {
+            animation: fadeIn 2s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Buttons */
         .button {
             display: inline-block;
-            background-color: #28a745;
-            color: white;
-            font-size: 18px;
+            background-color: #38bdf8;
+            color: #fff;
+            font-size: 1.3rem;
             font-weight: bold;
-            padding: 15px 25px;
-            border-radius: 8px;
+            padding: 16px 30px;
+            border-radius: 50px;
             border: none;
             cursor: pointer;
-            margin: 10px auto;
-            text-align: center;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            margin-top: 30px;
         }
 
         .button:hover {
-            background-color: #218838;
+            background-color: #1e40af;
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(56, 189, 248, 0.5);
         }
 
-        .calendar-container {
-            background-color: #2c3e50;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-            margin: 20px auto;
-            max-width: 800px;
-        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-list {
+                flex-direction: column;
+                gap: 15px;
+            }
 
-        .calendar-nav {
-            background-color: #2980b9;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            .visual-title {
+                font-size: 3rem;
+            }
 
-        .calendar-nav:hover {
-            background-color: #3498db;
-        }
+            .visual-description {
+                font-size: 1.3rem;
+            }
 
-        .month-container {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            padding: 10px;
-            background-color: #34495e;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
+            .long-background h2 {
+                font-size: 2.5rem;
+            }
 
-        .day {
-            background-color: #2c3e50;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-            color: #ecf0f1;
-        }
-
-        .day:hover {
-            background-color: #2980b9;
-        }
-
-        .task-container {
-            margin: 20px auto;
-            max-width: 800px;
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .task-container input {
-            padding: 10px;
-            font-size: 16px;
-            width: calc(100% - 120px);
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .task-container button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        .task-container button:hover {
-            background-color: #218838;
-        }
-
-        .task-list {
-            margin-top: 20px;
-            list-style: none;
-            padding: 0;
-        }
-
-        .task-list li {
-            background-color: #2c3e50;
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 5px;
+            .long-background p {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="prog-background">
-    <nav class="navbar">
-        <div class="navbar-container">
-            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
-            <h1 class="navbar-title">SustainaCore</h1>
-            <button class="navbar-toggle" id="navbar-toggle">
-                <span class="navbar-toggle-icon"></span>
-                <span class="navbar-toggle-icon"></span>
-                <span class="navbar-toggle-icon"></span>
-            </button>
-            <ul class="navbar-list" id="navbar-list">
-                <li><a href="/" class="navbar-item">Home</a></li>
-                <li><a href="/about" class="navbar-item">About</a></li>
-                <li><a href="/program" class="navbar-item">Services</a></li>
-                <li><a href="#" class="navbar-item">Contact</a></li>
-                <li><a href="/market" class="navbar-item">Marketplace</a></li>
-                <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        <h1 class="navbar-title">SustainaCore</h1>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="/about" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+        </ul>
+    </div>
+</nav>
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<div class="visual-section">
+    <h2 class="visual-title">SUSTAINACORE: GROWING OUR FUTURE</h2>
+    <img src="https://www.mainegardens.org/wp-content/uploads/2020/11/NaturalLandscapeDesign.jpg" width="50" alt="Earthy Landscape" class="visual-image">
+    <p class="visual-description scroll-fade" style="margin-top: 50px;">
+        Join us in our mission to revolutionize sustainable agriculture. Through innovative tools and mindful farming practices, we’re ensuring a greener, healthier future for the planet. From backyard gardens to industrial farms, our mission is to provide sustainable solutions and metrics to improve YOUR productivity.
+    </p>
+</div>
+
+<!-- Services Section -->
+<div class="visual-section">
+    <h2 class="visual-title">Building A Better Tomorrow</h2>
+    <p class="visual-description scroll-fade">
+        SustainaCore empowers farmers with the right tools and insights to optimize their crops, save resources, and reduce their environmental footprint. Our system brings together technology and nature, paving the way for regenerative agriculture practices.
+    </p>
+    <img src="https://media.wired.com/photos/593286f79be5e55af6c25aa6/191:100/w_1280,c_limit/AP47290246052.jpg" alt="Innovative Tools" class="visual-image">
+</div>
+
+<!-- Tools Section -->
+<div class="visual-section">
+    <h2 class="visual-title">Tools for Sustainability</h2>
+    <p class="visual-description scroll-fade">
+        Our farm planner allows you to plan your crops, track weather patterns, and manage daily tasks seamlessly. It’s the perfect companion for any farmer dedicated to sustainable practices.
+    </p>
+    <img src="https://img2.chinadaily.com.cn/images/202409/24/66f21585a3103711c348c902.jpeg" alt="Innovative Tools" class="visual-image">
+</div>
+
+<!-- Vision Section -->
+<div class="visual-section">
+    <h2 class="visual-title">Our Vision For A Greener World</h2>
+    <p class="visual-description scroll-fade">
+        Sustainability isn’t just about growing food; it’s about nurturing the earth. At SustainaCore, we’re committed to creating farming systems that support both the environment and the people who rely on it. Together, we can create a world where agriculture doesn’t just sustain us – it sustains the planet.
+    </p>
+    <img src="https://scx2.b-cdn.net/gfx/news/hires/2024/farming.jpg" alt="Innovative Tools" class="visual-image">
+</div>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
             </ul>
         </div>
-    </nav>
-
-    <div id="chatbot-popup">
-        <div id="chatbot-icon" class="chatbot-logo">
-            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
-        </div>
-        <div id="chatbot" class="chatbot-container hidden">
-            <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
-            <div id="chatbot-messages" class="chatbot-messages"></div>
-            <div class="chatbot-input-container">
-                <label for="chatbot-input" class="visually-hidden"></label>
-                <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
-                <button id="chatbot-send">Send</button>
-            </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <p>Email: support@agritech.com</p>
+            <p>Phone: +1 555 123 4567</p>
         </div>
     </div>
-
-    <div class="visual-section">
-        <h2 class="visual-title">SustainaCore: Growing Our Future</h2>
-        <img src="{{ url_for('static', filename='assets/earthy-landscape.jpg') }}" alt="Earthy Landscape" class="visual-image">
-        <p class="visual-description scroll-fade">
-            Join us in our mission to revolutionize sustainable agriculture. Through innovative tools and mindful farming practices, we’re ensuring a greener, healthier future for the planet.
-        </p>
-    </div>
-
-    <div class="long-background">
-        <h2>Building a Better Tomorrow</h2>
-        <p class="scroll-fade">
-            SustainaCore empowers farmers with the right tools and insights to optimize their crops, save resources, and reduce their environmental footprint. Our system brings together technology and nature, paving the way for regenerative agriculture practices.
-        </p>
-    </div>
-
-    <div class="visual-section">
-        <h2 class="visual-title">Tools for Sustainability</h2>
-        <img src="{{ url_for('static', filename='assets/innovative-tools.jpg') }}" alt="Innovative Tools" class="visual-image">
-        <p class="visual-description scroll-fade">
-            Our farm planner allows you to plan your crops, track weather patterns, and manage daily tasks seamlessly. It’s the perfect companion for any farmer dedicated to sustainable practices.
-        </p>
-    </div>
-
-    <div class="long-background">
-        <h2>Our Vision for a Greener World</h2>
-        <p class="scroll-fade">
-            Sustainability isn’t just about growing food; it’s about nurturing the earth. At SustainaCore, we’re committed to creating farming systems that support both the environment and the people who rely on it. Together, we can create a world where agriculture doesn’t just sustain us – it sustains the planet.
-        </p>
-    </div>
-
-    <div id="farm-planner" class="farm-planner">
-        <h2 class="planner-title">🌱 Farm Planner Tool</h2>
-        <p class="planner-subtitle">Enter your address to get started:</p>
-        <div class="input-container">
-            <input type="text" id="address-input" class="planner-input" placeholder="Enter your address" />
-            <button id="find-location" class="planner-button">Find My Location</button>
-        </div>
-
-        <div id="map-container" class="map-container">
-            <h3 class="section-title">Your Region</h3>
-            <div id="map" class="map-box"></div>
-        </div>
-
-        <div id="crop-selector" class="crop-selector">
-            <h3>Select Crops</h3>
-            <div id="available-crops" class="available-crops">
-                <h4>Available Crops</h4>
-                <div class="crop-item">
-                    <span>Tomato</span>
-                    <button class="add-crop-button" data-crop="Tomato">+</button>
-                </div>
-                <div class="crop-item">
-                    <span>Lettuce</span>
-                    <button class="add-crop-button" data-crop="Lettuce">+</button>
-                </div>
-                <div class="crop-item">
-                    <span>Carrot</span>
-                    <button class="add-crop-button" data-crop="Carrot">+</button>
-                </div>
-                <div class="crop-item">
-                    <span>Cucumber</span>
-                    <button class="add-crop-button" data-crop="Cucumber">+</button>
-                </div>
-            </div>
-            <div id="selected-crops" class="selected-crops">
-                <h4>Selected Crops</h4>
-                <div class="selected-crop-container"></div>
-            </div>
-            <button id="finalize-crops" class="finalize-button">Finalize Selection</button>
-        </div>
-
-        <style>
-            .crop-selector {
-                background-color: #34495e;
-                padding: 20px;
-                border-radius: 8px;
-                color: #ecf0f1;
-                max-width: 500px;
-                margin: 20px auto;
-            }
-
-            h3, h4 {
-                margin: 0 0 10px 0;
-            }
-
-            .crop-item, .selected-crop {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 8px;
-                margin: 5px 0;
-                background-color: #2c3e50;
-                border-radius: 5px;
-            }
-
-            .add-crop-button, .remove-crop-button, .finalize-button {
-                background-color: #28a745;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                padding: 5px 10px;
-                cursor: pointer;
-                font-size: 14px;
-            }
-
-            .add-crop-button:hover, .remove-crop-button:hover, .finalize-button:hover {
-                background-color: #218838;
-            }
-
-            .remove-crop-button {
-                background-color: #e74c3c;
-            }
-
-            .remove-crop-button:hover {
-                background-color: #c0392b;
-            }
-
-            .finalize-button {
-                margin-top: 15px;
-                padding: 10px 15px;
-                display: block;
-                width: 100%;
-            }
-        </style>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const availableCrops = document.querySelector("#available-crops");
-                const selectedCropContainer = document.querySelector(".selected-crop-container");
-                const finalizeButton = document.getElementById("finalize-crops");
-
-                availableCrops.addEventListener("click", (event) => {
-                    if (event.target.classList.contains("add-crop-button")) {
-                        const cropName = event.target.getAttribute("data-crop");
-                        addCropToSelected(cropName);
-                    }
-                });
-
-                selectedCropContainer.addEventListener("click", (event) => {
-                    if (event.target.classList.contains("remove-crop-button")) {
-                        const cropName = event.target.getAttribute("data-crop");
-                        removeCropFromSelected(cropName);
-                    }
-                });
-
-                finalizeButton.addEventListener("click", () => {
-                    const selectedCropNames = Array.from(selectedCropContainer.children).map(item =>
-                        item.querySelector("span").textContent
-                    );
-                    alert(`Crops finalized: ${selectedCropNames.join(", ")}`);
-                });
-
-                const addCropToSelected = (cropName) => {
-                    if (!Array.from(selectedCropContainer.children).some(item =>
-                        item.querySelector("span").textContent === cropName)) {
-                        const div = document.createElement("div");
-                        div.classList.add("selected-crop");
-                        div.innerHTML = `
-                    <span>${cropName}</span>
-                    <button class="remove-crop-button" data-crop="${cropName}">-</button>
-                `;
-                        selectedCropContainer.appendChild(div);
-                    }
-                };
-
-                const removeCropFromSelected = (cropName) => {
-                    Array.from(selectedCropContainer.children).forEach(item => {
-                        if (item.querySelector("span").textContent === cropName) {
-                            selectedCropContainer.removeChild(item);
-                        }
-                    });
-                };
-            });
-        </script>
-
-        <div id="weather-info" class="weather-info">
-            <h3>Weather Information</h3>
-            <table class="weather-table">
-                <thead>
-                <tr>
-                    <th>Temperature (°C)</th>
-                    <th>Humidity (%)</th>
-                    <th>Precipitation</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td id="temperature">Loading...</td>
-                    <td id="humidity">Loading...</td>
-                    <td id="precipitation">Loading...</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <button id="generate-calendar" class="button">Generate 365-Day Farming Plan</button>
-
-        <div id="calendar-container" class="calendar-container">
-            <button id="prev-month" class="calendar-nav">Prev Month</button>
-            <h3 id="month-header" class="month-header">January 2025</h3>
-            <button id="next-month" class="calendar-nav">Next Month</button>
-            <div id="months-container" class="month-container"></div>
-        </div>
-
-        <div id="task-container" class="task-container" style="display: none;">
-            <h4>Tasks for <span id="selected-date">[Select a Day]</span></h4>
-            <input type="text" id="task-input" placeholder="Enter a task">
-            <button id="add-task">Add Task</button>
-            <ul id="task-list" class="task-list"></ul>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>About Us</h3>
-                <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
-            </div>
-            <div class="footer-column">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Contact</h3>
-                <p>Email: support@agritech.com</p>
-                <p>Phone: +1 555 123 4567</p>
-            </div>
-        </div>
-        <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
-    </footer>
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/program.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3wmHvCMTotbs2mYWdYU8_k1Lh73J6tuY&callback=initMap" async defer></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const generateButton = document.getElementById("generate-calendar");
-            const calendarContainer = document.getElementById("calendar-container");
-            const monthsContainer = document.getElementById("months-container");
-            const monthHeader = document.getElementById("month-header");
-            const prevMonthBtn = document.getElementById("prev-month");
-            const nextMonthBtn = document.getElementById("next-month");
-            const taskContainer = document.getElementById("task-container");
-            const selectedDateSpan = document.getElementById("selected-date");
-            const taskInput = document.getElementById("task-input");
-            const addTaskButton = document.getElementById("add-task");
-            const taskList = document.getElementById("task-list");
-
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-
-            let currentMonthIndex = 0;
-            let tasks = {};
-
-            const generateCalendar = () => {
-                monthsContainer.innerHTML = "";
-                const daysInMonth = new Date(2025, currentMonthIndex + 1, 0).getDate();
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayElement = document.createElement("div");
-                    dayElement.classList.add("day");
-                    dayElement.textContent = day;
-                    dayElement.addEventListener("click", () => {
-                        const selectedDate = `${monthNames[currentMonthIndex]} ${day}, 2025`;
-                        selectedDateSpan.textContent = selectedDate;
-                        taskContainer.style.display = "block";
-                        renderTasks(selectedDate);
-                    });
-                    monthsContainer.appendChild(dayElement);
-                }
-            };
-
-            const renderTasks = (date) => {
-                taskList.innerHTML = "";
-                const dayTasks = tasks[date] || [];
-                dayTasks.sort().forEach(task => {
-                    const taskItem = document.createElement("li");
-                    taskItem.textContent = task;
-                    taskList.appendChild(taskItem);
-                });
-            };
-
-            addTaskButton.addEventListener("click", () => {
-                const date = selectedDateSpan.textContent;
-                if (!tasks[date]) {
-                    tasks[date] = [];
-                }
-                const task = taskInput.value.trim();
-                if (task) {
-                    tasks[date].push(task);
-                    taskInput.value = "";
-                    renderTasks(date);
-                }
-            });
-
-            generateButton.addEventListener("click", () => {
-                calendarContainer.style.display = "block";
-                generateCalendar();
-            });
-
-            prevMonthBtn.addEventListener("click", () => {
-                currentMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
-                monthHeader.textContent = monthNames[currentMonthIndex];
-                generateCalendar();
-            });
-
-            nextMonthBtn.addEventListener("click", () => {
-                currentMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
-                monthHeader.textContent = monthNames[currentMonthIndex];
-                generateCalendar();
-            });
-
-            monthHeader.textContent = monthNames[currentMonthIndex];
-        });
-    </script>
+    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
+</footer>
 </body>
 </html>
