@@ -1,8 +1,9 @@
- module.exports = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
-    './frontend/**/*.html',
-    './frontend/**/*.css',
-    './frontend/**/*.js',
+    "./index.html",                   // Main HTML file in root
+    "./server/templates/**/*.html",    // HTML templates in Flask's templates folder
+    "./server/static/js/**/*.js",      // JavaScript files in the static folder
   ],
   theme: {
     extend: {},
