@@ -1,7 +1,7 @@
 {
   "name": "my-fullstack-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "So here's the deal.",
   "main": "index.js",
   "scripts": {
     "build": "postcss server/static/css/styles.css -o frontend/dist/styles.css",
@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tailwindcss/cli": "^4.0.12",
+    "@tailwindcss/vite": "^4.0.12",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

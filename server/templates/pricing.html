@@ -1,10 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainaCore - Pricing</title>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #16222A, #1e293b);
+            color: #fff;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            opacity: 0; /* Initially hidden */
+        }
+
+        body.fade-in {
+            opacity: 1;
+        }
+
+        .pricing-section {
+            position: relative;
+            padding: 100px 0 96px 0;
+            text-align: center;
+            opacity: 0; /* Initially hidden */
+            transform: translateY(40px); /* Start from slightly below */
+            animation: fadeIn 1.5s ease-out forwards; /* Apply fade-in animation */
+        }
+
+        .pricing-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 36.5rem;
+            width: 100%;
+            z-index: -1;
+        }
+
+        .pricing-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .pricing-title-container {
+            margin-bottom: 48px;
+        }
+
+        .pricing-title {
+            text-transform: uppercase;
+            text-align: center;
+            font-family: 'fantasy', sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #c8d5b9;
+            margin-bottom: 16px;
+        }
+
+        .pricing-description {
+            color: tan;
+            font-size: 36px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            padding: 20px;
+        }
+
+        @media (min-width: 640px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .pricing-card {
+            background-color: #2d3748;
+            border-radius: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 28px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .pricing-card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: tan;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .pricing-card-subtitle {
+            font-size: 17px;
+            margin-top: 16px;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .pricing-price-container {
+            margin-bottom: 16px;
+        }
+
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 800;
+            color: tan;
+        }
+
+        .pricing-price-duration {
+            font-size: 18px;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+
+        .pricing-features {
+            margin-bottom: 16px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pricing-feature {
+            text-weight: bold;
+            display: flex;
+            align-items: center;
+            color: #f0f0f0;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .pricing-feature svg {
+            height: 18px;
+            width: 18px;
+            color: #48bb78;
+            margin-right: 8px;
+        }
+
+        .pricing-button {
+            display: block;
+            width: 100%;
+            padding: 8px 0px;
+            text-align: center;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            background-image: linear-gradient(to right, #3b82f6, #8b5cf6);
+            transition: background-image 0.3s ease;
+            font-size: 14px;
+        }
+
+        .pricing-button:hover {
+            background-image: linear-gradient(to right, #2563eb, #7e22ce);
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.classList.add('fade-in');
+        });
+    </script>
 </head>
-<body>
-$END$
+<body class="fade-in">
+<header class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo-link">
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        </a>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="/about" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
+            <li><a href="/pricing" class="navbar-item active">Pricing</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+        </ul>
+    </div>
+</header>
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<section class="pricing-section">
+    <div class="pricing-background"></div>
+    <div class="pricing-container">
+        <div class="pricing-title">
+            <p class="pricing-description">
+                Simple, affordable pricing for family gardens to factory farms.
+            </p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-card-content">
+                    <h3 class="pricing-card-title">Free</h3>
+                    <p class="pricing-card-subtitle">For hobbyists and plant-lovers to business owners and farmers alike!</p>
+                </div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Farm Planning Toolkit</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Digital Farm Journal</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Basic support</span>
+                    </li>
+                </ul>
+                <a href="#" class="pricing-button">
+                    Sign Up
+                </a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-card-content">
+                    <h3 class="pricing-card-title">Starter</h3>
+                    <p class="pricing-card-subtitle">For family farms to expanding businesses, all at low price.</p>
+                </div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Farm Planning Toolkit</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Digital Farm Journal</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>365 Day Farming Plan</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Standard support</span>
+                    </li>
+
+                </ul>
+                <a href="#" class="pricing-button">
+                    Get Started
+                </a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-card-content">
+                    <h3 class="pricing-card-title">Pro</h3>
+                    <p class="pricing-card-subtitle">Advanced tools for commercial farmers at an affordable price.</p>
+                </div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Farm Planning Toolkit</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Digital Farm Journal</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>365 Day Farming Plan</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Sustainable Crop Rotation</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Priority support</span>
+                    </li>
+                </ul>
+                <a href="#" class="pricing-button">
+                    Get Started
+                </a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-card-content">
+                    <h3 class="pricing-card-title">Enterprise</h3>
+                    <p class="pricing-card-subtitle">High scaling, dedicated solutions for large operations.</p>
+                </div>
+                <ul class="pricing-features">
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>All Pro Features</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Climate Resilient Crop Selection</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Farm Efficiency Calculator</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Unlimited Size Integration</span>
+                    </li>
+                    <li class="pricing-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Dedicated Support Team</span>
+                    </li>
+                </ul>
+                <a href="/contact" class="pricing-button">
+                    Contact Sales
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
+        </div>
+        <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Contact</h3>
+            <p>Email: support@agritech.com</p>
+            <p>Phone: +1 555 123 4567</p>
+        </div>
+    </div>
+    <p class="footer-bottom">© 2025 SustainaCore. All rights reserved.</p>
+</footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add('fade-in');
+    });
+</script>
 </body>
 </html>

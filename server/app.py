@@ -36,6 +36,10 @@ def about():
 def contact():
     return render_template('contact.html')
 
+@app.route('/pricing')
+def pricing():
+    return render_template('pricing.html')
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:
