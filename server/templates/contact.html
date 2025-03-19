@@ -4,190 +4,336 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainaCore | Contact Us</title>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
+        *, *:before, *:after {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         body {
-            background: radial-gradient(circle, #16222A, #3A6073);
-            color: #ecf0f1;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(to right, #ea1d6f 0%, #eb466b 100%);
+            font-size: 10px;
         }
 
-        .hero-section {
-            text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(to bottom, #243B55, #141E30);
-            border-bottom: 8px solid #00aaff;
-            box-shadow: 0 5px 15px rgba(0, 170, 255, 0.3);
-        }
-
-        .hero-section h1 {
-            font-size: 3.2em;
+        body, button, input {
+            font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            color: #00aaff;
+            letter-spacing: 1.4px;
+        }
+
+        .background {
+            display: flex;
+            min-height: 100vh;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            flex: 0 1 700px;
+            margin: auto;
+            padding: 10px;
+            transform: scale(1.4);
+            transform-origin: center;
+        }
+
+        .screen {
+            position: relative;
+            background: #3e3e3e;
+            border-radius: 15px;
+        }
+
+        .screen:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            bottom: 0;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .4);
+            z-index: -1;
+        }
+
+        .screen-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: #4d4d4f;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .screen-header-left {
+            margin-right: auto;
+        }
+
+        .screen-header-button {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 3px;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .screen-header-button.close {
+            background: #ed1c6f;
+        }
+
+        .screen-header-button.maximize {
+            background: #e8e925;
+        }
+
+        .screen-header-button.minimize {
+            background: #74c54f;
+        }
+
+        .screen-header-right {
+            display: flex;
+        }
+
+        .screen-header-ellipsis {
+            width: 3px;
+            height: 3px;
+            margin-left: 2px;
+            border-radius: 8px;
+            background: #999;
+        }
+
+        .screen-body {
+            display: flex;
+        }
+
+        .screen-body-item {
+            flex: 1;
+            padding: 50px;
+        }
+
+        .screen-body-item.left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-title {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            color: #ea1d6f;
+            font-size: 26px;
+        }
+
+        .app-title:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 25px;
+            height: 4px;
+            background: #ea1d6f;
+        }
+
+        .app-contact {
+            margin-top: auto;
+            font-size: 8px;
+            color: #888;
+        }
+
+        .app-form-group {
             margin-bottom: 15px;
         }
 
-        .hero-section p {
-            font-size: 1.3em;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            line-height: 1.8;
-            color: #bdc3c7;
+        .app-form-group.message {
+            margin-top: 40px;
         }
 
-        .hero-section a {
-            display: inline-block;
-            text-decoration: none;
-            background: #00aaff;
-            color: #fff;
-            padding: 15px 35px;
-            border-radius: 50px;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+        .app-form-group.buttons {
+            margin-bottom: 0;
+            text-align: right;
         }
 
-        .hero-section a:hover {
-            background: #008ecc;
-            transform: translateY(-3px);
-        }
-
-        /* Contact Form Section */
-        .contact-container {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 40px;
-            background: #1f2c38;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 170, 255, 0.2);
-        }
-
-        .contact-container h2 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #00aaff;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 1.1em;
-            margin-bottom: 8px;
-            color: #bdc3c7;
-        }
-
-        .form-group input,
-        .form-group textarea {
+        .app-form-control {
             width: 100%;
-            padding: 14px;
+            padding: 10px 0;
+            background: none;
             border: none;
-            border-radius: 8px;
-            background: #34495e;
-            color: #ffffff;
-            font-size: 1.1em;
+            border-bottom: 1px solid #666;
+            color: #ddd;
+            font-size: 14px;
+            text-transform: uppercase;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .app-form-control::placeholder {
+            color: #666;
+        }
+
+        .app-form-control:focus {
+            border-bottom-color: #ddd;
+        }
+
+        .app-form-button {
+            background: none;
+            border: none;
+            color: #ea1d6f;
+            font-size: 14px;
+            cursor: pointer;
             outline: none;
         }
 
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #95a5a6;
+        .app-form-button:hover {
+            color: #b9134f;
         }
 
-        .form-group textarea {
-            resize: none;
-            height: 150px;
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.3em;
-            color: #fff;
-            background: #00aaff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 170, 255, 0.4);
-        }
-
-        .submit-btn:hover {
-            background: #008ecc;
-        }
-
-        /* Footer Section */
-        .footer {
-            background: #16222A;
-            padding: 40px 20px;
-            text-align: center;
-            color: #b2bec3;
-            font-size: 1.1em;
-        }
-
-        .footer-container {
+        .credits {
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            max-width: 1000px;
-            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            color: #ffa4bd;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 16px;
+            font-weight: normal;
         }
 
-        .footer-column {
-            margin-bottom: 20px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.5em;
-            color: #00aaff;
-            margin-bottom: 15px;
-        }
-
-        .footer-column p,
-        .footer-column ul {
-            color: #bdc3c7;
-        }
-
-        .footer-column ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-column ul li a {
-            color: #00aaff;
+        .credits-link {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
             text-decoration: none;
-            transition: color 0.3s ease;
         }
 
-        .footer-column ul li a:hover {
-            color: #008ecc;
+        .dribbble {
+            width: 20px;
+            height: 20px;
+            margin: 0 5px;
         }
 
-        .footer-bottom {
-            margin-top: 30px;
-            font-size: 1em;
-            border-top: 1px solid #2c3e50;
-            padding-top: 20px;
+        @media screen and (max-width: 520px) {
+            .screen-body {
+                flex-direction: column;
+            }
+
+            .screen-body-item.left {
+                margin-bottom: 30px;
+            }
+
+            .app-title {
+                flex-direction: row;
+            }
+
+            .app-title span {
+                margin-right: 12px;
+            }
+
+            .app-title:after {
+                display: none;
+            }
         }
 
+        @media screen and (max-width: 600px) {
+            .screen-body {
+                padding: 40px;
+            }
+
+            .screen-body-item {
+                padding: 0;
+            }
+        }
+
+        /* Footer Styles (Converted from Tailwind) */
+        .custom-footer {
+            margin-top: 20px;
+            position: relative;
+            text-align: center;
+            background: linear-gradient(135deg, #16222A, #1e293b);
+            color: white;
+        }
+
+        .custom-footer .footer-content {
+            padding: 2rem 1.5rem;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        .custom-footer h2 {
+            font-weight: bold;
+            font-size: 1.875rem;
+            line-height: 1.3;
+        }
+
+        .custom-footer a.cta-button {
+            margin-top: 2rem;
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            font-size: 1.125rem;
+            font-weight: 500;
+            line-height: 1.2;
+            background: darkcyan;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-width: 1px;
+            border-color: transparent;
+            text-decoration: none;
+            color: white;
+            transition: scale 0.3s ease, background-color 0.3s ease;
+        }
+
+        .custom-footer a.cta-button:hover {
+            scale: 1.06;
+            background: linear-gradient(to right, #4f46e5, #6b46c1);
+        }
+
+        .custom-footer nav {
+            margin-top: 3.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        .custom-footer nav div {
+            padding: 0.5rem 1.25rem;
+        }
+
+        .custom-footer nav a {
+            color: darkcyan;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .custom-footer nav a:hover {
+            color: white;
+        }
+
+        .custom-footer p.copyright {
+            margin-top: 1.75rem;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -197,7 +343,6 @@
         </button>
         <ul class="navbar-list" id="navbar-list">
             <li><a href="/" class="navbar-item">Home</a></li>
-            <li><a href="/about" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="/contact" class="navbar-item active">Contact</a></li>
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
@@ -220,58 +365,71 @@
         </div>
     </div>
 </div>
-<header class="hero-section">
-    <h1>CONTACT SUSTAINACORE</h1>
-    <p>We're here to answer your questions and hear your thoughts. Let's work together for a sustainable future.</p>
-    <a href="#contact-form">Get in Touch</a>
-</header>
 
-<section class="contact-container" id="contact-form">
-    <h2>Get in Touch</h2>
-    <form action="/send-message" method="POST">
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-        </div>
-        <div class="form-group">
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" placeholder="Subject" required>
-        </div>
-        <div class="form-group">
-            <label for="message">Your Message</label>
-            <textarea id="message" name="message" placeholder="Type your message..." required></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Send Message</button>
-    </form>
-</section>
-
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-column">
-            <h3>About Us</h3>
-            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
-        </div>
-        <div class="footer-column">
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h3>Contact</h3>
-            <p>Email: support@agritech.com</p>
-            <p>Phone: +1 555 123 4567</p>
+<div class="background">
+    <div class="container">
+        <div class="screen">
+            <div class="screen-header">
+                <div class="screen-header-left">
+                    <div class="screen-header-button close"></div>
+                    <div class="screen-header-button maximize"></div>
+                    <div class="screen-header-button minimize"></div>
+                </div>
+                <div class="screen-header-right">
+                    <div class="screen-header-ellipsis"></div>
+                    <div class="screen-header-ellipsis"></div>
+                    <div class="screen-header-ellipsis"></div>
+                </div>
+            </div>
+            <div class="screen-body">
+                <div class="screen-body-item left">
+                    <div class="app-title">
+                        <span>CONTACT</span>
+                        <span>US</span>
+                    </div>
+                    <div class="app-contact">POWERED BY SUSTAINACORE</div>
+                </div>
+                <div class="screen-body-item">
+                    <form class="app-form" action="/send-message" method="POST">
+                        <div class="app-form-group">
+                            <input class="app-form-control" placeholder="NAME" name="name" required>
+                        </div>
+                        <div class="app-form-group">
+                            <input class="app-form-control" placeholder="EMAIL" name="email" required>
+                        </div>
+                        <div class="app-form-group">
+                            <input class="app-form-control" placeholder="SUBJECT" name="subject" required>
+                        </div>
+                        <div class="app-form-group message">
+                            <input class="app-form-control" placeholder="MESSAGE" name="message" required>
+                        </div>
+                        <div class="app-form-group buttons">
+                            <button class="app-form-button">CANCEL</button>
+                            <button class="app-form-button" type="submit">SEND</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <p class="footer-bottom">&copy; 2025 SustainaCore. All rights reserved.</p>
-</footer>
+</div>
 
+<footer class="custom-footer">
+    <div class="footer-content">
+        <h2 class="font-bold text-3xl leading-snug">
+            Ready to upgrade your farm?<br>Start your subscription today.
+        </h2>
+        <a class="cta-button" href="/pricing">Get started</a>
+        <nav class="flex flex-wrap justify-center text-lg font-medium">
+            <div><a href="/">Home</a></div>
+            <div><a href="/program">Services</a></div>
+            <div><a href="/contact">Contact</a></div>
+            <div><a href="/pricing">Pricing</a></div>
+            <div><a href="/marketplace">Marketplace</a></div>
+            <div><a href="/dashboard">Dashboard</a></div>
+        </nav>
+        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
+    </div>
+</footer>
 </body>
 </html>

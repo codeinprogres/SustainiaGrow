@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainaCore - The Future of Farming</title>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
         body {
@@ -49,7 +48,6 @@
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8); /* Add a stronger white shadow */
         }
 
-
         .header-subtitle {
             font-size: 1.6rem;
             font-weight: 400;
@@ -86,49 +84,54 @@
             justify-content: space-around;
             flex-wrap: wrap;
             padding: 80px 50px;
-            background: rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, #1e293b, #0f2027);
             border-top: 5px solid #38bdf8;
         }
 
         .feature {
             max-width: 400px;
             text-align: center;
-            /* background: rgba(255, 255, 255, 0.1); */
-            padding: 0; /* Remove padding to ensure image takes up the entire space */
+            padding: 0;
             border-radius: 20px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            transition: transform 0.05s ease-out, box-shadow 0.25s ease-out; /* Reduced duration */
+            transition: transform 0.05s ease-out, box-shadow 0.25s ease-out;
             margin: 20px;
-            position: relative;
-            overflow: hidden; /* Ensures the image doesn't overflow outside the card */
-            background-color: rgba(255, 255, 255, 0.1); /* ADD this line */
+            position: relative;  /*  IMPORTANT: Creates the positioning context */
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e293b, #0f2027);
         }
 
         .feature img {
-            width: auto;
+            width: 100%;
             height: auto;
-            scale: 5;
-            object-fit: cover; /* Ensures the image covers the entire space without stretching */
-            border-radius: 20px; /* Ensure the image fits the rounded corners of the card */
+            object-fit: cover;
+            border-radius: 20px;
             position: absolute;
-            z-index: -1; /* Pushes the image behind the text */
+            top: 0;
+            left: 0;
+            transition: opacity 0.3s ease;
+            opacity: 0.7; /* Adjusted opacity for a subtle background effect */
+
+        }
+
+        .feature:hover img {
+            opacity: 1; /* Full opacity on hover */
         }
 
         .feature-content {
-            position: relative;
-            z-index: 1; /* Makes sure the text appears above the image */
-            padding: 20px; /* Adds space for the text */
-        }
+            position: relative;  /* IMPORTANT:  Allows z-index to work */
+            z-index: 1;  /* Text is *above* the image */
+            padding: 20px;
 
+        }
 
         .feature:hover {
             transform: scale(1.05);
             box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
         }
 
-        .feature img {
-            width: 120px;
-            margin-bottom: 20px;
+        .feature h2, .feature p {  /*  Added rule for headings and paragraphs */
+            position: relative; /* Allows individual heading or paragraph control if needed */
+            z-index: 2; /* Make sure the heading and paragraphs are above everything else if needed */
         }
 
         /* REVIEWS */
@@ -146,7 +149,7 @@
         }
 
         .review-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(to right, #4f46e5, #6b46c1);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
@@ -232,11 +235,12 @@
         }
 
     </style>
+
 </head>
 <body>
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -246,7 +250,6 @@
         </button>
         <ul class="navbar-list" id="navbar-list">
             <li><a href="/" class="navbar-item active">Home</a></li>
-            <li><a href="/about" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
@@ -279,18 +282,24 @@
 <section class="features">
     <div class="feature">
         <img src="{{ url_for('static', filename='assets/presir.png') }}" alt="Precision Irrigation">
-        <h2>Precision Irrigation</h2>
-        <p>Optimize water usage and boost crop yield with real-time data.</p>
+        <div class="feature-content">
+            <h2>Precision Irrigation</h2>
+            <p>Optimize water usage and boost crop yield with real-time data.</p>
+        </div>
     </div>
     <div class="feature">
         <img src="{{ url_for('static', filename='assets/metrics.png') }}" alt="Sustainability Metrics">
-        <h2>Sustainability Metrics</h2>
-        <p>Track key metrics like water usage, carbon footprint, and crop performance.</p>
+        <div class="feature-content">
+            <h2>Sustainability Metrics</h2>
+            <p>Track key metrics like water usage, carbon footprint, and crop performance.</p>
+        </div>
     </div>
     <div class="feature">
         <img src="https://datapopalliance.org/wp-content/uploads/2021/11/shutterstock_1707038896-scaled.jpg" alt="AI-Powered Analytics">
-        <h2>AI-Powered Analytics</h2>
-        <p>Leverage AI to optimize farming decisions and enhance productivity.</p>
+        <div class="feature-content">
+            <h2>AI-Powered Analytics</h2>
+            <p>Leverage AI to optimize farming decisions and enhance productivity.</p>
+        </div>
     </div>
 </section>
 
@@ -318,47 +327,41 @@
 
 <section class="interactive-data">
     <h2>Interactive Sustainability Metrics</h2>
-    <p>See how our technology improves sustainability with real-time data.</p>
+    <p>See how our technology improves sustainability with real-time data</p>
     <canvas id="sustainabilityChart"></canvas>
 </section>
 
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-column">
-            <h3>About Us</h3>
-            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
-        </div>
-        <div class="footer-column">
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h3>Contact</h3>
-            <p>Email: support@agritech.com</p>
-            <p>Phone: +1 555 123 4567</p>
-        </div>
+<footer class="custom-footer">
+    <div class="footer-content">
+        <h2 class="font-bold text-3xl leading-snug">
+            Ready to upgrade your farm?<br>Start your subscription today.
+        </h2>
+        <a class="cta-button" href="/pricing">Get started</a>
+        <nav class="flex flex-wrap justify-center text-lg font-medium">
+            <div><a href="/">Home</a></div>
+            <div><a href="/program">Services</a></div>
+            <div><a href="/contact">Contact</a></div>
+            <div><a href="/pricing">Pricing</a></div>
+            <div><a href="/marketplace">Marketplace</a></div>
+            <div><a href="/dashboard">Dashboard</a></div>
+        </nav>
+        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
-    <p class="footer-bottom">© 2025 SustainaCore. All rights reserved.</p>
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     const ctx = document.getElementById('sustainabilityChart').getContext('2d');
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(56, 189, 248, 0.8)');   // Light blue
-    gradient.addColorStop(0.5, 'rgba(30, 64, 175, 0.8)');  // Dark blue
-    gradient.addColorStop(1, 'rgba(147, 51, 234, 0.8)');   // Purple
+    gradient.addColorStop(0, 'rgba(56, 189, 248, 0.8)');
+    gradient.addColorStop(0.5, 'rgba(30, 64, 175, 0.8)');
+    gradient.addColorStop(1, 'rgba(147, 51, 234, 0.8)');
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Water Usage', 'Carbon Footprint', 'Crop Yield'],
+            labels: ['WATER USAGE', 'CARBON FOOTPRINT', 'CROP YIELD'],
             datasets: [{
                 label: 'Sustainability Metrics',
                 data: [75, 50, 90],
@@ -422,6 +425,5 @@
         }
     });
 </script>
-
 </body>
 </html>

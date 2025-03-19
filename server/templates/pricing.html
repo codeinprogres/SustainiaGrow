@@ -11,24 +11,20 @@
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #16222A, #1e293b);
+            background: linear-gradient(to right, #4f46e5, #6b46c1);
             color: #fff;
             overflow-x: hidden;
             box-sizing: border-box;
-            opacity: 0; /* Initially hidden */
-        }
-
-        body.fade-in {
-            opacity: 1;
         }
 
         .pricing-section {
             position: relative;
-            padding: 100px 0 96px 0;
+            padding: 100px 0 130px 0;
             text-align: center;
-            opacity: 0; /* Initially hidden */
-            transform: translateY(40px); /* Start from slightly below */
-            animation: fadeIn 1.5s ease-out forwards; /* Apply fade-in animation */
+            background: linear-gradient(to right, #4f46e5, #6b46c1);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeIn 1.5s ease-out forwards;
         }
 
         .pricing-background {
@@ -39,6 +35,18 @@
             width: 100%;
             z-index: -1;
         }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
 
         .pricing-container {
             max-width: 1280px;
@@ -173,22 +181,10 @@
             background-image: linear-gradient(to right, #2563eb, #7e22ce);
         }
 
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+
 
     </style>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.body.classList.add('fade-in');
-        });
     </script>
 </head>
 <body class="fade-in">
@@ -204,7 +200,6 @@
         </button>
         <ul class="navbar-list" id="navbar-list">
             <li><a href="/" class="navbar-item">Home</a></li>
-            <li><a href="/about" class="navbar-item">About</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/pricing" class="navbar-item active">Pricing</a></li>
@@ -243,6 +238,10 @@
                     <h3 class="pricing-card-title">Free</h3>
                     <p class="pricing-card-subtitle">For hobbyists and plant-lovers to business owners and farmers alike!</p>
                 </div>
+                <div class="pricing-price-container">
+                    <span class="pricing-price">$0</span>
+                    <span class="pricing-price-duration">/mo</span>
+                </div>
                 <ul class="pricing-features">
                     <li class="pricing-feature">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -272,6 +271,10 @@
                 <div class="pricing-card-content">
                     <h3 class="pricing-card-title">Starter</h3>
                     <p class="pricing-card-subtitle">For family farms to expanding businesses, all at low price.</p>
+                </div>
+                <div class="pricing-price-container">
+                    <span class="pricing-price">$29</span>
+                    <span class="pricing-price-duration">/mo</span>
                 </div>
                 <ul class="pricing-features">
                     <li class="pricing-feature">
@@ -309,6 +312,10 @@
                 <div class="pricing-card-content">
                     <h3 class="pricing-card-title">Pro</h3>
                     <p class="pricing-card-subtitle">Advanced tools for commercial farmers at an affordable price.</p>
+                </div>
+                <div class="pricing-price-container">
+                    <span class="pricing-price">$79</span>
+                    <span class="pricing-price-duration">/mo</span>
                 </div>
                 <ul class="pricing-features">
                     <li class="pricing-feature">
@@ -352,6 +359,10 @@
                     <h3 class="pricing-card-title">Enterprise</h3>
                     <p class="pricing-card-subtitle">High scaling, dedicated solutions for large operations.</p>
                 </div>
+                <div class="pricing-price-container">
+                    <span class="pricing-price">$499</span>
+                    <span class="pricing-price-duration">/mo</span>
+                </div>
                 <ul class="pricing-features">
                     <li class="pricing-feature">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -392,28 +403,22 @@
     </div>
 </section>
 
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-column">
-            <h3>About Us</h3>
-            <p>Learn more about our mission to revolutionize sustainable agriculture.</p>
-        </div>
-        <div class="footer-column">
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
-        <div class="footer-column">
-            <h3>Contact</h3>
-            <p>Email: support@agritech.com</p>
-            <p>Phone: +1 555 123 4567</p>
-        </div>
+<footer class="custom-footer">
+    <div class="footer-content">
+        <h2 class="font-bold text-3xl leading-snug">
+            Ready to upgrade your farm?<br>Start your subscription today.
+        </h2>
+        <a class="cta-button" href="/pricing">Get started</a>
+        <nav class="flex flex-wrap justify-center text-lg font-medium">
+            <div><a href="/">Home</a></div>
+            <div><a href="/program">Services</a></div>
+            <div><a href="/contact">Contact</a></div>
+            <div><a href="/pricing">Pricing</a></div>
+            <div><a href="/marketplace">Marketplace</a></div>
+            <div><a href="/dashboard">Dashboard</a></div>
+        </nav>
+        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
-    <p class="footer-bottom">© 2025 SustainaCore. All rights reserved.</p>
 </footer>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
