@@ -1476,3 +1476,74 @@ section {
 .navbar-logo-link:hover {
     opacity: 0.6; /*Change the property here to fit the aesthetic*/
 }
+
+/* Footer Styles (Converted from Tailwind) - styles.css */
+.custom-footer {
+    margin-top: 20px;
+    position: relative;
+    text-align: center;
+    background: linear-gradient(135deg, #16222A, #1e293b);
+    color: white;
+}
+
+.custom-footer .footer-content {
+    padding: 2rem 1.5rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.custom-footer h2 {
+    font-weight: bold;
+    font-size: 1.875rem;
+    line-height: 1.3;
+}
+
+.custom-footer a.cta-button {
+    margin-top: 2rem;
+    display: inline-block;
+    padding: 1.25rem 3rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.2;
+    background: darkcyan;
+    border-radius: 9999px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-width: 1px;
+    border-color: transparent;
+    text-decoration: none;
+    color: white;
+    transition: scale 0.3s ease, background-color 0.3s ease;
+}
+
+.custom-footer a.cta-button:hover {
+    scale: 1.06;
+    background: linear-gradient(to right, #4f46e5, #6b46c1);
+}
+
+.custom-footer nav {
+    margin-top: 3.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.custom-footer nav div {
+    padding: 0.5rem 1.25rem;
+}
+
+.custom-footer nav a {
+    color: darkcyan;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.custom-footer nav a:hover {
+    color: white;
+}
+
+.custom-footer p.copyright {
+    margin-top: 1.75rem;
+    font-size: 0.875rem;
+}
