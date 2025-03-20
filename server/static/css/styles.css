@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap');
+
 body, html {
     margin: 0;
     padding: 0;
@@ -73,6 +75,7 @@ ul {
     color: darkgrey;
     font-size: 1rem;
     transition: color 0.3s;
+    font-family: 'Lato', sans-serif;
 }
 
 .navbar-item:hover {

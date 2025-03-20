@@ -77,20 +77,21 @@
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr;  /* Default to one column */
             gap: 32px;
             padding: 20px;
+            justify-content: center;  /* Center items on the main axis */
         }
 
         @media (min-width: 640px) {
             .pricing-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
             }
         }
 
         @media (min-width: 1024px) {
             .pricing-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
             }
         }
 
@@ -102,7 +103,8 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            max-width: 350px;
         }
 
         .pricing-card:hover {
@@ -262,8 +264,8 @@
                         <span>Basic support</span>
                     </li>
                 </ul>
-                <a href="#" class="pricing-button">
-                    Sign Up
+                <a href="/dashboard" class="pricing-button">
+                    Get Started
                 </a>
             </div>
 
@@ -303,7 +305,7 @@
                     </li>
 
                 </ul>
-                <a href="#" class="pricing-button">
+                <a href="/contact" class="pricing-button">
                     Get Started
                 </a>
             </div>
@@ -349,57 +351,10 @@
                         <span>Priority support</span>
                     </li>
                 </ul>
-                <a href="#" class="pricing-button">
+                <a href="/contact" class="pricing-button">
                     Get Started
                 </a>
             </div>
-
-            <div class="pricing-card">
-                <div class="pricing-card-content">
-                    <h3 class="pricing-card-title">Enterprise</h3>
-                    <p class="pricing-card-subtitle">High scaling, dedicated solutions for large operations.</p>
-                </div>
-                <div class="pricing-price-container">
-                    <span class="pricing-price">$499</span>
-                    <span class="pricing-price-duration">/mo</span>
-                </div>
-                <ul class="pricing-features">
-                    <li class="pricing-feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>All Pro Features</span>
-                    </li>
-                    <li class="pricing-feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Climate Resilient Crop Selection</span>
-                    </li>
-                    <li class="pricing-feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Farm Efficiency Calculator</span>
-                    </li>
-                    <li class="pricing-feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Unlimited Size Integration</span>
-                    </li>
-                    <li class="pricing-feature">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Dedicated Support Team</span>
-                    </li>
-                </ul>
-                <a href="/contact" class="pricing-button">
-                    Contact Sales
-                </a>
-            </div>
-        </div>
     </div>
 </section>
 
