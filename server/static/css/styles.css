@@ -955,7 +955,7 @@ html {
 /*here is the marketplace chat DO NOT REMOVE THIS:*/
 .marketplace {
     padding: 3rem 1.5rem;
-    background: linear-gradient(135deg, rgba(46, 204, 113, 0.7), rgba(41, 128, 185, 0.7));
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     border-top: 5px solid #2980b9;
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -993,7 +993,7 @@ html {
 }
 
 .marketplace-item {
-    background: #fff;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     border-radius: 15px;
     padding: 1.5rem;
     text-align: center;
