@@ -7,7 +7,6 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-        /* Global Styles */
         body {
             margin: 0;
             padding: 0;
@@ -170,11 +169,12 @@
         </button>
         <ul class="navbar-list" id="navbar-list">
             <li><a href="/" class="navbar-item">Home</a></li>
-            <li><a href="/program" class="navbar-item active">Services</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
             <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
         </ul>
     </div>
 </header>

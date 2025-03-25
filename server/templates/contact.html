@@ -17,7 +17,7 @@
             font-size: 10px;
         }
 
-        body, button, input {
+         button, input {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             letter-spacing: 1.4px;
@@ -330,7 +330,6 @@
         }
     </style>
 </head>
-<body>
 <header class="navbar">
     <div class="navbar-container">
         <a href="/" class="navbar-logo-link">
@@ -344,13 +343,16 @@
         <ul class="navbar-list" id="navbar-list">
             <li><a href="/" class="navbar-item">Home</a></li>
             <li><a href="/program" class="navbar-item">Services</a></li>
-            <li><a href="/contact" class="navbar-item active">Contact</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
         </ul>
     </div>
 </header>
+<body>
+
 <div id="chatbot-popup">
     <div id="chatbot-icon" class="chatbot-logo">
         <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
