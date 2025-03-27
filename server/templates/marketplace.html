@@ -5,12 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainaCore</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header-title {
+            font-size: 5rem;
+            font-weight: 1300;
+            text-transform: uppercase;
+            z-index: 2;
+            letter-spacing: 2px;
+            color: #ffffff; /* Set text color to white */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8); /* Add a stronger white shadow */
+        }
+
+        /* Marketplace Section */
+        .marketplace {
+            padding: 40px 20px 250px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+
+        .marketplace-header {
+            padding: 40px 20px 10px;
+            text-align: center;
+            font-size: 5rem;
+            font-weight: 1300;
+            text-transform: uppercase;
+            z-index: 2;
+            letter-spacing: 2px;
+            color: #ffffff; /* Set text color to white */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8); /* Add a stronger white shadow */
+        }
+
+        .marketplace-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .marketplace-header p {
+            font-size: 1.1rem;
+        }
+
+        .marketplace-items {
+            display: grid;
+            align-items: center;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0px;
+            padding: 0 ;
+        }
+
+        .marketplace-item {
+            align-content: center;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .marketplace-item:hover {
+            transform: translateY(-5px);
+            border-radius: 0px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .marketplace-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .marketplace-item-content {
+            padding: 20px;
+        }
+
+        .marketplace-item h3 {
+            align-content: center;
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .marketplace-item p {
+            align-content: center;
+            font-size: 0.9rem;
+            color: lightgray;
+            margin-bottom: 15px;
+        }
+
+        .marketplace-item button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #6b46c1;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .marketplace-item button:hover {
+            background-color: hotpink;
+            border-radius: 0px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .marketplace-items {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body class="body-background">
 
+<!-- Original Navbar -->
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -19,119 +143,82 @@
             <span class="navbar-toggle-icon"></span>
         </button>
         <ul class="navbar-list" id="navbar-list">
-            <ul class="navbar-list" id="navbar-list">
-                <li><a href="/" class="navbar-item">Home</a></li>
-                <li><a href="/program" class="navbar-item">Services</a></li>
-                <li><a href="/contact" class="navbar-item">Contact</a></li>
-                <li><a href="/pricing" class="navbar-item">Pricing</a></li>
-                <li><a href="/market" class="navbar-item active">Marketplace</a></li>
-                <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
-                <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
-            </ul>
-</header>
-<div id="chatbot-popup">
-    <div id="chatbot-icon" class="chatbot-logo">
-        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
-    </div>
-    <div id="chatbot" class="chatbot-container hidden">
-        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
-        <div id="chatbot-messages" class="chatbot-messages"></div>
-        <div class="chatbot-input-container">
-            <label for="chatbot-input" class="visually-hidden"></label>
-            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
-            <button id="chatbot-send">Send</button>
-        </div>
-    </div>
-</div>
-<div class="main-container">
-    <div class="toc-container">
-        <ul class="table-of-contents">
-            <li><a href="#marketplace-section">Marketplace</a></li>
-            <li><a href="#about-section">About</a></li>
-            <li><a href="#services-section">Services</a></li>
-            <li><a href="#contact-section">Contact</a></li>
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
+            <li><a href="/pricing" class="navbar-item">Pricing</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
         </ul>
     </div>
+</header>
 
-    <div class="content-container">
-        <section id="marketplace-section">
-            <h2 class="marketplace-title">🌟 Marketplace</h2>
-            <div class="marketplace-description">
-                Explore sustainable tools, products, and innovations designed to support eco-friendly farming practices.
-            </div>
-
-            <div class="search-container">
-                <input type="text" id="search-bar" class="search-bar" placeholder="Search Marketplace...">
-            </div>
-            <div class="marketplace-items" id="marketplace-items">
-                <div class="category-header"> Seeds </div>
-                <div class="marketplace-item" data-title="Corn Seeds">
-                    <img src="https://sowtrueseed.com/cdn/shop/products/Corn_Dent_Hickory_King_Yellow_CD_42f1f490-8a21-4e28-8b0e-760e8b81fd30@2x.jpg?v=1571732093" alt="Corn Seeds" class="item-image">
-                    <h3 class="item-title">Corn Seeds</h3>
-                    <p class="item-description">Premium quality corn seeds for high-yield harvests. Ideal for large and small farms.</p>
-                    <button class="item-add-button">Add to Cart</button>
-                </div>
-                <div class="marketplace-item" data-title="Tomato Seeds">
-                    <img src="https://ndgbotanicals.com/wp-content/uploads/2016/08/Tomato-Mortgage-Lifter-1-7035-scaled.jpg" alt="Tomato Seeds" class="item-image">
-                    <h3 class="item-title">Tomato Seeds</h3>
-                    <p class="item-description">Organic tomato seeds for rich and juicy produce. Grows well in most climates.</p>
-                    <button class="item-add-button">Add to Cart</button>
-                </div>
-
-                <div class="category-header">Tools</div>
-                <div class="marketplace-item" data-title="Hand Tiller">
-                    <img src="https://m.media-amazon.com/images/I/61oBr++PMWL.jpg" alt="Hand Tiller" class="item-image">
-                    <h3 class="item-title">Hand Tiller</h3>
-                    <p class="item-description">Durable and easy-to-use hand tiller for soil preparation and weed control.</p>
-                    <button class="item-add-button">Add to Cart</button>
-                </div>
-                <div class="marketplace-item" data-title="Irrigation System Kit">
-                    <img src="https://cdn11.bigcommerce.com/s-tjrce8etun/images/stencil/1280x1280/attribute_rule_images/774_source_1678384110.jpg" alt="Irrigation Kit" class="item-image">
-                    <h3 class="item-title">Irrigation System Kit</h3>
-                    <p class="item-description">Complete irrigation system for efficient water distribution across your fields.</p>
-                    <button class="item-add-button">Add to Cart</button>
-                </div>
-
-                <div class="category-header">Other Farming Equipment</div>
-                <div class="marketplace-item" data-title="Compost Bin">
-                    <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTbZ6Zx1iTNfDL6EkA1OdGJ7LMIHcdnOnCy6Ju2gMCqks8fzqxshq6JlQpT4xkVoASxu6hXQQOBjQN0TMJWtxWJ7GtBZYsI_KAcnBbadFY1I9bupmmx8Z7Zqw" alt="Compost Bin" class="item-image">
-                    <h3 class="item-title">Compost Bin</h3>
-                    <p class="item-description">Eco-friendly compost bin for turning organic waste into nutritious compost.</p>
-                    <button class="item-add-button">Add to Cart</button>
-                </div>
-                <div class="marketplace-item" data-title="Garden Cart">
-                    <img src="https://i5.walmartimages.com/seo/Best-Choice-Products-Dual-Wheel-Home-Wheelbarrow-Yard-Garden-Cart-for-Lawn-Construction-Green_17cd4d71-4ba8-406d-b287-e273df9186d1.7e7be387423cc3b266f70a42bb9fa056.jpeg" alt="Garden Cart" class="item-image">
-                    <h3 class="item-title">Garden Cart</h3>
-                    <p class="item-description">Heavy-duty garden cart for transporting soil, tools, and harvests with ease.</p>
-                    <button class="item-add-button">Add to Cart</button>
-                </div>
-            </div>
-
-        </section>
-
-        <section id="cart-section">
-            <h2>🛒 Your Cart</h2>
-            <ul id="cart-items">
-            </ul>
-        </section>
-
-        <section id="about-section">
-            <h2>About</h2>
-            <p>Learn more about us and our mission to revolutionize sustainable agriculture.</p>
-        </section>
-
-        <section id="services-section">
-            <h2>Services</h2>
-            <p>Explore the services we offer to support sustainable agriculture.</p>
-        </section>
-
-        <section id="contact-section">
-            <h2>Contact</h2>
-            <p>Get in touch with us for more information.</p>
-        </section>
+<!-- New Marketplace Section -->
+<section class="marketplace">
+    <div class="marketplace-header">
+        <h2>Marketplace</h2>
+        <p>Explore sustainable tools, products, and innovations designed to support eco-friendly farming practices.</p>
     </div>
-</div>
+    <div class="marketplace-items">
+        <!-- Corn Seeds -->
+        <div class="marketplace-item">
+            <img src="{{ url_for('static', filename='assets/corn.png') }}" alt="Corn Seeds">
+            <div class="marketplace-item-content">
+                <h3>Corn Seeds</h3>
+                <p>Premium quality corn seeds for high-yield harvests. Ideal for large and small farms.</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+        <!-- Tomato Seeds -->
+        <div class="marketplace-item">
+            <img src="{{ url_for('static', filename='assets/tomato seeds.png') }}" alt="Tomato Seeds">
+            <div class="marketplace-item-content">
+                <h3>Tomato Seeds</h3>
+                <p>Organic tomato seeds for rich and juicy produce. Grows well in most climates.</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+        <!-- Hand Tiller -->
+        <div class="marketplace-item">
+            <img src="{{ url_for('static', filename='assets/tiller.png') }}" alt="Hand Tiller">
+            <div class="marketplace-item-content">
+                <h3>Hand Tiller</h3>
+                <p>Durable and easy-to-use hand tiller for soil preparation and weed control.</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+        <!-- Irrigation System Kit -->
+        <div class="marketplace-item">
+            <img src="{{ url_for('static', filename='assets/irrigation.png') }}" alt="Irrigation System Kit">
+            <div class="marketplace-item-content">
+                <h3>Irrigation System Kit</h3>
+                <p>Complete irrigation system for efficient water distribution across your fields.</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+        <!-- Compost Bin -->
+        <div class="marketplace-item">
+            <img src="{{ url_for('static', filename='assets/compost.png') }}" alt="Compost Bin">
+            <div class="marketplace-item-content">
+                <h3>Compost Bin</h3>
+                <p>Eco-friendly compost bin for turning organic waste into nutritious compost.</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+        <!-- Garden Cart -->
+        <div class="marketplace-item">
+            <img src="{{ url_for('static', filename='assets/barrow.png') }}" alt="Garden Cart">
+            <div class="marketplace-item-content">
+                <h3>Garden Cart</h3>
+                <p>Heavy-duty garden cart for transporting soil, tools, and harvests with ease.</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- Original Footer -->
 <footer class="custom-footer">
     <div class="footer-content">
         <h2 class="font-bold text-3xl leading-snug">
@@ -152,21 +239,5 @@
 
 <script src="{{ url_for('static', filename='js/marketplace.js') }}"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
-<script>
-    document.getElementById('search-bar').addEventListener('input', function(event) {
-        const searchTerm = event.target.value.toLowerCase();
-        const marketplaceItems = document.querySelectorAll('.marketplace-item');
-
-        marketplaceItems.forEach(item => {
-            const title = item.getAttribute('data-title').toLowerCase();
-            if (title.includes(searchTerm)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-</script>
 </body>
 </html>

@@ -4,159 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainaCore</title>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #14143e, #0d1c35);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background-attachment: fixed;
+            scroll-behavior: smooth;
         }
-
-        /* Hero Section */
-        .visual-section {
-            padding: 120px 50px;
-            text-align: center;
-            position: relative;
-            color: #fff;
-            background: linear-gradient(135deg, rgb(0, 0, 0), rgb(13, 28, 53)), url("https://www.mainegardens.org/wp-content/uploads/2020/11/NaturalLandscapeDesign.jpg");
+        .parallax {
+            background-attachment: fixed;
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
-        }
-
-        .visual-title {
-            font-size: 4rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-            text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.8);
-        }
-
-        .visual-description {
-            font-size: 1.5rem;
-            margin-top: 20px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.6);
-        }
-
-        .long-background {
-            padding: 100px 50px;
-            background-color: rgba(0, 0, 0, 0.85);
-            text-align: center;
-            background: linear-gradient(135deg, #14143e, #000000);
-        }
-
-        .long-background h2 {
-            font-size: 3rem;
-            margin-bottom: 30px;
-            color: #38bdf8;
-            text-shadow: 0px 0px 15px rgba(56, 189, 248, 0.7);
-        }
-
-        .long-background p {
-            font-size: 1.3rem;
-            max-width: 950px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-            color: #d1d1d1;
-        }
-
-        /* Image Formatting */
-        .visual-image {
-            width: 95%;
-            max-width: 1100px;
-            height: auto;
-            border-radius: 12px;
-            margin-top: 30px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            transition: transform 0.3s ease, filter 0.4s ease;
-        }
-
-        .visual-image:hover {
-            transform: scale(1.05);
-            filter: brightness(1.1);
-        }
-
-        /* Scroll Fade Animation */
-        .scroll-fade {
-            animation: fadeIn 2s ease-out forwards;
-            opacity: 0;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Buttons */
-        .button {
-            display: inline-block;
-            background-color: #38bdf8;
-            color: #fff;
-            font-size: 1.3rem;
-            font-weight: bold;
-            padding: 16px 30px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: all 0.4s ease;
-            margin-top: 30px;
-        }
-
-        .button:hover {
-            background-color: #1e40af;
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(56, 189, 248, 0.5);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar-list {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .visual-title {
-                font-size: 3rem;
-            }
-
-            .visual-description {
-                font-size: 1.3rem;
-            }
-
-            .long-background h2 {
-                font-size: 2.5rem;
-            }
-
-            .long-background p {
-                font-size: 1.1rem;
-            }
         }
     </style>
 </head>
-<body>
 
-<!-- Navbar -->
+<body class="bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white font-sans">
+
 <header class="navbar">
     <div class="navbar-container">
         <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
@@ -168,13 +32,15 @@
             <span class="navbar-toggle-icon"></span>
         </button>
         <ul class="navbar-list" id="navbar-list">
-            <li><a href="/" class="navbar-item">Home</a></li>
-            <li><a href="/program" class="navbar-item">Services</a></li>
-            <li><a href="/contact" class="navbar-item">Contact</a></li>
-            <li><a href="/pricing" class="navbar-item">Pricing</a></li>
-            <li><a href="/market" class="navbar-item">Marketplace</a></li>
-            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
-            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <ul class="navbar-list" id="navbar-list">
+                <li><a href="/" class="navbar-item">Home</a></li>
+                <li><a href="/program" class="navbar-item">Services</a></li>
+                <li><a href="/contact" class="navbar-item">Contact</a></li>
+                <li><a href="/pricing" class="navbar-item">Pricing</a></li>
+                <li><a href="/market" class="navbar-item">Marketplace</a></li>
+                <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            </ul>
         </ul>
     </div>
 </header>
@@ -192,43 +58,119 @@
         </div>
     </div>
 </div>
-
 <!-- Hero Section -->
-<div class="visual-section">
-    <h2 class="visual-title">SUSTAINACORE: GROWING OUR FUTURE</h2>
-    <img src="https://www.mainegardens.org/wp-content/uploads/2020/11/NaturalLandscapeDesign.jpg" width="50" alt="Earthy Landscape" class="visual-image">
-    <p class="visual-description scroll-fade" style="margin-top: 50px;">
-        Join us in our mission to revolutionize sustainable agriculture. Through innovative tools and mindful farming practices, we’re ensuring a greener, healthier future for the planet. From backyard gardens to industrial farms, our mission is to provide sustainable solutions and metrics to improve YOUR productivity.
-    </p>
-</div>
+<section class="h-screen parallax bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?forest,sustainability')">
+    <div class="flex items-center justify-center h-full bg-black bg-opacity-60">
+        <div class="text-center text-white px-4">
+            <h1 class="text-5xl font-bold mb-4">Empowering Sustainability, One Innovation at a Time</h1>
+            <p class="text-lg mb-6">Explore our services designed to revolutionize sustainability through cutting-edge technology and data-driven solutions.</p>
+            <a href="#services" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition">Explore Services</a>
+        </div>
+    </div>
+</section>
 
 <!-- Services Section -->
-<div class="visual-section">
-    <h2 class="visual-title">Building A Better Tomorrow</h2>
-    <p class="visual-description scroll-fade">
-        SustainaCore empowers farmers with the right tools and insights to optimize their crops, save resources, and reduce their environmental footprint. Our system brings together technology and nature, paving the way for regenerative agriculture practices.
-    </p>
-    <img src="https://media.wired.com/photos/593286f79be5e55af6c25aa6/191:100/w_1280,c_limit/AP47290246052.jpg" alt="Innovative Tools" class="visual-image">
-</div>
+<section id="services" class="py-20 bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-white mb-12">Our Services</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Service 1 -->
+            <div class="bg-gradient-to-br from-blue-900 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
+                <h3 class="text-2xl font-semibold text-blue-400 mb-4">Sustainability Analytics</h3>
+                <p class="text-gray-300">Track and optimize energy usage through AI-powered insights.</p>
+            </div>
+            <!-- Service 2 -->
+            <div class="bg-gradient-to-br from-blue-900 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
+                <h3 class="text-2xl font-semibold text-blue-400 mb-4">Carbon Footprint Reduction</h3>
+                <p class="text-gray-300">Implement solutions to lower your environmental impact effectively.</p>
+            </div>
+            <!-- Service 3 -->
+            <div class="bg-gradient-to-br from-blue-900 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
+                <h3 class="text-2xl font-semibold text-blue-400 mb-4">Smart Resource Management</h3>
+                <p class="text-gray-300">Intelligent monitoring and efficient allocation of resources.</p>
+            </div>
+            <!-- Service 4 -->
+            <div class="bg-gradient-to-br from-blue-900 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
+                <h3 class="text-2xl font-semibold text-blue-400 mb-4">Custom Sustainability Solutions</h3>
+                <p class="text-gray-300">Tailored services that align with your business’s sustainability goals.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- Tools Section -->
-<div class="visual-section">
-    <h2 class="visual-title">Tools for Sustainability</h2>
-    <p class="visual-description scroll-fade">
-        Our farm planner allows you to plan your crops, track weather patterns, and manage daily tasks seamlessly. It’s the perfect companion for any farmer dedicated to sustainable practices.
-    </p>
-    <img src="https://img2.chinadaily.com.cn/images/202409/24/66f21585a3103711c348c902.jpeg" alt="Innovative Tools" class="visual-image">
-</div>
+<!-- Why Choose Us Section -->
+<section class="py-20 parallax bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?city,green')">
+    <div class="bg-black bg-opacity-60 py-16">
+        <div class="max-w-6xl mx-auto px-4 text-center text-white">
+            <h2 class="text-4xl font-bold mb-8">Why Choose Us</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-blue-400">Eco-Innovation</h3>
+                    <p class="text-gray-300">Leverage the latest sustainable technologies.</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-blue-400">AI-Powered Insights</h3>
+                    <p class="text-gray-300">Make data-driven decisions with confidence.</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-blue-400">Expert Support</h3>
+                    <p class="text-gray-300">Guidance from sustainability experts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- Vision Section -->
-<div class="visual-section">
-    <h2 class="visual-title">Our Vision For A Greener World</h2>
-    <p class="visual-description scroll-fade">
-        Sustainability isn’t just about growing food; it’s about nurturing the earth. At SustainaCore, we’re committed to creating farming systems that support both the environment and the people who rely on it. Together, we can create a world where agriculture doesn’t just sustain us – it sustains the planet.
-    </p>
-    <img src="https://scx2.b-cdn.net/gfx/news/hires/2024/farming.jpg" alt="Innovative Tools" class="visual-image">
-</div>
+<!-- Sustainability Insights (API Data) -->
+<section id="insights" class="py-20 bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-white mb-12">Sustainability Insights</h2>
+        <div id="insights-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- API Data Will Be Injected Here -->
+        </div>
+    </div>
+</section>
 
+<!-- Contact Section -->
+<section class="py-20 bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-white mb-12">Get in Touch</h2>
+        <form class="bg-gray-800 p-8 rounded-lg shadow-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <input type="text" placeholder="Your Name" class="p-4 w-full border border-gray-700 rounded-lg focus:ring focus:ring-blue-500 bg-gray-700 text-white">
+                <input type="email" placeholder="Your Email" class="p-4 w-full border border-gray-700 rounded-lg focus:ring focus:ring-blue-500 bg-gray-700 text-white">
+            </div>
+            <textarea placeholder="Your Message" rows="5" class="p-4 w-full border border-gray-700 rounded-lg focus:ring focus:ring-blue-500 bg-gray-700 text-white mb-6"></textarea>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition w-full">Send Message</button>
+        </form>
+    </div>
+</section>
+
+<!-- JavaScript to Fetch API Data -->
+<script>
+    async function fetchInsights() {
+        try {
+            const response = await fetch('https://sustainacoreapi.com/insights'); // Replace with actual API URL
+            const data = await response.json();
+
+            const insightsContainer = document.getElementById('insights-container');
+
+            data.forEach(item => {
+                const insightCard = `
+                        <div class="bg-gradient-to-br from-blue-900 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
+                            <h3 class="text-2xl font-semibold text-blue-400 mb-4">${item.title}</h3>
+                            <p class="text-gray-300">${item.description}</p>
+                        </div>
+                    `;
+                insightsContainer.innerHTML += insightCard;
+            });
+        } catch (error) {
+            console.error('Error fetching insights:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchInsights);
+</script>
 <footer class="custom-footer">
     <div class="footer-content">
         <h2 class="font-bold text-3xl leading-snug">
