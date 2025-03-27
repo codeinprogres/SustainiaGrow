@@ -5,23 +5,23 @@ from flask_bcrypt import Bcrypt
 import requests
 import os
 
-app = Flask(
-    __name__,
-    static_folder='static',
-    template_folder='templates'
-)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
+# 🔹 App Configuration
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this!
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
+# 🔹 Database & Authentication Setup
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login_page'  # Change the view name to login_page
 
-OPENAI_API_KEY = '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'  # Replace with your actual OpenAI API Key
+# 🔹 OpenAI API Configuration (Optional)
+OPENAI_API_KEY = 'your_openai_api_key'  # Replace this!
 OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 
+# ------------------- User Model -------------------
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -31,33 +31,9 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# 🔹 Initialize DB if not exists
 with app.app_context():
     db.create_all()
-
-# ------------------- OpenAI Chat Function -------------------
-def get_openai_response(user_message):
-    try:
-        response = requests.post(
-            OPENAI_API_URL,
-            json={
-                'model': 'gpt-4',
-                'messages': [{'role': 'user', 'content': user_message}],
-            },
-            headers={
-                'Authorization': f'Bearer {OPENAI_API_KEY}',
-                'Content-Type': 'application/json',
-            },
-        )
-
-        if response.status_code != 200:
-            raise Exception(f"OpenAI request failed with status code {response.status_code}")
-
-        data = response.json()
-        bot_message = data['choices'][0]['message']['content']
-        return bot_message
-    except requests.exceptions.RequestException as e:
-        print(f"Request error: {e}")
-        return "Sorry, I couldn't process your request."
 
 # ------------------- Routes -------------------
 @app.route('/')
@@ -66,7 +42,11 @@ def index():
 
 @app.route('/program')
 def program():
-    return render_template('program.html', google_maps_api_key=os.getenv('GOOGLE_MAPS_API_KEY'))
+    return render_template('program.html')
+
+@app.route('/login', methods=['GET'])
+def login_page():  # Rename to login_page to avoid conflict with Flask-Login's 'login' function
+    return render_template('login.html')  # Ensure you have a login.html file
 
 @app.route('/market')
 def market():
@@ -104,50 +84,47 @@ def chat():
         return jsonify({'message': 'Server error. Please try again later.'}), 500
 
 # ------------------- Authentication Routes -------------------
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
+@app.route('/auth', methods=['POST'])
+def auth():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        if 'signup' in request.form:
+            username = request.form['username']
+            password = request.form['password']
 
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            flash('Username already exists. Try another one.', 'danger')
-            return redirect(url_for('signup'))
+            existing_user = User.query.filter_by(username=username).first()
+            if existing_user:
+                flash('Username already exists. Try another one.', 'danger')
+                return redirect(url_for('index'))
 
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        new_user = User(username=username, password=hashed_password)
+            hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+            new_user = User(username=username, password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
 
-        db.session.add(new_user)
-        db.session.commit()
+            flash('Account created successfully! Please log in.', 'success')
+            return redirect(url_for('login_page'))  # Redirect to login page after signup
 
-        flash('Account created successfully!', 'success')
-        return redirect(url_for('login'))
+        elif 'login' in request.form:
+            username = request.form['username']
+            password = request.form['password']
 
-    return render_template('signup.html')
+            user = User.query.filter_by(username=username).first()
+            if user and bcrypt.check_password_hash(user.password, password):
+                login_user(user)
+                flash('Login successful!', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Invalid username or password', 'danger')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        user = User.query.filter_by(username=username).first()
-        if user and bcrypt.check_password_hash(user.password, password):
-            login_user(user)
-            flash('Login successful!', 'success')
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Invalid username or password', 'danger')
-
-    return render_template('login.html')
+    return redirect(url_for('login_page'))  # Redirect to login page if something goes wrong
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('login_page'))  # Redirect to login page after logout
+
 
 # ------------------- Run the Flask App -------------------
 if __name__ == '__main__':
