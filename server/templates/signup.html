@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #00f2fe, #0e3255);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #00f2fe;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #00f2fe;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.7);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, #00f2fe, #3f5efb);
+            color: #121212;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #3f5efb, #00f2fe);
+            transform: scale(1.05);
+        }
+
+        .login-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .login-link a {
+            color: #00f2fe;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #3f5efb;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Sign Up</h2>
+    <form action="{{ url_for('signup') }}" method="POST">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="email" name="email" placeholder="Email" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <p class="login-link">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+</div>
+</body>
+</html>
