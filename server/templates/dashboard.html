@@ -6,277 +6,26 @@
     <title>SustainaCore</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-
-        .temperature-meter-wrapper {
-            position: relative; /* Keeps it in place without affecting other elements */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto;
-            max-width: 100%;
-            height: 100vh; /* Ensure it takes full screen height */
-        }
-
-        .temptop {
-            position: absolute;
-            top: 1200px; /* Adjust this value to position it correctly */
-            left: 62%;
-            transform: translateX(-50%);
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .temperature-meter-container {
-            position: relative;  /* Positions relative to the wrapper */
-            width: 400px;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, rgba(26, 34, 51, 0.8), rgba(18, 24, 37, 1)),
-            linear-gradient(135deg, rgba(0, 204, 255, 0.7), rgba(255, 0, 204, 0.7));
-            border-radius: 50%;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4),
-            0 0 60px rgba(0, 204, 255, 0.5),
-            inset 0 0 40px rgba(0, 0, 0, 0.8),
-            0 4px 25px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            border: 8px solid #111111;
-            background-size: 200% 200%;
-            animation: gradient-motion 4s ease infinite;
-        }
-
-        /* Animation for moving gradient */
-        @keyframes gradient-motion {
-            0% {
-                background-position: 0% 0%;
-            }
-            50% {
-                background-position: 100% 100%;
-            }
-            100% {
-                background-position: 0% 0%;
-            }
-        }
-
-        /* Add a subtle glowing outer layer */
-        .temperature-meter-container::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            background: linear-gradient(45deg, rgba(0, 204, 255, 0.6), rgba(255, 0, 204, 0.6));
-            border-radius: 50%;
-            filter: blur(15px);
-            z-index: -1;
-        }
-
-        /* Inner lighting and depth */
-        .temperature-meter-container::after {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4));
-            border-radius: 50%;
-            filter: blur(10px);
-            z-index: -2;
-        }
-
-        .progtop{
-            position: relative;
-            transform: translateY(-300px);
-            margin-right: 700px
-        }
-        .divtop{
-            position: relative;
-        }
-
-        canvas {
-            display: block;
-            margin: auto;
-            background: transparent;
-        }
-
-        .month-header {
-            background-color: #2980b9;
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            padding: 15px 20px;
-            text-align: center;
-            border-radius: 10px;
-            margin: 20px auto;
-            text-transform: capitalize;
-            max-width: 400px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .templabel {
-            position: absolute;
-            top: 15px;
-            transform: translateY(-460px);
-            translate: 75px;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 8px 15px;
-            background: linear-gradient(120deg, #000000, #102047, #002b5e, #1b2735);
-            background-size: 400% 400%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            color: #d1e6fa;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            letter-spacing: 0.8px;
-            text-align: center;
-            min-width: 200px;
-            width: 250px;
-            height: 60px;
-            animation: gradientMove 6s infinite alternate;
-            white-space: nowrap;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease-in-out;
-            opacity: 0;
-            box-shadow: 0 0 10px rgb(35, 35, 108), 0 0 20px rgb(20, 20, 62);
-        }
-
-        .templabel.show {
-            display: flex; /* Make the label visible */
-            opacity: 1; /* Fade in */
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .templabel h1.animate {
-            animation: writeText 1.2s steps(28, end) forwards;
-        }
-
-        @keyframes gradientMove {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-
-
-
-        .button {
-            display: inline-block;
-            background-color: #28a745;
+        /* General body styles */
+        body {
+            scroll-behavior: smooth;
+            background-image: linear-gradient(to bottom right, #1A202C, #2C3E50, #000000);
             color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 15px 25px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            margin: 10px auto;
-            text-align: center;
+            font-family: sans-serif;
         }
 
-        .button:hover {
-            background-color: #218838;
-        }
-
-        .calendar-container {
-            background-color: #2c3e50;
-            padding: 20px;
-            border-radius: 8px;
-            display: none;
-            margin: 20px auto;
-            max-width: 800px;
-        }
-
-        .calendar-nav {
-            background-color: #2980b9;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .calendar-nav:hover {
-            background-color: #3498db;
-        }
-
-        .month-container {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            padding: 10px;
-            background-color: #34495e;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .day {
-            background-color: #2c3e50;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-            color: #ecf0f1;
-        }
-
-        .day:hover {
-            background-color: #2980b9;
-        }
-
-        .task-container {
-            margin: 20px auto;
-            max-width: 800px;
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .task-container input {
-            padding: 10px;
-            font-size: 16px;
-            width: calc(100% - 120px);
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .task-container button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        .task-container button:hover {
-            background-color: #218838;
-        }
-
-        .task-list {
-            margin-top: 20px;
-            list-style: none;
-            padding: 0;
-        }
-
-        .task-list li {
-            background-color: #2c3e50;
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 5px;
+        /* Parallax effect */
+        .parallax {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
+
 <body class="prog-background">
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/program.js') }}"></script>
 <header class="navbar">
     <div class="navbar-container">
         <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
@@ -298,7 +47,23 @@
         </ul>
     </div>
 </header>
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..."/>
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
 <style>
+    /* Custom header styles */
     .custom-header {
         position: relative;
         width: 100%;
@@ -392,28 +157,17 @@
 
 <header class="custom-header">
     <div class="custom-header-overlay">
+<<<<<<< HEAD
         <h1 class="custom-header-title">Hello, {{user.username}}</h1>
+=======
+        <h1 class="custom-header-title">Hello, {{ user.username }}!</h1>
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
         <p class="custom-header-subtitle">Welcome To Your Dashboard</p>
     </div>
 </header>
 
-
-<div id="chatbot-popup">
-    <div id="chatbot-icon" class="chatbot-logo">
-        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
-    </div>
-    <div id="chatbot" class="chatbot-container hidden">
-        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
-        <div id="chatbot-messages" class="chatbot-messages"></div>
-        <div class="chatbot-input-container">
-            <label for="chatbot-input" class="visually-hidden"></label>
-            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
-            <button id="chatbot-send">Send</button>
-        </div>
-    </div>
-</div>
-
 <style>
+    /* Program section styling */
     body {
         font-family: 'Poppins', sans-serif;
         background: linear-gradient(135deg, #000428, #004e92);
@@ -428,7 +182,6 @@
         text-align: center;
         transition: transform 0.3s ease, opacity 0.3s ease;
     }
-
 
     .section-header {
         margin-bottom: 40px;
@@ -498,7 +251,9 @@
         }
     }
 </style>
+
 <style>
+    /* Farmtop styles */
     .farmtop{
         margin-top: 410px;
     }
@@ -734,6 +489,7 @@
     </div>
 
     <style>
+        /* Parent container styles */
         .parent-container {
             position: relative;
             width: 100%;
@@ -741,378 +497,14 @@
         }
     </style>
 
-
-
-
-
-    <style>
-        .crop-selector {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 8px;
-            color: #ecf0f1;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-
-        h3, h4 {
-            margin: 0 0 10px 0;
-        }
-
-        .crop-item, .selected-crop {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            margin: 5px 0;
-            background-color: #2c3e50;
-            border-radius: 5px;
-        }
-
-        .add-crop-button, .remove-crop-button, .finalize-button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .add-crop-button:hover, .remove-crop-button:hover, .finalize-button:hover {
-            background-color: #218838;
-        }
-
-        .remove-crop-button {
-            background-color: #e74c3c;
-        }
-
-        .remove-crop-button:hover {
-            background-color: #c0392b;
-        }
-
-        .finalize-button {
-            margin-top: 15px;
-            padding: 10px 15px;
-            display: block;
-            width: 100%;
-        }
-    </style>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const availableCrops = document.querySelector("#available-crops");
-            const selectedCropContainer = document.querySelector(".selected-crop-container");
-            const finalizeButton = document.getElementById("finalize-crops");
-
-            availableCrops.addEventListener("click", (event) => {
-                if (event.target.classList.contains("add-crop-button")) {
-                    const cropName = event.target.getAttribute("data-crop");
-                    addCropToSelected(cropName);
-                }
-            });
-
-            selectedCropContainer.addEventListener("click", (event) => {
-                if (event.target.classList.contains("remove-crop-button")) {
-                    const cropName = event.target.getAttribute("data-crop");
-                    removeCropFromSelected(cropName);
-                }
-            });
-
-            finalizeButton.addEventListener("click", () => {
-                const selectedCropNames = Array.from(selectedCropContainer.children).map(item =>
-                    item.querySelector("span").textContent
-                );
-                alert(`Crops finalized: ${selectedCropNames.join(", ")}`);
-            });
-
-            const addCropToSelected = (cropName) => {
-                if (!Array.from(selectedCropContainer.children).some(item =>
-                    item.querySelector("span").textContent === cropName)) {
-                    const div = document.createElement("div");
-                    div.classList.add("selected-crop");
-                    div.innerHTML = `
-                    <span>${cropName}</span>
-                    <button class="remove-crop-button" data-crop="${cropName}">-</button>
-                `;
-                    selectedCropContainer.appendChild(div);
-                }
-            };
-
-            const removeCropFromSelected = (cropName) => {
-                Array.from(selectedCropContainer.children).forEach(item => {
-                    if (item.querySelector("span").textContent === cropName) {
-                        selectedCropContainer.removeChild(item);
-                    }
-                });
-            };
-        });
-    </script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const generateButton = document.getElementById("generate-calendar");
-            const calendarContainer = document.getElementById("calendar-container");
-            const monthsContainer = document.getElementById("months-container");
-            const monthHeader = document.getElementById("month-header");
-            const prevMonthBtn = document.getElementById("prev-month");
-            const nextMonthBtn = document.getElementById("next-month");
-            const taskContainer = document.getElementById("task-container");
-            const selectedDateSpan = document.getElementById("selected-date");
-            const taskInput = document.getElementById("task-input");
-            const addTaskButton = document.getElementById("add-task");
-            const taskList = document.getElementById("task-list");
-
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-
-            let currentMonthIndex = 0;
-            let tasks = {};
-
-            const generateCalendar = () => {
-                monthsContainer.innerHTML = "";
-                const daysInMonth = new Date(2025, currentMonthIndex + 1, 0).getDate();
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayElement = document.createElement("div");
-                    dayElement.classList.add("day");
-                    dayElement.textContent = day;
-                    dayElement.addEventListener("click", () => {
-                        const selectedDate = `${monthNames[currentMonthIndex]} ${day}, 2025`;
-                        selectedDateSpan.textContent = selectedDate;
-                        taskContainer.style.display = "block";
-                        renderTasks(selectedDate);
-                    });
-                    monthsContainer.appendChild(dayElement);
-                }
-            };
-
-            const renderTasks = (date) => {
-                taskList.innerHTML = "";
-                const dayTasks = tasks[date] || [];
-                dayTasks.sort().forEach(task => {
-                    const taskItem = document.createElement("li");
-                    taskItem.textContent = task;
-                    taskList.appendChild(taskItem);
-                });
-            };
-
-            addTaskButton.addEventListener("click", () => {
-                const date = selectedDateSpan.textContent;
-                if (!tasks[date]) {
-                    tasks[date] = [];
-                }
-                const task = taskInput.value.trim();
-                if (task) {
-                    tasks[date].push(task);
-                    taskInput.value = "";
-                    renderTasks(date);
-                }
-            });
-
-            generateButton.addEventListener("click", () => {
-                calendarContainer.style.display = "block";
-                generateCalendar();
-            });
-
-            prevMonthBtn.addEventListener("click", () => {
-                currentMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
-                monthHeader.textContent = monthNames[currentMonthIndex];
-                generateCalendar();
-            });
-
-            nextMonthBtn.addEventListener("click", () => {
-                currentMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
-                monthHeader.textContent = monthNames[currentMonthIndex];
-                generateCalendar();
-            });
-
-            monthHeader.textContent = monthNames[currentMonthIndex];
-        });
-    </script>
-
-    <script>
-        const canvas = document.getElementById("temperatureMeter");
-        const ctx = canvas.getContext("2d");
-        const temperatureLabel = document.getElementById("temperatureLabel");
-
-        let currentTemperature = 0;
-
-        function animateMeter(lastTemp, currentTemp) {
-            const tempDifference = currentTemp - lastTemp;
-            const step = tempDifference / 20; // Smoothness step
-
-            // Update temperature incrementally
-            let temp = lastTemp;
-            const update = () => {
-                temp += step;
-                if (Math.abs(temp - currentTemp) < Math.abs(step)) {
-                    temp = currentTemp; // Stop at the target value
-                }
-                drawAnalogMeter(temp);
-                temperatureLabel.textContent = `Temperature: ${Math.round(temp)}°C`;
-
-                // Continue animation
-                if (temp !== currentTemp) {
-                    requestAnimationFrame(update);
-                }
-            };
-            update();
-        }
-
-        function drawAnalogMeter(temperature) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const gradient = ctx.createLinearGradient(0, 0, 300, 0);
-            gradient.addColorStop(0, "#4B9E8B"); // Soft teal for cool temperatures
-            gradient.addColorStop(0.33, "#A0D911"); // Soft green for mild temperatures
-            gradient.addColorStop(0.66, "#FFDC00"); // Golden yellow for warm temperatures
-            gradient.addColorStop(1, "#FF5733"); // Warm red for hot temperatures
-
-            // Outer circle (background)
-            ctx.beginPath();
-            ctx.arc(150, 150, 130, 0, 2 * Math.PI);
-            ctx.fillStyle = "#2b3a45"; // Elegant dark background
-            ctx.fill();
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = "#1f2a3a"; // Subtle darker outline
-            ctx.stroke();
-            ctx.closePath();
-
-            // Gradient arc (temperature scale)
-            ctx.beginPath();
-            ctx.arc(150, 150, 110, Math.PI, 2 * Math.PI);
-            ctx.lineWidth = 20;
-            ctx.strokeStyle = gradient;
-            ctx.lineJoin = 'round';
-            ctx.stroke();
-            ctx.closePath();
-
-            // Rotating needle
-            const angle = Math.PI + (Math.PI * (temperature + 40) / 80);
-            ctx.save();
-            ctx.translate(150, 150);
-            ctx.rotate(angle);
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, -90);
-            ctx.lineWidth = 8;
-            ctx.strokeStyle = "#A6B8D8"; // Polished silver for the needle
-            ctx.stroke();
-            ctx.closePath();
-            ctx.restore();
-
-            // Central knob (focal point)
-            ctx.beginPath();
-            ctx.arc(150, 150, 14, 0, 2 * Math.PI);
-            ctx.fillStyle = "#A6B8D8"; // Polished silver to match the needle
-            ctx.fill();
-            ctx.closePath();
-
-            // Outer ring for the meter (modern steel border)
-            ctx.beginPath();
-            ctx.arc(150, 150, 145, 0, 2 * Math.PI);
-            ctx.lineWidth = 6;
-            ctx.strokeStyle = "#7A8C8D"; // Muted steel border
-            ctx.stroke();
-            ctx.closePath();
-
-            // Subtle inner white ring for refinement
-            ctx.beginPath();
-            ctx.arc(150, 150, 120, 0, 2 * Math.PI);
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.5)"; // Soft white border
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-
-        document.addEventListener("DOMContentLoaded", () => {
-            setupDynamicWeatherUpdate();
-            drawAnalogMeter(currentTemperature);
-        });
-
-
-        // Toggle visibility and animate the label when the button is clicked
-        // Toggle visibility and make the label visible when the button is clicked
-        document.getElementById("find-location").addEventListener("click", function() {
-            const label = document.getElementById("temperatureLabel");
-
-            // Only show the label if it's hidden
-            if (label.style.display === "none" || label.style.display === "") {
-                label.style.display = "flex";  // Show the label
-                setTimeout(() => {
-                    label.classList.add("show"); // Trigger the fade-in effect
-                }, 10); // Small delay for the smooth transition
-            }
-        });
-
-        function updateTemperatureMeter() {
-            if (window.weatherInfo && window.weatherInfo.temperature !== undefined) {
-                const newTemperature = Math.round(window.weatherInfo.temperature);
-                animateMeter(currentTemperature, newTemperature);
-                currentTemperature = newTemperature;
-
-                updateTemperatureLabel(currentTemperature);
-            }
-        }
-
-        // Function to update the temperature label dynamically
-        function updateTemperatureLabel(temperature) {
-            const label = document.getElementById("temperatureLabel");
-            const text = `Temperature: ${temperature}°C`; // Dynamic text update
-            const h1 = label.querySelector("h1");
-
-            // Update the text
-            h1.textContent = text;
-
-            // Trigger the text animation by adding/removing the 'animate' class
-            h1.classList.remove("animate");  // Remove animation class
-            void h1.offsetWidth;  // Force reflow
-            h1.classList.add("animate");  // Re-add the animation class
-
-            // Optional: Subtle hover-style glow on update
-            label.style.boxShadow = "0 0 25px rgba(0, 255, 255, 0.2), 0 0 50px rgba(255, 255, 255, 0.3)";
-            setTimeout(() => {
-                label.style.boxShadow = "0 0 20px rgba(0, 255, 255, 0.15), 0 0 40px rgba(255, 255, 255, 0.2)";
-            }, 300); // Revert glow after animation
-        }
-
-
-        function setupDynamicWeatherUpdate() {
-            let lastTemperature = null;
-
-            setInterval(() => {
-                if (
-                    window.weatherInfo &&
-                    window.weatherInfo.temperature !== undefined &&
-                    window.weatherInfo.temperature !== lastTemperature
-                ) {
-                    lastTemperature = window.weatherInfo.temperature;
-                    updateTemperatureMeter();
-                }
-            }, 100);
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            setupDynamicWeatherUpdate();
-            drawAnalogMeter(currentTemperature);
-        });
-
-
-
-    </script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/program.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3wmHvCMTotbs2mYWdYU8_k1Lh73J6tuY&callback=initMap" async defer></script>
 
-
+    <!-- ... (Existing styles and script) ... -->
     <style>
+<<<<<<< HEAD
 
         .barometer-container-custom {
             position: absolute;
@@ -2306,6 +1698,9 @@
 
     <style>
         /* Overall Body Styling */
+=======
+        /* General Body Styling */
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
         .farm-tips-container {
             width: 90%;
             max-width: 800px; /* Slightly reduced width for better fitting */
@@ -2373,9 +1768,6 @@
         }
     </style>
 
-
-
-
     <div id="farmTips" class="farm-tips-container">
         <div class="farm-tips-title">Farm Tips & Inspirational Quotes</div>
 
@@ -2401,12 +1793,10 @@
             farmTips.classList.add('fade-in');
         });
     </script>
-    <script>
-        const addCropButton = document.getElementById('add-crop-button');
-        const farmTips = document.getElementById('farmTips');
 
-        let clickCount = 0;
+</div>
 
+<<<<<<< HEAD
         addCropButton.addEventListener('click', function () {
             clickCount++;
 
@@ -2433,6 +1823,25 @@
             <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
         </div>
     </footer>
+=======
+<footer class="custom-footer">
+    <div class="footer-content">
+        <h2 class="font-bold text-3xl leading-snug">
+            Ready to upgrade your farm?<br>Start your subscription today.
+        </h2>
+        <a class="cta-button" href="/pricing">Get started</a>
+        <nav class="flex flex-wrap justify-center text-lg font-medium">
+            <div><a href="/">Home</a></div>
+            <div><a href="/program">Services</a></div>
+            <div><a href="/contact">Contact</a></div>
+            <div><a href="/pricing">Pricing</a></div>
+            <div><a href="/marketplace">Marketplace</a></div>
+            <div><a href="/dashboard">Dashboard</a></div>
+        </nav>
+        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
+    </div>
+</footer>
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 </div>
 </body>
 </html>

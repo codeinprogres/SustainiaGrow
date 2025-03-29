@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
+<<<<<<< HEAD
 
 app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -21,6 +22,23 @@ OPENAI_API_KEY = 'your_openai_api_key'
 OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 
 
+=======
+# 🔹 App Configuration
+app.config['SECRET_KEY'] = 'your_secret_key'  # Change this!
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+
+# 🔹 Database & Authentication Setup
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login_page'  # Change the view name to login_page
+
+# 🔹 OpenAI API Configuration (Optional)
+OPENAI_API_KEY = 'your_openai_api_key'  # Replace this!
+OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
+
+# ------------------- User Model -------------------
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -30,10 +48,18 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+<<<<<<< HEAD
 
 with app.app_context():
     db.create_all()
 
+=======
+# 🔹 Initialize DB if not exists
+with app.app_context():
+    db.create_all()
+
+# ------------------- Routes -------------------
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 @app.route('/')
 def index():
     return render_template('index.html', user=current_user)
@@ -43,8 +69,13 @@ def program():
     return render_template('program.html')
 
 @app.route('/login', methods=['GET'])
+<<<<<<< HEAD
 def login_page():
     return render_template('login.html')
+=======
+def login_page():  # Rename to login_page to avoid conflict with Flask-Login's 'login' function
+    return render_template('login.html')  # Ensure you have a login.html file
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 
 @app.route('/market')
 def market():
@@ -81,7 +112,11 @@ def chat():
         print(f"Error handling chat message: {e}")
         return jsonify({'message': 'Server error. Please try again later.'}), 500
 
+<<<<<<< HEAD
 
+=======
+# ------------------- Authentication Routes -------------------
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 @app.route('/auth', methods=['POST'])
 def auth():
     if request.method == 'POST':
@@ -100,7 +135,11 @@ def auth():
             db.session.commit()
 
             flash('Account created successfully! Please log in.', 'success')
+<<<<<<< HEAD
             return redirect(url_for('login_page'))
+=======
+            return redirect(url_for('login_page'))  # Redirect to login page after signup
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 
         elif 'login' in request.form:
             username = request.form['username']
@@ -114,14 +153,22 @@ def auth():
             else:
                 flash('Invalid username or password', 'danger')
 
+<<<<<<< HEAD
     return redirect(url_for('login_page'))
+=======
+    return redirect(url_for('login_page'))  # Redirect to login page if something goes wrong
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out.', 'info')
+<<<<<<< HEAD
     return redirect(url_for('login_page'))
+=======
+    return redirect(url_for('login_page'))  # Redirect to login page after logout
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 
 
 if __name__ == '__main__':

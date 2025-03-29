@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainaCore | About Us</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/program.js') }}"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #0a0a0a;
+            color: #eaeaea;
+            line-height: 1.6;
+            height: 100vh;
+            position: relative;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(2, 19, 58, 0.9), rgba(4, 32, 85, 0.9));
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite, pulseStars 20s infinite;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        /* Animation for Pulse Stars */
+        @keyframes pulseStars {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Main Header Section */
+        header {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 2;
+            border-radius: 20px;
+            margin-bottom: 800px;
+        }
+
+        header h1 {
+            color: #ecf0f1;
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-shadow: 0 0 35px rgba(255, 255, 255, 0.6), 0 0 65px rgba(0, 255, 255, 0.8);
+            animation: textGlow 4s ease-in-out infinite;
+        }
+
+        header p {
+            font-size: 1.4rem;
+            color: #bdc3c7;
+            margin-top: 10px;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.85;
+        }
+
+        /* Header Text Glow Animation */
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 35px rgba(255, 255, 255, 0.6), 0 0 65px rgba(0, 255, 255, 0.8); }
+            50% { text-shadow: 0 0 55px rgba(255, 255, 255, 0.8), 0 0 85px rgba(0, 255, 255, 1); }
+            100% { text-shadow: 0 0 35px rgba(255, 255, 255, 0.6), 0 0 65px rgba(0, 255, 255, 0.8); }
+        }
+
+        /* Section Titles */
+        h2 {
+            font-size: 3rem;
+            margin: 40px 0;
+            text-transform: uppercase;
+            color: #ecf0f1;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 35px rgba(0, 255, 255, 0.5);
+            animation: textSlide 2s ease-out;
+        }
+
+        @keyframes textSlide {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 100px 10%;
+            background: #1a2a44;
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .team-section .team-members {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            z-index: 2;
+        }
+
+        .team-member {
+            background: rgba(52, 152, 219, 0.8);
+            border-radius: 10px;
+            padding: 30px;
+            width: 260px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 6px 40px rgba(0, 0, 0, 0.7);
+            background: linear-gradient(135deg, rgba(4, 15, 60, 0.7), rgba(21, 45, 106, 0.8));
+        }
+
+        .team-member:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.8);
+            transition: all 0.4s ease;
+        }
+
+        .team-member img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member img:hover {
+            transform: scale(1.1);
+        }
+
+        .team-member h3 {
+            color: #fff;
+            margin-top: 20px;
+            font-size: 1.7rem;
+        }
+
+        .team-member p {
+            color: #bdc3c7;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        /* Vision Section */
+        .vision-section {
+            padding: 120px 15%;
+            background: #1e2c4b;
+            color: #ecf0f1;
+            position: relative;
+            z-index: 2;
+            border-radius: 20px;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .vision-section p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+            text-align: center;
+            animation: textFadeIn 3s ease-out;
+        }
+
+        @keyframes textFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+<header class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        </a>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="/about" class="navbar-item">About</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
+            <li><a href="/pricing" class="navbar-item">Pricing</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+        </ul>
+    </div>
+</header>
+
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Background Cosmic Effect -->
+<div class="background"></div>
+
+<!-- Main Header -->
+<header style="position: relative; top: -5rem;">
+    <img
+            style="width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; "
+            alt="background field image"
+            src="https://live.staticflickr.com/5832/23169901305_0d855c6b19_h.jpg">
+    <div style="
+    position: absolute;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    top: 18rem;
+    left: 0;">
+        <h1 style="color: white;">
+            SustainaCore
+        </h1>
+        <p style="color: white; width: 200%;">
+            "Transforming agriculture into a sustainable, greener future for all."
+        </p>
+    </div>
+</header>
+
+
+
+<!-- Vision Section -->
+<div class="vision-section" style="margin-top: 30rem;">
+    <h2 style="text-align: center;">Our Vision</h2>
+    <p style="text-align: center;">
+        At SustainaCore, we strive to create an agricultural ecosystem that not only thrives but also heals the planet. Our goal is to reshape how we farm—making it more sustainable, resource-efficient, and environmentally friendly.
+    </p>
+</div>
+
+<!-- Footer -->
+<footer class="custom-footer">
+    <div class="footer-content">
+        <h2 class="font-bold text-3xl leading-snug">
+            Ready to upgrade your farm?<br>Start your subscription today.
+        </h2>
+        <a class="cta-button" href="/pricing">Get started</a>
+        <nav class="flex flex-wrap justify-center text-lg font-medium">
+            <div><a href="/">Home</a></div>
+            <div><a href="/program">Services</a></div>
+            <div><a href="/contact">Contact</a></div>
+            <div><a href="/pricing">Pricing</a></div>
+            <div><a href="/marketplace">Marketplace</a></div>
+            <div><a href="/dashboard">Dashboard</a></div>
+        </nav>
+        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
+    </div>
+</footer>
+
+
+</body>
+</html>
