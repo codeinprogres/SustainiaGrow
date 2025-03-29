@@ -11,20 +11,36 @@
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #4f46e5, #6b46c1);
+            background: black;
             color: #fff;
             overflow-x: hidden;
             box-sizing: border-box;
+        }
+
+        .custom-footer {
+            margin-top: auto;  /* Pushes the footer to the bottom */
         }
 
         .pricing-section {
             position: relative;
             padding: 100px 0 130px 0;
             text-align: center;
-            background: linear-gradient(to right, #4f46e5, #6b46c1);
+            background: url("https://duckma.com/hs-fs/hubfs/Imported_Blog_Media/view-futuristic-looking-city-scaled.jpg?width=2560&height=1707&name=view-futuristic-looking-city-scaled.jpg") no-repeat center center;
+            background-size: cover;
             opacity: 0;
-            transform: translateY(40px);
             animation: fadeIn 1.5s ease-out forwards;
+            margin-bottom: 0;
+        }
+
+        .pricing-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);  /* Black overlay with 50% opacity */
+            z-index: -1;  /* Ensure it stays behind the content */
         }
 
         .pricing-background {
@@ -39,11 +55,9 @@
         @keyframes fadeIn {
             0% {
                 opacity: 0;
-                transform: translateY(40px);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
@@ -64,12 +78,12 @@
             font-family: 'fantasy', sans-serif;
             font-size: 48px;
             font-weight: bold;
-            color: #c8d5b9;
+            color: #ffffff;
             margin-bottom: 16px;
         }
 
         .pricing-description {
-            color: tan;
+            color: #ffffff;
             font-size: 36px;
             text-align: center;
             line-height: 1.5;
@@ -96,7 +110,7 @@
         }
 
         .pricing-card {
-            background-color: #2d3748;
+            background-color: #0d1c35;
             border-radius: 30px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             padding: 28px;
@@ -115,7 +129,7 @@
         .pricing-card-title {
             font-size: 24px;
             font-weight: 600;
-            color: tan;
+            color: #ffffff;
             margin-bottom: 16px;
             text-align: center;
         }
@@ -134,7 +148,7 @@
         .pricing-price {
             font-size: 48px;
             font-weight: 800;
-            color: tan;
+            color: #ffffff;
         }
 
         .pricing-price-duration {
@@ -232,19 +246,19 @@
     <div class="pricing-background"></div>
     <div class="pricing-container">
         <div class="pricing-title">
-            <p class="pricing-description">
+            <p class="pricing-description font-bold">
                 Simple, affordable pricing for family gardens to factory farms.
             </p>
         </div>
 
         <div class="pricing-grid">
             <div class="pricing-card">
-                <div class="pricing-card-content">
-                    <h3 class="pricing-card-title">Free</h3>
-                    <p class="pricing-card-subtitle">For hobbyists and plant-lovers to business owners and farmers alike!</p>
+                <div class="pricing-card-content font-bold">
+                    <h3 class="pricing-card-title ">Free</h3>
+                    <p class="pricing-card-subtitle ">For hobbyists and plant-lovers to business owners and farmers alike!</p>
                 </div>
-                <div class="pricing-price-container">
-                    <span class="pricing-price">$0</span>
+                <div class="pricing-price-container font-bold">
+                    <span class="pricing-price ">$0</span>
                     <span class="pricing-price-duration">/mo</span>
                 </div>
                 <ul class="pricing-features">
