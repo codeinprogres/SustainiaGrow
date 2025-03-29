@@ -10,7 +10,20 @@
     <style>
         body {
             scroll-behavior: smooth;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+;
         }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
         .parallax {
             background-attachment: fixed;
             background-size: cover;
@@ -18,7 +31,7 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white font-sans">
+<body class=" bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white font-sans">
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/program.js') }}"></script>
 
