@@ -8,23 +8,321 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
+        /* General Body Styles */
         body {
             scroll-behavior: smooth;
+<<<<<<< HEAD
         }
         .parallax {
             background-attachment: fixed;
             background-size: cover;
             background-position: center;
+=======
+            background-image: linear-gradient(to bottom right, #1A202C, #2C3E50, #000000);
+            color: white;
+            font-family: sans-serif;
         }
+
+        /* Parallax Effect */
+        .parallax {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            height: 100vh;
+            background-image: url('https://butterfly-conservation.org/sites/default/files/styles/masthead/public/2018-12/branches-bright-colors-957024.jpg?itok=u17dNRYI');
+        }
+
+        .hero-content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content {
+            text-align: center;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .hero-title {
+            font-size: 3.0rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-button {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.4s;
+        }
+
+        .hero-button:hover {
+            background-color: #1e40af;
+        }
+
+        /* Services Section */
+        .services-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            background-color: #1A202C;
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
+        }
+
+        .services-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 72rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .service-card {
+            background-image: linear-gradient(to bottom right, #3b82f6, #4A5568);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
+
+        .service-card:hover {
+            box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.3);
+            transform: translateY(-0.5rem);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #93c5fd;
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            color: #D1D5DB;
+        }
+
+        /* Why Choose Us Section */
+        .why-choose-us-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+
+        .why-choose-us-section {
+            background-image: url('https://source.unsplash.com/1600x900/?city,green');
+        }
+
+        .why-choose-us-content {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        .why-choose-us-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .why-choose-us-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 72rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .why-choose-us-card {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .why-choose-us-card {
+            color: white;
+        }
+
+        /* Sustainability Insights Section */
+        .insights-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            background-color: #1A202C;
+        }
+
+        .insights-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .insights-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 72rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            background-color: #1A202C;
+        }
+
+        .contact-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .contact-form {
+            background-color: #4A5568;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            max-width: 48rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .contact-form-input {
+            padding: 1rem;
+            width: 100%;
+            border: 1px solid #718096;
+            border-radius: 0.5rem;
+            outline: none;
+            background-color: #4A5568;
+            color: white;
+        }
+
+        .contact-form-textarea {
+            padding: 1rem;
+            width: 100%;
+            border: 1px solid #718096;
+            border-radius: 0.5rem;
+            outline: none;
+            background-color: #4A5568;
+            color: white;
+            resize: vertical;
+        }
+
+        .contact-form-button {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s;
+            width: 100%;
+            border: none;
+        }
+
+        .contact-form-button:hover {
+            background-color: #1e40af;
+        }
+
+        /* custom footer section */
+        .custom-footer {
+            background-color: #1A202C;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .custom-footer .footer-content {
+            max-width: 6xl;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .custom-footer .cta-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #4338ca;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-footer .cta-button:hover {
+            background-color: #312e81;
+        }
+
+        .custom-footer nav {
+            margin-top: 2rem;
+        }
+
+        .custom-footer nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .custom-footer nav a:hover {
+            color: #ddd;
+        }
+
+        .custom-footer .copyright {
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: #a1a1aa;
+        }
+
     </style>
 </head>
 
+<<<<<<< HEAD
 <body class="bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white font-sans">
+=======
+<body>
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/program.js') }}"></script>
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -40,7 +338,11 @@
                 <li><a href="/pricing" class="navbar-item">Pricing</a></li>
                 <li><a href="/market" class="navbar-item">Marketplace</a></li>
                 <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+<<<<<<< HEAD
+                <li><a href="{{ url_for('logout') }}" class="navbar-item">Account</a></li>
+=======
                 <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
             </ul>
         </ul>
     </div>
@@ -54,18 +356,19 @@
         <div id="chatbot-messages" class="chatbot-messages"></div>
         <div class="chatbot-input-container">
             <label for="chatbot-input" class="visually-hidden"></label>
-            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..."/>
             <button id="chatbot-send">Send</button>
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 <!-- Hero Section -->
 <section class="h-screen parallax bg-cover bg-center" style="background-image: url('https://butterfly-conservation.org/sites/default/files/styles/masthead/public/2018-12/branches-bright-colors-957024.jpg?itok=u17dNRYI')">
     <div class="flex items-center justify-center h-full bg-black bg-opacity-60">
         <div class="text-center text-white px-4">
             <h1 class="text-5xl font-bold mb-4">Empowering Sustainability, One Innovation at a Time</h1>
             <p class="text-lg mb-6">Explore our services designed to revolutionize sustainability through cutting-edge technology and data-driven solutions.</p>
-            <a href="#services" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition">Explore Services</a>
+            <a href="#services" class="bg-black hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition">Explore Services</a>
         </div>
     </div>
 </section>
@@ -94,11 +397,64 @@
             <div class="bg-gradient-to-br from-blue-900 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
                 <h3 class="text-2xl font-semibold text-blue-400 mb-4">Custom Sustainability Solutions</h3>
                 <p class="text-gray-300">Tailored services that align with your business’s sustainability goals.</p>
+=======
+<section class="hero-section parallax" >
+    <div class="hero-content-container">
+        <div class="hero-content">
+            <h1 class="hero-title">Empowering Sustainability, One Innovation at a Time</h1>
+            <p class="hero-description">Explore our services designed to revolutionize sustainability through cutting-edge technology and data-driven solutions.</p>
+            <a href="#services" class="hero-button">Explore Services</a>
+        </div>
+    </div>
+</section>
+
+<section id="services" class="services-section">
+    <div class="services-grid">
+        <!-- Service 1 -->
+        <a href="#" class="service-card">
+            <h3 class="service-title">Sustainability Analytics</h3>
+            <p class="service-description">Track and optimize energy usage through AI-powered insights.</p>
+        </a>
+        <!-- Service 2 -->
+        <a href="#" class="service-card">
+            <h3 class="service-title">Carbon Footprint Reduction</h3>
+            <p class="service-description">Implement solutions to lower your environmental impact effectively.</p>
+        </a>
+        <!-- Service 3 -->
+        <a href="#" class="service-card">
+            <h3 class="service-title">Smart Resource Management</h3>
+            <p class="service-description">Intelligent monitoring and efficient allocation of resources.</p>
+        </a>
+        <!-- Service 4 -->
+        <a href="#" class="service-card">
+            <h3 class="service-title">Custom Sustainability Solutions</h3>
+            <p class="service-description">Tailored services that align with your business’s sustainability goals.</p>
+        </a>
+    </div>
+</section>
+
+<section class="why-choose-us-section parallax">
+    <div class="why-choose-us-content">
+        <h2 class="why-choose-us-title">Why Choose Us</h2>
+        <div class="why-choose-us-grid">
+            <div class="why-choose-us-card">
+                <h3 class="service-title">Eco-Innovation</h3>
+                <p class="service-description">Leverage the latest sustainable technologies.</p>
+            </div>
+            <div class="why-choose-us-card">
+                <h3 class="service-title">AI-Powered Insights</h3>
+                <p class="service-description">Make data-driven decisions with confidence.</p>
+            </div>
+            <div class="why-choose-us-card">
+                <h3 class="service-title">Expert Support</h3>
+                <p class="service-description">Guidance from sustainability experts.</p>
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
             </div>
         </div>
     </div>
 </section>
 
+<<<<<<< HEAD
 <!-- Why Choose Us Section -->
 <section class="py-20 parallax bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?city,green')">
     <div class="bg-black bg-opacity-60 py-16">
@@ -154,6 +510,32 @@
             const response = await fetch('https://sustainacoreapi.com/insights'); // Replace with actual API URL
             const data = await response.json();
 
+=======
+<section id="insights" class="insights-section">
+    <h2 class="insights-title">Sustainability Insights</h2>
+    <div id="insights-container" class="insights-container">
+        <!-- API Data Will Be Injected Here -->
+    </div>
+</section>
+
+<section class="contact-section">
+    <h2 class="contact-title">Get in Touch</h2>
+    <form class="contact-form">
+        <div class="contact-form-grid">
+            <input type="text" placeholder="Your Name" class="contact-form-input">
+            <input type="email" placeholder="Your Email" class="contact-form-input">
+        </div>
+        <textarea placeholder="Your Message" rows="5" class="contact-form-textarea"></textarea>
+        <button type="submit" class="contact-form-button">Send Message</button>
+    </form>
+</section>
+<script>
+    async function fetchInsights() {
+        try {
+            const response = await fetch('https://sustainacoreapi.com/insights'); // Replace with actual API URL
+            const data = await response.json();
+
+>>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
             const insightsContainer = document.getElementById('insights-container');
 
             data.forEach(item => {

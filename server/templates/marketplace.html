@@ -6,6 +6,7 @@
     <title>SustainaCore</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
+        /* Global Styles */
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -199,7 +200,7 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
-            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Account</a></li>
         </ul>
     </div>
 </header>
@@ -281,7 +282,7 @@
             <div><a href="/marketplace">Marketplace</a></div>
             <div><a href="/dashboard">Dashboard</a></div>
         </nav>
-        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
+        <p class="copyright">Â© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
 </footer>
 

@@ -48,7 +48,7 @@ ul {
 .navbar-container {
     width: 100%;
     max-width: 1200px;
-    height: 100px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -763,7 +763,6 @@ body {
     font-size: 1rem;
 }
 
-/*NOW DO NOT TOUCH EITHER ARKO THIS IS THE CALENDER*/
 .calendar-container {
     background: rgba(255, 255, 255, 0.1);
     padding: 20px;
@@ -842,9 +841,9 @@ body {
     animation: backgroundMove 15s infinite linear;
     position: relative;
     width: 100%;
-    margin-left: 0; /* Reset margin */
+    margin-left: 0;
     margin-right: 0;
-    padding: 0; /* Reset padding */
+    padding: 0;
 }
 
 @keyframes backgroundMove {
@@ -953,7 +952,7 @@ html {
 .visual-image:hover {
     animation: imageHover 0.3s forwards;
 }
-/*here is the marketplace chat DO NOT REMOVE THIS:*/
+
 .marketplace {
     padding: 3rem 1.5rem;
     background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -1148,7 +1147,6 @@ html {
 
 .toc-container {
     position: fixed;
-    /*margin-right: 1400px;*/
     margin-top: 150px;
     top: 80px;
     left: 0;
@@ -1249,7 +1247,7 @@ section {
         margin: 2rem;
     }
 }
-/* Category Headers */
+
 .category-header {
     font-size: 1.5em;
     font-weight: bold;
@@ -1259,7 +1257,6 @@ section {
     padding-bottom: 5px;
 }
 
-/* Marketplace Items */
 .marketplace-item {
     border: 1px solid #ddd;
     padding: 15px;
@@ -1294,8 +1291,7 @@ section {
 .marketplace-item .item-add-button:hover {
     background-color: #2ecc71;
 }
-/* Calendar Section Styling */
-/* Calendar Section Styling */
+
 #calendar-container {
     margin: 30px auto;
     width: 80%;
@@ -1319,11 +1315,11 @@ section {
     border-radius: 8px;
     background-color: #ffffff;
     width: 100%;
-    height: 500px; /* Ensure the calendar has a height */
-    box-sizing: border-box; /* Ensure padding doesn't affect the size */
+    height: 500px;
+    box-sizing: border-box;
 }
 
-/* FullCalendar Toolbar Styling */
+
 .fc-toolbar {
     background-color: #28a745;
     color: white;
@@ -1337,7 +1333,7 @@ section {
     margin: 0;
 }
 
-/* FullCalendar Event Styling */
+
 .fc-day-grid-event {
     background-color: #17a2b8;
     color: white;
@@ -1351,24 +1347,24 @@ section {
     cursor: pointer;
 }
 
-/* Day Number Styling */
+
 .fc-day-number {
     font-size: 16px;
     color: #333;
 }
 
-/* Today's Day Styling */
+
 .fc-day.fc-day-today {
     background-color: #f1f1f1;
     border: 1px solid #28a745;
 }
 
-/* Other Days Styling */
+
 .fc-day.fc-day-other {
     background-color: #f7f7f7;
 }
 
-/* Weekend Days (Saturday and Sunday) Styling */
+
 .fc-day.fc-day-saturday, .fc-day.fc-day-sunday {
     background-color: #f2f2f2;
 }
@@ -1382,7 +1378,7 @@ section {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+    background-color: rgba(0,0,0,0.5);
 
 }
 
@@ -1419,69 +1415,60 @@ section {
     cursor: pointer;
 }
 
-/* Navbar Section */
+
 .navbar {
     text-transform: uppercase;
     font-family: 'Segoe UI Semibold', sans-serif;
 }
 
-/* Header Section */
+
 .header {
     font-family: 'Verdana', serif;
 
 }
 
-/* Precision Irrigation Section */
+
 .horizontal-section {
     font-family: 'Verdana', sans-serif;
 }
 
-/* Sustainability Metrics Section */
 .horizontal-section.reverse {
     font-family: 'Courier New', monospace;
 }
 
-/* Chatbot Section */
 .chatbot-container {
     font-family: 'Trebuchet MS', sans-serif;
 }
 
-/* Mainframe Section */
 .mainframe {
     font-family: 'Times New Roman', serif;
 }
 
-/* Mission Section */
 .mission-container {
     font-family: 'Comic Sans MS', cursive;
 }
 
-/* Technology Section */
 .tech-container {
     font-family: 'Helvetica', sans-serif;
 }
 
-/* Success Stories Section */
 .success-stories {
     font-family: 'Garamond', serif;
 }
 
-/* Contact Us Section */
 .contact-us {
     font-family: 'Tahoma', sans-serif;
 }
 
-/* Footer Section */
 
 .navbar-logo-link {
     transition: opacity 0.3s ease;
 }
-
+<li><a href="{{ url_for('logout') }}" class="navbar-item">Account</a></li>
 .navbar-logo-link:hover {
-    opacity: 0.6; /*Change the property here to fit the aesthetic*/
+    opacity: 0.6;
 }
 
-/* Footer Styles (Converted from Tailwind) - styles.css */
 .custom-footer {
     margin-top: 20px;
     position: relative;
