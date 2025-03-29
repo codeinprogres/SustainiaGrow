@@ -24,13 +24,13 @@
         }
 
         .background-overlay {
-            position: fixed; /* Ensures it covers the full viewport */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Adjust the opacity as needed */
-            pointer-events: none; /* Ensures content remains clickable */
+            background: rgba(0, 0, 0, 0.7);
+            pointer-events: none;
             z-index: 0;
         }
         button, input {
@@ -63,7 +63,7 @@
             margin: auto;
             transform: scale(1.4);
             transform-origin: center;
-            border-radius: 15px; /* Adjust for more or less rounding */
+            border-radius: 15px;
         }
 
         .screen {
@@ -294,7 +294,7 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
-            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Account</a></li>
         </ul>
     </div>
 </header>

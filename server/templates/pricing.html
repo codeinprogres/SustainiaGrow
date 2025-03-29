@@ -91,21 +91,21 @@
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: 1fr;  /* Default to one column */
+            grid-template-columns: 1fr;
             gap: 32px;
             padding: 20px;
-            justify-content: center;  /* Center items on the main axis */
+            justify-content: center
         }
 
         @media (min-width: 640px) {
             .pricing-grid {
-                grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (min-width: 1024px) {
             .pricing-grid {
-                grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -223,7 +223,7 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
-            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Account</a></li>
         </ul>
     </div>
 </header>
