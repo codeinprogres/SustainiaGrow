@@ -6,10 +6,7 @@
     <title>SustainaCore</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-<<<<<<< HEAD
-=======
         /* Global Styles */
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -28,7 +25,6 @@
             text-transform: uppercase;
             z-index: 2;
             letter-spacing: 2px;
-<<<<<<< HEAD
             color: #ffffff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(227, 61, 148, 1);
         }
@@ -51,16 +47,6 @@
             background: rgba(0, 0, 0, 0.7);
             pointer-events: none;
             z-index: 1;
-=======
-            color: #ffffff; /* Set text color to white */
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8); /* Add a stronger white shadow */
-        }
-
-        /* Marketplace Section */
-        .marketplace {
-            padding: 40px 20px 250px;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
         }
 
         .marketplace-header {
@@ -69,7 +55,6 @@
             font-size: 5rem;
             font-weight: 1300;
             text-transform: uppercase;
-<<<<<<< HEAD
             letter-spacing: 2px;
             position: relative;
             z-index: 2;
@@ -78,16 +63,6 @@
 
         .marketplace-header h2 {
             font-size: 4rem;
-=======
-            z-index: 2;
-            letter-spacing: 2px;
-            color: #ffffff; /* Set text color to white */
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8); /* Add a stronger white shadow */
-        }
-
-        .marketplace-header h2 {
-            font-size: 2.5rem;
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
             margin-bottom: 10px;
         }
 
@@ -97,7 +72,6 @@
 
         .marketplace-items {
             display: grid;
-<<<<<<< HEAD
             place-items: center;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 50px;
@@ -203,82 +177,12 @@
         @media (max-width: 768px) {
             .marketplace-items {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-=======
-            align-items: center;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 0px;
-            padding: 0 ;
-        }
-
-        .marketplace-item {
-            align-content: center;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .marketplace-item:hover {
-            transform: translateY(-5px);
-            border-radius: 0px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .marketplace-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .marketplace-item-content {
-            padding: 20px;
-        }
-
-        .marketplace-item h3 {
-            align-content: center;
-            font-size: 1.2rem;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .marketplace-item p {
-            align-content: center;
-            font-size: 0.9rem;
-            color: lightgray;
-            margin-bottom: 15px;
-        }
-
-        .marketplace-item button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #6b46c1;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .marketplace-item button:hover {
-            background-color: hotpink;
-            border-radius: 0px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .marketplace-items {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
             }
         }
     </style>
 </head>
 <body class="body-background">
 
-<!-- Original Navbar -->
 <header class="navbar">
     <div class="navbar-container">
         <a href="/" class="navbar-logo-link">
@@ -296,16 +200,11 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
-<<<<<<< HEAD
             <li><a href="{{ url_for('logout') }}" class="navbar-item">Account</a></li>
-=======
-            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
         </ul>
     </div>
 </header>
 
-<<<<<<< HEAD
 <section class="marketplace">
     <div class="marketplace-header">
         <h2>Marketplace</h2>
@@ -364,73 +263,11 @@
             </div>
             <div class="image">
                 <img src="https://iili.io/3umz8W7.png" alt="Garden Cart" class="product">
-=======
-<!-- New Marketplace Section -->
-<section class="marketplace">
-    <div class="marketplace-header">
-        <h2>Marketplace</h2>
-        <p>Explore sustainable tools, products, and innovations designed to support eco-friendly farming practices.</p>
-    </div>
-    <div class="marketplace-items">
-        <!-- Corn Seeds -->
-        <div class="marketplace-item">
-            <img src="{{ url_for('static', filename='assets/corn.png') }}" alt="Corn Seeds">
-            <div class="marketplace-item-content">
-                <h3>Corn Seeds</h3>
-                <p>Premium quality corn seeds for high-yield harvests. Ideal for large and small farms.</p>
-                <button>Add to Cart</button>
-            </div>
-        </div>
-        <!-- Tomato Seeds -->
-        <div class="marketplace-item">
-            <img src="{{ url_for('static', filename='assets/tomato seeds.png') }}" alt="Tomato Seeds">
-            <div class="marketplace-item-content">
-                <h3>Tomato Seeds</h3>
-                <p>Organic tomato seeds for rich and juicy produce. Grows well in most climates.</p>
-                <button>Add to Cart</button>
-            </div>
-        </div>
-        <!-- Hand Tiller -->
-        <div class="marketplace-item">
-            <img src="{{ url_for('static', filename='assets/tiller.png') }}" alt="Hand Tiller">
-            <div class="marketplace-item-content">
-                <h3>Hand Tiller</h3>
-                <p>Durable and easy-to-use hand tiller for soil preparation and weed control.</p>
-                <button>Add to Cart</button>
-            </div>
-        </div>
-        <!-- Irrigation System Kit -->
-        <div class="marketplace-item">
-            <img src="{{ url_for('static', filename='assets/irrigation.png') }}" alt="Irrigation System Kit">
-            <div class="marketplace-item-content">
-                <h3>Irrigation System Kit</h3>
-                <p>Complete irrigation system for efficient water distribution across your fields.</p>
-                <button>Add to Cart</button>
-            </div>
-        </div>
-        <!-- Compost Bin -->
-        <div class="marketplace-item">
-            <img src="{{ url_for('static', filename='assets/compost.png') }}" alt="Compost Bin">
-            <div class="marketplace-item-content">
-                <h3>Compost Bin</h3>
-                <p>Eco-friendly compost bin for turning organic waste into nutritious compost.</p>
-                <button>Add to Cart</button>
-            </div>
-        </div>
-        <!-- Garden Cart -->
-        <div class="marketplace-item">
-            <img src="{{ url_for('static', filename='assets/barrow.png') }}" alt="Garden Cart">
-            <div class="marketplace-item-content">
-                <h3>Garden Cart</h3>
-                <p>Heavy-duty garden cart for transporting soil, tools, and harvests with ease.</p>
-                <button>Add to Cart</button>
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
             </div>
         </div>
     </div>
 </section>
 
-<!-- Original Footer -->
 <footer class="custom-footer">
     <div class="footer-content">
         <h2 class="font-bold text-3xl leading-snug">
@@ -445,11 +282,10 @@
             <div><a href="/marketplace">Marketplace</a></div>
             <div><a href="/dashboard">Dashboard</a></div>
         </nav>
-        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
+        <p class="copyright">Â© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
 </footer>
 
-<<<<<<< HEAD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
 <script>
     VanillaTilt.init(document.querySelectorAll(".card"), {
@@ -460,8 +296,6 @@
         "max-glare": 0.2,
     });
 </script>
-=======
->>>>>>> e985408ac99e37c65367647b2a3c2fb7351dbea9
 <script src="{{ url_for('static', filename='js/marketplace.js') }}"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
