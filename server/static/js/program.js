@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             humidity: data.main.humidity,
             precipitation: data.weather[0].description,
         };
+
         console.log('Stored Weather Info:', window.weatherInfo);
     };
 
@@ -95,24 +96,24 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const calendarContainer = document.getElementById("calendar-container");
-        const calendar = document.getElementById("calendar");
-        calendar.innerHTML = ""; // Clear previous plan
+        // const calendarContainer = document.getElementById("calendar-container");
+        // const calendar = document.getElementById("calendar");
+        // calendar.innerHTML = ""; // Clear previous plan
+        //
+        // selectedCrops.forEach((crop) => {
+        //     const cropPlan = document.createElement("div");
+        //     cropPlan.classList.add("crop-plan");
+        //     cropPlan.innerHTML = `
+        //         <h4>${crop}</h4>
+        //         <p><strong>Watering Schedule:</strong> Water every 2 days.</p>
+        //         <p><strong>Harvest Time:</strong> Harvest in 30 days.</p>
+        //         <p><strong>Ideal Temperature:</strong> 65-75°F.</p>
+        //         <p><strong>Additional Tips:</strong> Ensure good soil drainage.</p>
+        //     `;
+        //     calendar.appendChild(cropPlan);
+        // });
 
-        selectedCrops.forEach((crop) => {
-            const cropPlan = document.createElement("div");
-            cropPlan.classList.add("crop-plan");
-            cropPlan.innerHTML = ` 
-                <h4>${crop}</h4>
-                <p><strong>Watering Schedule:</strong> Water every 2 days.</p>
-                <p><strong>Harvest Time:</strong> Harvest in 30 days.</p>
-                <p><strong>Ideal Temperature:</strong> 65-75°F.</p>
-                <p><strong>Additional Tips:</strong> Ensure good soil drainage.</p>
-            `;
-            calendar.appendChild(cropPlan);
-        });
-
-        calendarContainer.classList.remove("hidden");
+        // calendarContainer.classList.remove("hidden");
     });
 
     // Removed FullCalendar functionality

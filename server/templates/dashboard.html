@@ -392,7 +392,7 @@
 
 <header class="custom-header">
     <div class="custom-header-overlay">
-        <h1 class="custom-header-title">Hello,</h1>
+        <h1 class="custom-header-title">Hello, {{user.username}}</h1>
         <p class="custom-header-subtitle">Welcome To Your Dashboard</p>
     </div>
 </header>
@@ -526,32 +526,23 @@
                     </div>
 
                     <div id="crop-selector" class="crop-selector">
-                        <h3>Select Crops</h3>
+                        <h3>Use the crop selection tool to determine your monthly rotation</h3>
+
+                        <!-- Available Crops Section -->
                         <div id="available-crops" class="available-crops">
-                            <h4>Available Crops</h4>
-                            <div class="crop-item">
-                                <span>Tomato</span>
-                                <button class="add-crop-button" data-crop="Tomato">+</button>
-                            </div>
-                            <div class="crop-item">
-                                <span>Lettuce</span>
-                                <button class="add-crop-button" data-crop="Lettuce">+</button>
-                            </div>
-                            <div class="crop-item">
-                                <span>Carrot</span>
-                                <button class="add-crop-button" data-crop="Carrot">+</button>
-                            </div>
-                            <div class="crop-item">
-                                <span>Cucumber</span>
-                                <button class="add-crop-button" data-crop="Cucumber">+</button>
-                            </div>
+                            <p></p>
                         </div>
+
+                        <!-- Selected Crops Section (left unused as we aren't selecting crops) -->
                         <div id="selected-crops" class="selected-crops">
                             <h4>Selected Crops</h4>
                             <div class="selected-crop-container"></div>
                         </div>
+
+                        <!-- Finalize Selection Button (not used here, but included) -->
                         <button id="finalize-crops" class="finalize-button">Finalize Selection</button>
                     </div>
+
                     <div id="weather-info" class="weather-info">
                         <h3>Weather Information</h3>
                         <table class="weather-table">
@@ -560,6 +551,7 @@
                                 <th>Temperature (°C)</th>
                                 <th>Humidity (%)</th>
                                 <th>Precipitation</th>
+                                <th>Region</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -567,6 +559,7 @@
                                 <td id="temperature">Loading...</td>
                                 <td id="humidity">Loading...</td>
                                 <td id="precipitation">Loading...</td>
+                                <td id="climate-region">Loading...</td>
                             </tr>
                             </tbody>
                         </table>
@@ -574,7 +567,7 @@
 
                     <button id="generate-calendar" class="button">Generate 365-Day Farming Plan</button>
 
-                    <div id="calendar-container" class="calendar-container">
+                    <div id="calendar-container" class="calendar-container" style="display: none;">
                         <button id="prev-month" class="calendar-nav">Prev Month</button>
                         <h3 id="month-header" class="month-header">January 2025</h3>
                         <button id="next-month" class="calendar-nav">Next Month</button>
@@ -583,10 +576,11 @@
 
                     <div id="task-container" class="task-container" style="display: none;">
                         <h4>Tasks for <span id="selected-date">[Select a Day]</span></h4>
-                        <input type="text" id="task-input" placeholder="Enter a task">
-                        <button id="add-task">Add Task</button>
+                        <input type="text" id="task-input" placeholder="Enter a task" aria-label="Enter task for selected date">
+                        <button id="add-task" aria-label="Add task for selected date">Add Task</button>
                         <ul id="task-list" class="task-list"></ul>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -800,139 +794,106 @@
     </style>
 
     <script>
+        const cropPositions = new Map();
+        let selectedCropContainer;
+        let selectedCropNames;
+
         document.addEventListener("DOMContentLoaded", () => {
             const availableCrops = document.querySelector("#available-crops");
-            const selectedCropContainer = document.querySelector(".selected-crop-container");
+            selectedCropContainer = document.querySelector("#selected-crops .selected-crop-container");
             const finalizeButton = document.getElementById("finalize-crops");
 
+            // Add event listener to available crops section
             availableCrops.addEventListener("click", (event) => {
                 if (event.target.classList.contains("add-crop-button")) {
-                    const cropName = event.target.getAttribute("data-crop");
-                    addCropToSelected(cropName);
+                    const cropItem = event.target.closest(".crop-item"); // Get the parent div
+                    const cropName = cropItem.querySelector("span").textContent;
+                    addCropToSelected(cropName, cropItem);
                 }
             });
 
+            // Add event listener to selected crops section
             selectedCropContainer.addEventListener("click", (event) => {
                 if (event.target.classList.contains("remove-crop-button")) {
-                    const cropName = event.target.getAttribute("data-crop");
-                    removeCropFromSelected(cropName);
+                    const cropItem = event.target.closest(".selected-crop");
+                    const cropName = cropItem.querySelector("span").textContent;
+                    removeCropFromSelected(cropName, cropItem);
                 }
             });
 
+            // Finalize selection button
             finalizeButton.addEventListener("click", () => {
-                const selectedCropNames = Array.from(selectedCropContainer.children).map(item =>
+                selectedCropNames = Array.from(selectedCropContainer.children).map(item =>
                     item.querySelector("span").textContent
                 );
-                alert(`Crops finalized: ${selectedCropNames.join(", ")}`);
+                console.log("Selected Crop Names:", selectedCropNames);
+
+
+                // Fix here: alert crops finalized with the correct list
+                if (selectedCropNames.length > 0) {
+                    alert(`Crops finalized: ${selectedCropNames.join(", ")}`);
+                } else {
+                    alert("No crops selected!");
+                }
             });
 
-            const addCropToSelected = (cropName) => {
+            // Add crop to the selected section and remove from available crops
+            const addCropToSelected = (cropName, cropItem) => {
+                if (selectedCropContainer.children.length >= 10) {
+                    alert("You can only select up to 10 crops.");
+                    return;
+                }
+
+                // Get the index of the crop in the available crops list and store it in the map
+                const index = Array.from(availableCrops.children).indexOf(cropItem);
+                cropPositions.set(cropName, index);
+
                 if (!Array.from(selectedCropContainer.children).some(item =>
-                    item.querySelector("span").textContent === cropName)) {
+                    item.querySelector("span").textContent === cropName
+                )) {
                     const div = document.createElement("div");
                     div.classList.add("selected-crop");
                     div.innerHTML = `
-                    <span>${cropName}</span>
-                    <button class="remove-crop-button" data-crop="${cropName}">-</button>
-                `;
+                <span>${cropName}</span>
+                <button class="remove-crop-button" data-crop="${cropName}">-</button>
+            `;
+
                     selectedCropContainer.appendChild(div);
+                    console.log(selectedCropContainer.children);
+
+                    // Remove crop from available crops
+                    cropItem.remove();
                 }
             };
 
-            const removeCropFromSelected = (cropName) => {
-                Array.from(selectedCropContainer.children).forEach(item => {
-                    if (item.querySelector("span").textContent === cropName) {
-                        selectedCropContainer.removeChild(item);
-                    }
-                });
+            // Remove crop from the selected section and move it back to available crops
+            const removeCropFromSelected = (cropName, cropItem) => {
+                // Get the stored index, if exists, else append at the end
+                const index = cropPositions.has(cropName) ? cropPositions.get(cropName) : availableCrops.children.length;
+
+                const div = document.createElement("div");
+                div.classList.add("crop-item");
+                div.innerHTML = `
+            <span>${cropName}</span>
+            <button class="add-crop-button" data-crop="${cropName}">+</button>
+        `;
+
+                // Insert the crop back at its stored position
+                if (index >= 0 && index < availableCrops.children.length) {
+                    availableCrops.insertBefore(div, availableCrops.children[index]);
+                } else {
+                    availableCrops.appendChild(div);
+                }
+
+                cropItem.remove(); // Remove the crop from the selected container
+                cropPositions.delete(cropName); // Remove from map
             };
+
         });
+
+
     </script>
 
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const generateButton = document.getElementById("generate-calendar");
-            const calendarContainer = document.getElementById("calendar-container");
-            const monthsContainer = document.getElementById("months-container");
-            const monthHeader = document.getElementById("month-header");
-            const prevMonthBtn = document.getElementById("prev-month");
-            const nextMonthBtn = document.getElementById("next-month");
-            const taskContainer = document.getElementById("task-container");
-            const selectedDateSpan = document.getElementById("selected-date");
-            const taskInput = document.getElementById("task-input");
-            const addTaskButton = document.getElementById("add-task");
-            const taskList = document.getElementById("task-list");
-
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-
-            let currentMonthIndex = 0;
-            let tasks = {};
-
-            const generateCalendar = () => {
-                monthsContainer.innerHTML = "";
-                const daysInMonth = new Date(2025, currentMonthIndex + 1, 0).getDate();
-
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayElement = document.createElement("div");
-                    dayElement.classList.add("day");
-                    dayElement.textContent = day;
-                    dayElement.addEventListener("click", () => {
-                        const selectedDate = `${monthNames[currentMonthIndex]} ${day}, 2025`;
-                        selectedDateSpan.textContent = selectedDate;
-                        taskContainer.style.display = "block";
-                        renderTasks(selectedDate);
-                    });
-                    monthsContainer.appendChild(dayElement);
-                }
-            };
-
-            const renderTasks = (date) => {
-                taskList.innerHTML = "";
-                const dayTasks = tasks[date] || [];
-                dayTasks.sort().forEach(task => {
-                    const taskItem = document.createElement("li");
-                    taskItem.textContent = task;
-                    taskList.appendChild(taskItem);
-                });
-            };
-
-            addTaskButton.addEventListener("click", () => {
-                const date = selectedDateSpan.textContent;
-                if (!tasks[date]) {
-                    tasks[date] = [];
-                }
-                const task = taskInput.value.trim();
-                if (task) {
-                    tasks[date].push(task);
-                    taskInput.value = "";
-                    renderTasks(date);
-                }
-            });
-
-            generateButton.addEventListener("click", () => {
-                calendarContainer.style.display = "block";
-                generateCalendar();
-            });
-
-            prevMonthBtn.addEventListener("click", () => {
-                currentMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
-                monthHeader.textContent = monthNames[currentMonthIndex];
-                generateCalendar();
-            });
-
-            nextMonthBtn.addEventListener("click", () => {
-                currentMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
-                monthHeader.textContent = monthNames[currentMonthIndex];
-                generateCalendar();
-            });
-
-            monthHeader.textContent = monthNames[currentMonthIndex];
-        });
-    </script>
 
     <script>
         const canvas = document.getElementById("temperatureMeter");
@@ -2177,7 +2138,196 @@
     </div>
 
     <script>
-        // Precipitation variable from the weather API
+        let suitable_crops = [];
+        let climateRegion = '';
+
+        const updateClimateRegion = (data) => {
+            if (data && data.main) {
+                const temperature = data.main.temp;
+                const humidity = data.main.humidity;
+                const precipitation = data.weather[0].description;
+
+                // Example of climate classification based on temperature, humidity, and precipitation
+                if (temperature > 35) {
+                    climateRegion = 'Hyper-arid (Extremely Hot and Dry)';
+                } else if (temperature > 30) {
+                    climateRegion = 'Desert (Arid)';
+                } else if (temperature > 25) {
+                    climateRegion = 'Tropical Rainforest';
+                } else if (temperature > 20) {
+                    climateRegion = 'Tropical Savanna';
+                } else if (temperature > 15) {
+                    climateRegion = 'Subtropical Highlands';
+                } else if (temperature >= 10 && temperature <= 15) {
+                    climateRegion = 'Temperate';
+                } else if (temperature >= 5 && temperature < 10) {
+                    climateRegion = 'Cool Temperate';
+                } else if (temperature >= 0 && temperature < 5) {
+                    climateRegion = 'Subarctic';
+                } else if (temperature < 0) {
+                    climateRegion = 'Polar/Cold';
+                } else {
+                    climateRegion = 'Unknown';
+                }
+
+                console.log('Climate Region:', climateRegion);
+
+                document.getElementById('climate-region').innerText = `Climate Region: ${climateRegion}`;
+                suggest_crops(temperature, precipitation, humidity)
+            }
+        };
+
+        function suggest_crops(temperature, precipitation, humidity) {
+            console.log("suggest_crops function called")
+            let crops = [
+                {"name": "Wheat", "min_temp": 5, "max_temp": 25, "min_precip": 200, "max_precip": 700, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Corn", "min_temp": 16, "max_temp": 32, "min_precip": 250, "max_precip": 900, "humidity_range": 50-70, "region": "Tropical"},
+                {"name": "Rice", "min_temp": 22, "max_temp": 38, "min_precip": 400, "max_precip": 1200, "humidity_range": 80-90, "region": "Tropical"},
+                {"name": "Barley", "min_temp": 5, "max_temp": 20, "min_precip": 200, "max_precip": 700, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Tomato", "min_temp": 12, "max_temp": 35, "min_precip": 200, "max_precip": 500, "humidity_range": 60-80, "region": "Subtropical"},
+                {"name": "Potato", "min_temp": 7, "max_temp": 25, "min_precip": 250, "max_precip": 800, "humidity_range": 70-80, "region": "Temperate"},
+                {"name": "Soybean", "min_temp": 15, "max_temp": 35, "min_precip": 300, "max_precip": 1000, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Oats", "min_temp": 4, "max_temp": 20, "min_precip": 150, "max_precip": 600, "humidity_range": 55-75, "region": "Temperate"},
+                {"name": "Sugarcane", "min_temp": 20, "max_temp": 38, "min_precip": 600, "max_precip": 1500, "humidity_range": 70-90, "region": "Tropical"},
+                {"name": "Cotton", "min_temp": 15, "max_temp": 35, "min_precip": 250, "max_precip": 1000, "humidity_range": 50-75, "region": "Subtropical"},
+                {"name": "Peas", "min_temp": 5, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Grapes", "min_temp": 10, "max_temp": 35, "min_precip": 300, "max_precip": 800, "humidity_range": 50-70, "region": "Temperate"},
+                {"name": "Carrots", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Lettuce", "min_temp": 5, "max_temp": 25, "min_precip": 250, "max_precip": 600, "humidity_range": 55-75, "region": "Temperate"},
+                {"name": "Cabbage", "min_temp": 5, "max_temp": 20, "min_precip": 300, "max_precip": 800, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Cucumber", "min_temp": 12, "max_temp": 30, "min_precip": 300, "max_precip": 800, "humidity_range": 60-80, "region": "Subtropical"},
+                {"name": "Onion", "min_temp": 5, "max_temp": 25, "min_precip": 150, "max_precip": 700, "humidity_range": 55-70, "region": "Temperate"},
+                {"name": "Bell Pepper", "min_temp": 12, "max_temp": 32, "min_precip": 250, "max_precip": 800, "humidity_range": 60-80, "region": "Subtropical"},
+                {"name": "Beans", "min_temp": 15, "max_temp": 35, "min_precip": 300, "max_precip": 1000, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Sunflower", "min_temp": 12, "max_temp": 35, "min_precip": 200, "max_precip": 700, "humidity_range": 50-70, "region": "Temperate"},
+                {"name": "Strawberry", "min_temp": 10, "max_temp": 30, "min_precip": 300, "max_precip": 800, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Banana", "min_temp": 22, "max_temp": 35, "min_precip": 1000, "max_precip": 2000, "humidity_range": 70-85, "region": "Tropical"},
+                {"name": "Mango", "min_temp": 20, "max_temp": 40, "min_precip": 500, "max_precip": 1500, "humidity_range": 65-85, "region": "Tropical"},
+                {"name": "Pineapple", "min_temp": 22, "max_temp": 35, "min_precip": 800, "max_precip": 1500, "humidity_range": 70-85, "region": "Tropical"},
+                {"name": "Avocado", "min_temp": 15, "max_temp": 30, "min_precip": 500, "max_precip": 1200, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Coffee", "min_temp": 18, "max_temp": 30, "min_precip": 1000, "max_precip": 2000, "humidity_range": 80-90, "region": "Tropical"},
+                {"name": "Cocoa", "min_temp": 18, "max_temp": 32, "min_precip": 1200, "max_precip": 2500, "humidity_range": 80-90, "region": "Tropical"},
+                {"name": "Ginger", "min_temp": 20, "max_temp": 35, "min_precip": 800, "max_precip": 1500, "humidity_range": 70-85, "region": "Tropical"},
+                {"name": "Sweet Potato", "min_temp": 15, "max_temp": 35, "min_precip": 400, "max_precip": 1200, "humidity_range": 60-80, "region": "Subtropical"},
+                {"name": "Lemon", "min_temp": 15, "max_temp": 35, "min_precip": 500, "max_precip": 1500, "humidity_range": 70-80, "region": "Tropical"},
+                {"name": "Papaya", "min_temp": 20, "max_temp": 35, "min_precip": 800, "max_precip": 2000, "humidity_range": 70-90, "region": "Tropical"},
+                {"name": "Melon", "min_temp": 15, "max_temp": 35, "min_precip": 200, "max_precip": 700, "humidity_range": 50-70, "region": "Temperate"},
+                {"name": "Watermelon", "min_temp": 18, "max_temp": 35, "min_precip": 400, "max_precip": 1000, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Chili Pepper", "min_temp": 15, "max_temp": 35, "min_precip": 200, "max_precip": 800, "humidity_range": 50-70, "region": "Tropical"},
+                {"name": "Basil", "min_temp": 10, "max_temp": 30, "min_precip": 250, "max_precip": 700, "humidity_range": 60-80, "region": "Subtropical"},
+                {"name": "Cilantro", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-70, "region": "Temperate"},
+                {"name": "Spinach", "min_temp": 5, "max_temp": 20, "min_precip": 250, "max_precip": 600, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Broccoli", "min_temp": 5, "max_temp": 20, "min_precip": 300, "max_precip": 700, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Radish", "min_temp": 5, "max_temp": 20, "min_precip": 150, "max_precip": 500, "humidity_range": 55-70, "region": "Temperate"},
+                {"name": "Mustard", "min_temp": 5, "max_temp": 25, "min_precip": 200, "max_precip": 700, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Peanut", "min_temp": 20, "max_temp": 35, "min_precip": 400, "max_precip": 1200, "humidity_range": 50-70, "region": "Tropical"},
+                {"name": "Okra", "min_temp": 20, "max_temp": 35, "min_precip": 500, "max_precip": 1200, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Zucchini", "min_temp": 10, "max_temp": 30, "min_precip": 200, "max_precip": 600, "humidity_range": 60-75, "region": "Subtropical"},
+                {"name": "Asparagus", "min_temp": 10, "max_temp": 25, "min_precip": 300, "max_precip": 700, "humidity_range": 55-70, "region": "Temperate"},
+                {"name": "Leeks", "min_temp": 5, "max_temp": 20, "min_precip": 200, "max_precip": 600, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Kale", "min_temp": 5, "max_temp": 20, "min_precip": 300, "max_precip": 800, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Fennel", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-70, "region": "Temperate"},
+                {"name": "Chard", "min_temp": 5, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Raspberry", "min_temp": 5, "max_temp": 20, "min_precip": 400, "max_precip": 1000, "humidity_range": 60-70, "region": "Temperate"},
+                {"name": "Blueberry", "min_temp": 10, "max_temp": 20, "min_precip": 400, "max_precip": 1000, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Blackberry", "min_temp": 10, "max_temp": 25, "min_precip": 400, "max_precip": 1000, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Pomegranate", "min_temp": 15, "max_temp": 30, "min_precip": 200, "max_precip": 600, "humidity_range": 50-70, "region": "Subtropical"},
+                {"name": "Sweet Corn", "min_temp": 16, "max_temp": 32, "min_precip": 400, "max_precip": 900, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Rhubarb", "min_temp": 5, "max_temp": 20, "min_precip": 400, "max_precip": 800, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Artichoke", "min_temp": 10, "max_temp": 25, "min_precip": 300, "max_precip": 600, "humidity_range": 60-70, "region": "Mediterranean"},
+                {"name": "Celeriac", "min_temp": 5, "max_temp": 20, "min_precip": 250, "max_precip": 700, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Parsley", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Chives", "min_temp": 5, "max_temp": 20, "min_precip": 200, "max_precip": 500, "humidity_range": 60-70, "region": "Temperate"},
+                {"name": "Tarragon", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Rosemary", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 50-70, "region": "Mediterranean"},
+                {"name": "Thyme", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 50-70, "region": "Mediterranean"},
+                {"name": "Sage", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 600, "humidity_range": 50-70, "region": "Mediterranean"},
+                {"name": "Mint", "min_temp": 10, "max_temp": 25, "min_precip": 200, "max_precip": 700, "humidity_range": 60-80, "region": "Temperate"},
+                {"name": "Arugula", "min_temp": 5, "max_temp": 20, "min_precip": 250, "max_precip": 600, "humidity_range": 60-75, "region": "Temperate"},
+                {"name": "Ginger Root", "min_temp": 20, "max_temp": 35, "min_precip": 500, "max_precip": 1500, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Yam", "min_temp": 20, "max_temp": 35, "min_precip": 600, "max_precip": 1200, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Figs", "min_temp": 15, "max_temp": 30, "min_precip": 400, "max_precip": 1000, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Taro", "min_temp": 20, "max_temp": 35, "min_precip": 1000, "max_precip": 3000, "humidity_range": 80-90, "region": "Tropical"},
+                {"name": "Jackfruit", "min_temp": 25, "max_temp": 40, "min_precip": 500, "max_precip": 1500, "humidity_range": 70-85, "region": "Tropical"},
+                {"name": "Durian", "min_temp": 25, "max_temp": 35, "min_precip": 1000, "max_precip": 3000, "humidity_range": 80-90, "region": "Tropical"},
+                {"name": "Guava", "min_temp": 20, "max_temp": 35, "min_precip": 500, "max_precip": 1500, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Lychee", "min_temp": 20, "max_temp": 35, "min_precip": 800, "max_precip": 2000, "humidity_range": 70-85, "region": "Tropical"},
+                {"name": "Dragonfruit", "min_temp": 20, "max_temp": 30, "min_precip": 500, "max_precip": 1000, "humidity_range": 60-75, "region": "Tropical"},
+                {"name": "Mandarin Orange", "min_temp": 15, "max_temp": 30, "min_precip": 600, "max_precip": 1500, "humidity_range": 60-80, "region": "Tropical"},
+                {"name": "Soursop", "min_temp": 20, "max_temp": 35, "min_precip": 1000, "max_precip": 2000, "humidity_range": 80-90, "region": "Tropical"},
+                {"name": "Cantaloupe", "min_temp": 18, "max_temp": 35, "min_precip": 300, "max_precip": 800, "humidity_range": 50-70, "region": "Tropical"},
+                {"name": "Honeydew Melon", "min_temp": 18, "max_temp": 35, "min_precip": 300, "max_precip": 800, "humidity_range": 60-70, "region": "Temperate"},
+                {"name": "Lime", "min_temp": 20, "max_temp": 35, "min_precip": 800, "max_precip": 1500, "humidity_range": 70-80, "region": "Tropical"},
+                {"name": "Coconut", "min_temp": 25, "max_temp": 32, "min_precip": 1500, "max_precip": 2500, "humidity_range": 70-80, "region": "Tropical"}
+            ];
+
+                console.log("Updating crop selector..."); // Debugging
+
+                const availableCropsDiv = document.getElementById("available-crops");
+                if (!availableCropsDiv) {
+                    console.error("Error: 'available-crops' div not found.");
+                    return;
+                }
+
+                availableCropsDiv.innerHTML = "<h4>Available Crops</h4>";
+
+                const suitableCrops = crops.filter(crop =>
+                    temperature >= crop.min_temp &&
+                    temperature <= crop.max_temp &&
+                    // precipitation >= crop.min_precip &&
+                    // precipitation <= crop.max_precip &&
+                    humidity >= crop.humidity_range
+                );
+
+                if (suitableCrops.length === 0) {
+                    availableCropsDiv.innerHTML += "<p>No crops available for the current conditions.</p>";
+                    return;
+                }
+
+                // Display the suitable crops
+                suitableCrops.forEach(crop => {
+                    // Create a container div for each crop
+                    let cropItem = document.createElement("div");
+                    cropItem.classList.add("crop-item");
+
+                    // Add the crop name
+                    cropItem.innerHTML = `<span>${crop.name}</span>`;
+
+                    // Create the add button
+                    let addButton = document.createElement("button");
+                    addButton.classList.add("add-crop-button");
+                    addButton.innerText = "+";
+
+
+
+                    // Append the button to the crop item
+                    cropItem.appendChild(addButton);
+
+                    // Append the crop item to the available crops div
+                    availableCropsDiv.appendChild(cropItem);
+                });
+
+
+
+ //            for (let crop of crops) {
+ //                let min_temp = crop["min_temp"];
+ //                let max_temp = crop["max_temp"];
+ //                let min_precip = crop["min_precip"];
+ //                let max_precip = crop["max_precip"];
+ //                let [min_humidity, max_humidity] = crop["humidity_range"].split('-').map(Number);
+ //
+ //                if (min_temp <= temperature && temperature <= max_temp &&
+ //                    min_precip <= precipitation && precipitation <= max_precip &&
+ //                    min_humidity <= humidity && humidity <= max_humidity &&
+ //                    crop["region"] === climateRegion) {
+ //                    suitable_crops.push(crop["name"]);
+ //                }
+ //            }
+ // // Debugging
+ //            return suitable_crops;
+        }
+
+
         document.addEventListener("DOMContentLoaded", () => {
             // Ensure that the map and weather data are loaded
             const loadMap = (lat, lng) => {
@@ -2237,13 +2387,14 @@
             };
 
             const storeWeatherInfo = (data) => {
-                // Store weather data in a global variable for reuse
+
                 window.weatherInfo = {
                     temperature: data.main.temp,
                     humidity: data.main.humidity,
                     precipitation: data.weather[0].description || 'No precipitation info available',
                 };
                 console.log('Stored Weather Info:', window.weatherInfo);
+                updateClimateRegion(data)
                 updatePrecipitation();
             };
 
@@ -2254,31 +2405,28 @@
                     let descriptionText = 'Weather data not available';
                     let icon = '';
 
-                    // Update precipitation dynamically based on weather data
                     if (precipitation.includes("clear sky")) {
                         descriptionText = 'Clear skies!';
-                        icon = '☀️'; // Sunny icon
+                        icon = '☀️';
                     } else if (precipitation.includes("clouds")) {
                         descriptionText = 'It\'s cloudy today';
-                        icon = '☁️'; // Cloudy icon
+                        icon = '☁️';
                     } else if (precipitation.includes("rain") || precipitation.includes("drizzle")) {
                         descriptionText = 'It\'s raining today';
-                        icon = '🌧️'; // Rainy icon
+                        icon = '🌧️';
                     } else if (precipitation.includes("snow")) {
                         descriptionText = 'It\'s snowing today';
-                        icon = '❄️'; // Snowy icon
+                        icon = '❄️';
                     } else {
                         descriptionText = 'No precipitation info available';
-                        icon = '❓'; // Default icon
+                        icon = '❓';
                     }
 
-                    // Update the description and icon dynamically
                     document.getElementById('precipitation-description').innerText = descriptionText;
                     document.getElementById('weather-icon').innerText = icon;
                 }
             };
 
-            // Geocode Address
             const geocodeAddress = (address) => {
                 const geocoder = new google.maps.Geocoder();
                 geocoder.geocode({ address }, (results, status) => {
@@ -2293,23 +2441,25 @@
             };
 
             document.getElementById("find-location").addEventListener("click", () => {
+
                 const address = document.getElementById("address-input").value;
                 if (address) geocodeAddress(address);
                 else alert("Please enter an address.");
+
+
+
             });
 
-            // Initial UI update when the page loads
             updatePrecipitation();
         });
 
     </script>
 
     <style>
-        /* Overall Body Styling */
         .farm-tips-container {
             width: 90%;
-            max-width: 800px; /* Slightly reduced width for better fitting */
-            height: 500px; /* Adjusted height to fit content nicely */
+            max-width: 800px;
+            height: 500px;
             margin: 50px auto;
             padding: 20px;
             border-radius: 20px;
@@ -2339,9 +2489,8 @@
             text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 255, 255, 0.7);
         }
 
-        /* Tips and tricks area */
         .farm-tips-text {
-            font-size: 1.3rem; /* Smaller text to better fit the layout */
+            font-size: 1.3rem;
             text-align: center;
             line-height: 1.6;
             color: #f0f0f0;
@@ -2364,7 +2513,6 @@
             margin-bottom: 0;
         }
 
-        /* Divider for visual appeal */
         .divider {
             width: 100%;
             height: 2px;
@@ -2381,13 +2529,13 @@
 
         <!-- Farm Tips Section -->
         <div class="farm-tips-text">
-            🌿 **Tip 2**: Use mulch to help retain moisture in the soil and keep weeds under control. It also enriches the soil as it decomposes.
+            🌿 Tip 1: Use mulch to help retain moisture in the soil and keep weeds under control. It also enriches the soil as it decomposes.
         </div>
         <div class="farm-tips-text">
-            🌾 **Tip 3**: Test your soil regularly to ensure optimal pH and nutrient levels. Healthy soil leads to healthier crops.
+            🌾 Tip 2: Test your soil regularly to ensure optimal pH and nutrient levels. Healthy soil leads to healthier crops.
         </div>
         <div class="farm-tips-text">
-            🍅 **Tip 5**: Water your plants early in the morning to reduce evaporation loss. It also helps prevent fungal diseases.
+            🍅 Tip 3: Water your plants early in the morning to reduce evaporation loss. It also helps prevent fungal diseases.
         </div>
 
         <div class="divider"></div>
@@ -2415,6 +2563,2688 @@
             }
         });
     </script>
+
+
+<!--The pain begins here....-->
+<!--Individual schedules for 80 CROPS FOR THIRTY DAYS EACH-->
+<!--    line count should hit 5000 once we're done-->
+
+<script>
+
+</script>
+
+    <!--    Calendar Section-&#45;&#45;IMPORTANT AF-->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const generateButton = document.getElementById("generate-calendar");
+            const calendarContainer = document.getElementById("calendar-container");
+            const monthsContainer = document.getElementById("months-container");
+            const monthHeader = document.getElementById("month-header");
+            const prevMonthBtn = document.getElementById("prev-month");
+            const nextMonthBtn = document.getElementById("next-month");
+            const taskContainer = document.getElementById("task-container");
+            const selectedDateSpan = document.getElementById("selected-date");
+            const taskInput = document.getElementById("task-input");
+            const addTaskButton = document.getElementById("add-task");
+            const taskList = document.getElementById("task-list");
+
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            let currentMonthIndex = 0;
+            let tasks = {};
+
+            // Your long CropSchedules data
+            const CropSchedules = {
+                "Wheat": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Fertilizing" },
+                    { day: 10, task: "Harvesting" },
+                    { day: 11, task: "Planting new seeds" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Fertilizing" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Corn": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Fertilizing" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Fertilizing" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Fertilizing" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Fertilizing" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Fertilizing" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Rice": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Fertilizing" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Fertilizing" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Fertilizing" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Fertilizing" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Fertilizing" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Barley": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Fertilizing" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Fertilizing" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Tomato": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Staking/Support" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Staking/Support" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Potato": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Hilling (forming mounds around plants)" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Fertilizing" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Hilling" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Hilling" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Hilling" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Fertilizing" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Hilling" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Soybean": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Fertilizing" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Oats": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Fertilizing" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Sugarcane": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Fertilizing" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Cotton": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Fertilizing" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Peas": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Fertilizing" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Fertilizing" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Fertilizing" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Fertilizing" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Grapes": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Fertilizing" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Fertilizing" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Fertilizing" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Fertilizing" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Carrots": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Fertilizing" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Fertilizing" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Fertilizing" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Fertilizing" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Lettuce": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Fertilizing" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Fertilizing" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Fertilizing" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Fertilizing" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Cabbage": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Cucumber": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Onion": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Bell Pepper": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Beans": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Sunflower": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Strawberry": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Banana": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Mango": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Pineapple": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Avocado": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Coffee": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Cocoa": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Ginger": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Sweet Potato": [
+                    { day: 1, task: "Planting slips" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Lemon": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Pruning" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Fertilizing" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Mulching" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Papaya": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Mulching" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Mulching" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Melon": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Mulching" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Mulching" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Watermelon": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Mulching" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Mulching" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Chili Pepper": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Mulching" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Mulching" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Basil": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Pruning" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Fertilizing" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Cilantro": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Pruning" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Fertilizing" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Spinach": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Pruning" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Fertilizing" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Broccoli": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Pruning" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Weeding" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Fertilizing" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Radish": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Mustard": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Peanut": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Okra": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Zucchini": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Fertilizing" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Asparagus": [
+                    { day: 1, task: "Planting crowns" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Fertilizing" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Monitor growth" }
+                ],
+                "Leeks": [
+                    { day: 1, task: "Planting seeds or transplants" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Fertilizing" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Monitor growth" }
+                ],
+                "Kale": [
+                    { day: 1, task: "Planting seeds or transplants" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Fertilizing" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Fennel": [
+                    { day: 1, task: "Planting seeds or transplants" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Fertilizing" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Chard": [
+                    { day: 1, task: "Planting seeds or transplants" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Weeding" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Fertilizing" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Weeding" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Raspberry": [
+                    { day: 1, task: "Planting canes or transplants" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Mulching" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Weeding" },
+                    { day: 10, task: "Watering" },
+                    { day: 11, task: "Pruning" },
+                    { day: 12, task: "Watering" },
+                    { day: 13, task: "Weeding" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Weeding" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Weeding" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Weeding" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Weeding" },
+                    { day: 30, task: "Harvesting" }
+                ],
+                "Blueberry": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Mulching" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Pruning" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Mulching" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (if ready)" }
+                ],
+                "Blackberry": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Mulching" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Pruning" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Mulching" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (if ready)" }
+                ],
+                "Pomegranate": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (if needed)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Mulching" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Pruning" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Mulching" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Mulching" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (if fruits are ripe)" }
+                ],
+                "Sweet Corn": [
+                    { day: 1, task: "Planting" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Fertilizing" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Mulching" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Thinning" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Fertilizing" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Weeding" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Mulching" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Supporting (if needed)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (when kernels are plump and milky)" }
+                ],
+                "Rhubarb": [
+                    { day: 1, task: "Planting (in well-drained soil, with compost)" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Mulching" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Applying fertilizer (low-nitrogen, balanced fertilizer)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Mulching" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Fertilizing (with compost or slow-release fertilizer)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning (remove flower stalks to promote leaf growth)" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Mulching" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Supporting (if necessary, to prevent plant breakage)" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Checking for pests (e.g., aphids)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (after the plant has matured for at least one season; only harvest stalks, not leaves)" }
+                ],
+                "Artichoke": [
+                    { day: 1, task: "Planting (in well-drained soil, spacing 3-4 feet apart)" },
+                    { day: 2, task: "Watering" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Mulching (to retain moisture and suppress weeds)" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Fertilizing (balanced fertilizer or compost)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Mulching (apply a second layer of mulch if necessary)" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Pruning (remove dead or damaged leaves)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Supporting (if necessary, add stakes to prevent the plant from toppling)" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Mulching" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing (add more compost or slow-release fertilizer)" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Checking for pests (e.g., aphids, slugs)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (pick artichokes when the buds are still tight and before they start to flower)" }
+                ],
+                "Celeriac": [
+                    { day: 1, task: "Planting (start indoors or direct sow in well-drained soil)" },
+                    { day: 2, task: "Watering (ensure the soil is consistently moist)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Mulching (to retain moisture and suppress weeds)" },
+                    { day: 5, task: "Watering" },
+                    { day: 6, task: "Weeding" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Fertilizing (apply balanced fertilizer or compost)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Mulching" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Supporting (if necessary, stake the plant to prevent tipping)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for pests (e.g., aphids, slugs)" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Weeding" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Mulching (add more mulch if necessary)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing (add slow-release fertilizer or compost)" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Weeding" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (harvest when the celeriac roots are fully formed and firm)" }
+                ],
+                "Parsley": [
+                    { day: 1, task: "Planting (sow seeds indoors or directly in soil; prefer well-drained, rich soil)" },
+                    { day: 2, task: "Watering (keep the soil moist but not soggy)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Mulching (helps retain moisture and prevent weeds)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Fertilizing (apply a balanced fertilizer or compost)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any damaged or yellowing leaves)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Checking for pests (watch for aphids, caterpillars)" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Mulching" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Pruning" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing (add a slow-release fertilizer if needed)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning (remove any older leaves to promote fresh growth)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (harvest outer leaves first to allow the plant to keep growing)" }
+                ],
+                "Chives": [
+                    { day: 1, task: "Planting (sow seeds directly in soil or plant small starter plants; prefer well-drained soil)" },
+                    { day: 2, task: "Watering (keep the soil moist but not soggy)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Mulching (helps keep soil moist and prevents weeds)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Fertilizing (apply a balanced fertilizer or compost)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any damaged or yellow leaves)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Checking for pests (watch for aphids, spider mites, or rust)" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Mulching" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Pruning" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Fertilizing (light feeding with a slow-release fertilizer)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Weeding" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning (trim chives back to encourage fresh growth)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (cut the outer leaves of the chives, leaving about 2-3 inches of growth for regrowth)" }
+                ],
+                "Tarragon": [
+                    { day: 1, task: "Planting (sow seeds or plant starter plants in well-drained soil with good sunlight)" },
+                    { day: 2, task: "Watering (keep soil moist but not soggy; tarragon prefers dry to moderate watering once established)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Mulching (to retain moisture and control weeds)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Pruning (remove any damaged or dead stems)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing (apply light organic fertilizer or compost)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Checking for pests (aphids or spider mites may be present)" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Mulching" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Pruning" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Fertilizing (apply a balanced fertilizer lightly)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning (trim to encourage fresh growth)" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (cut back tarragon when stems reach a good length for use)" }
+                ],
+                "Rosemary": [
+                    { day: 1, task: "Planting (choose a sunny location with well-drained soil; rosemary prefers slightly alkaline soil)" },
+                    { day: 2, task: "Watering (water lightly; ensure soil is well-drained and not soggy)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering (ensure soil dries out between waterings; rosemary is drought-tolerant once established)" },
+                    { day: 5, task: "Pruning (remove any damaged or dead stems)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Mulching (apply a thin layer of mulch to help retain moisture and control weeds)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing (apply a light amount of balanced fertilizer or compost)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Checking for pests (look out for aphids, spider mites, or whiteflies)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Pruning (trim the plant to encourage new growth)" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Mulching" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Pruning" },
+                    { day: 20, task: "Fertilizing (apply a light amount of balanced fertilizer)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning (remove older stems to promote fresh growth)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (harvest rosemary by cutting fresh sprigs for use in cooking or drying)" }
+                ],
+                "Thyme": [
+                    { day: 1, task: "Planting (choose a sunny location with well-drained, slightly alkaline soil)" },
+                    { day: 2, task: "Watering (water lightly, ensuring soil drains well; thyme prefers dry conditions once established)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering (avoid overwatering; thyme can tolerate drought)" },
+                    { day: 5, task: "Pruning (trim back any dead or woody stems)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Mulching (apply a thin layer of mulch to help retain moisture and control weeds)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing (apply a light application of balanced fertilizer or compost)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Checking for pests (inspect for aphids, spider mites, or whiteflies)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Pruning (remove older stems to encourage new growth and keep the plant compact)" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Mulching" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Pruning (remove any leggy or overgrown stems to maintain shape)" },
+                    { day: 20, task: "Fertilizing (apply a light, organic fertilizer or compost)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning (keep the plant tidy and bushy)" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning (remove any dead wood or spent flower stalks)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (harvest thyme sprigs by cutting just above a leaf node, and use fresh or dry for storage)" }
+                ],
+                "Sage": [
+                    { day: 1, task: "Planting (choose a sunny spot with well-drained, slightly alkaline soil)" },
+                    { day: 2, task: "Watering (water lightly, ensuring the soil is not waterlogged)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering (sage prefers dry conditions once established, so avoid overwatering)" },
+                    { day: 5, task: "Pruning (remove any dead or woody stems to encourage new growth)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Mulching (apply a thin layer of mulch to help retain moisture and control weeds)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Fertilizing (apply a light application of balanced organic fertilizer)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Checking for pests (inspect for aphids or spider mites)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Pruning (trim back any old or overgrown stems to maintain a bushy shape)" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Mulching" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Pruning (cut back any long, leggy stems to encourage more compact growth)" },
+                    { day: 20, task: "Fertilizing (apply a light, organic fertilizer or compost)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Weeding" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Pruning (remove dead or spent leaves to keep the plant tidy)" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Mulching" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Pruning (keep the plant neat and bushy by cutting back old growth)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Harvesting (harvest sage leaves by cutting stems just above a leaf node, use fresh or dry for storage)" }
+                ],
+                "Mint": [
+                    { day: 1, task: "Planting (plant in a container or garden with well-drained, moist soil and full sun to partial shade)" },
+                    { day: 2, task: "Watering (ensure the soil is moist, but not waterlogged)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering (mint prefers consistent moisture, but avoid overwatering)" },
+                    { day: 5, task: "Pruning (trim back any leggy or overgrown stems to encourage new growth)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Fertilizing (apply a light, balanced fertilizer to promote growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (cut back mint if it's spreading too much to control its growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Checking for pests (inspect for aphids, spider mites, or other pests)" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Pruning (continue to trim back leggy or overgrown stems)" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Mulching (apply a thin layer of mulch to retain moisture and control weeds)" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Fertilizing (light application of organic fertilizer)" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (cut back any unwanted runners to control mint's spread)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Pruning (maintain the plant's shape and prevent overgrowth)" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Mulching" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Harvesting (pluck mint leaves for fresh use or drying)" },
+                    { day: 30, task: "Harvesting (continue to harvest fresh mint leaves, but don’t remove more than 1/3 of the plant at a time)" }
+                ],
+                "Arugula": [
+                    { day: 1, task: "Planting (sow seeds directly into the soil or in containers, spacing them about 1 inch apart)" },
+                    { day: 2, task: "Watering (keep the soil consistently moist but not waterlogged)" },
+                    { day: 3, task: "Weeding" },
+                    { day: 4, task: "Watering (arugula prefers cool, moist conditions)" },
+                    { day: 5, task: "Thinning (once seedlings are large enough, thin them to 4-6 inches apart to allow for good air circulation)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding" },
+                    { day: 8, task: "Fertilizing (apply a balanced, light fertilizer to encourage healthy leaf growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Checking for pests (look for aphids or other common pests on the leaves)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Pruning (remove any yellow or damaged leaves)" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Weeding" },
+                    { day: 15, task: "Harvesting (start harvesting outer leaves once the plants have reached about 3 inches tall)" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Thinning (if necessary, thin out any overcrowded plants)" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Mulching (apply a thin layer of mulch around the plants to retain moisture and prevent weed growth)" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (trim any excess growth to maintain healthy plants)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Weeding" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Harvesting (continue to harvest outer leaves, leaving the center to grow)" },
+                    { day: 26, task: "Watering" },
+                    { day: 27, task: "Checking for pests (inspect for aphids or slugs)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Pruning (remove any damaged or yellowing leaves)" },
+                    { day: 30, task: "Harvesting (final harvest of the remaining arugula leaves)" }
+                ],
+                "Ginger Root": [
+                    { day: 1, task: "Planting (soak rhizomes in water overnight, then plant 2-4 inches deep in well-draining soil)" },
+                    { day: 2, task: "Watering (keep soil moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply a light layer of mulch to retain moisture and regulate temperature)" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Checking for sprouts (ginger takes 2-3 weeks to sprout, be patient)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Weeding (carefully remove weeds to avoid disturbing rhizomes)" },
+                    { day: 8, task: "Watering" },
+                    { day: 9, task: "Fertilizing (apply a balanced organic fertilizer or compost tea)" },
+                    { day: 10, task: "Checking soil moisture (ensure soil is damp but not waterlogged)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Monitoring for pests (check for aphids, spider mites, or fungal issues)" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Mulching (add more mulch if needed to maintain moisture and prevent weeds)" },
+                    { day: 17, task: "Fertilizing (apply nitrogen-rich fertilizer to encourage shoot growth)" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Checking growth (look for first shoots emerging above soil)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Pruning (remove any weak or yellowing shoots)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Checking soil health (ensure soil is rich in organic matter and well-draining)" },
+                    { day: 25, task: "Watering" },
+                    { day: 26, task: "Fertilizing (apply organic compost or liquid seaweed feed for healthy rhizome development)" },
+                    { day: 27, task: "Weeding" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking for pests and diseases (inspect leaves for discoloration or signs of damage)" },
+                    { day: 30, task: "Watering" }
+                ],
+                "Yam": [
+                    { day: 1, task: "Planting (bury yam setts or tubers 4-6 inches deep in well-draining soil)" },
+                    { day: 2, task: "Watering (keep soil moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch to retain moisture and suppress weeds)" },
+                    { day: 4, task: "Watering" },
+                    { day: 5, task: "Checking for sprouts (yams take 2-4 weeks to sprout, be patient)" },
+                    { day: 6, task: "Weeding (remove weeds carefully to avoid root disturbance)" },
+                    { day: 7, task: "Watering" },
+                    { day: 8, task: "Fertilizing (apply organic compost or a balanced fertilizer to encourage growth)" },
+                    { day: 9, task: "Monitoring soil moisture (ensure soil is consistently moist but not too wet)" },
+                    { day: 10, task: "Weeding" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Staking (set up trellises or stakes for yam vines to climb)" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Checking for pests (look for aphids, caterpillars, or leaf miners)" },
+                    { day: 15, task: "Watering" },
+                    { day: 16, task: "Mulching (add more mulch if necessary to maintain moisture)" },
+                    { day: 17, task: "Fertilizing (apply potassium-rich fertilizer to promote tuber development)" },
+                    { day: 18, task: "Watering" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Checking vine growth (ensure vines are climbing properly on supports)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Pruning (trim excessive or weak vines to encourage stronger growth)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Checking soil health (ensure soil remains loose and well-draining)" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Fertilizing (add compost or manure for continued growth)" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Checking for pests and diseases (inspect leaves for discoloration or damage)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Securing vines (ensure vines are properly trained on supports for healthy growth)" }
+                ],
+                "Figs": [
+                    { day: 1, task: "Planting (plant fig tree in well-draining soil with full sun exposure)" },
+                    { day: 2, task: "Watering (keep soil evenly moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch to retain moisture and regulate soil temperature)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil is moist but not too wet)" },
+                    { day: 5, task: "Weeding (remove any weeds around the base of the tree)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect leaves for aphids, scale insects, or spider mites)" },
+                    { day: 8, task: "Fertilizing (apply a balanced fertilizer or compost to promote healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any weak or damaged branches to encourage strong growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Checking for new growth (observe leaf and branch development)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Applying organic mulch (refresh mulch layer if necessary)" },
+                    { day: 16, task: "Fertilizing (use a nitrogen-rich fertilizer to support leaf and stem growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Monitoring for pests and diseases (look for signs of fungal infections or insect damage)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Checking fig tree structure (ensure branches are growing evenly and adjust support if needed)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Pruning (remove any overcrowded or excess growth)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Checking fruit development (if applicable, monitor for small fig formation)" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Fertilizing (apply phosphorus and potassium to encourage fruit production if figs are developing)" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Checking for pests and diseases (inspect leaves and fruit for any issues)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Pruning (remove any weak or dead branches to maintain tree health)" }
+                ],
+                "Taro": [
+                    { day: 1, task: "Planting (plant taro corms 2-3 inches deep in rich, well-draining soil with full to partial sunlight)" },
+                    { day: 2, task: "Watering (keep soil consistently moist, as taro thrives in wet conditions)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch to retain moisture and suppress weeds)" },
+                    { day: 4, task: "Checking soil moisture (ensure soil remains damp but not waterlogged)" },
+                    { day: 5, task: "Weeding (carefully remove weeds to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for sprouts (taro can take 2-3 weeks to sprout)" },
+                    { day: 8, task: "Fertilizing (apply a nitrogen-rich fertilizer to promote leafy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Weeding (remove any competing plants around taro seedlings)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Monitoring for pests (look for aphids, caterpillars, or root rot)" },
+                    { day: 13, task: "Watering" },
+                    { day: 14, task: "Mulching (refresh mulch layer if necessary to maintain moisture)" },
+                    { day: 15, task: "Fertilizing (apply potassium and phosphorus for strong root and tuber development)" },
+                    { day: 16, task: "Watering" },
+                    { day: 17, task: "Checking leaf growth (healthy leaves indicate strong root development)" },
+                    { day: 18, task: "Weeding" },
+                    { day: 19, task: "Watering" },
+                    { day: 20, task: "Checking for signs of disease (inspect leaves for yellowing or fungal issues)" },
+                    { day: 21, task: "Watering" },
+                    { day: 22, task: "Pruning (remove any damaged or yellowing leaves)" },
+                    { day: 23, task: "Watering" },
+                    { day: 24, task: "Fertilizing (apply compost or organic fertilizer to encourage steady growth)" },
+                    { day: 25, task: "Weeding" },
+                    { day: 26, task: "Checking corm development (gently feel soil around base for signs of swelling tubers)" },
+                    { day: 27, task: "Watering" },
+                    { day: 28, task: "Monitoring for pests and diseases (ensure no signs of rot or pest damage)" },
+                    { day: 29, task: "Watering" },
+                    { day: 30, task: "Mulching (add extra mulch to prepare for further growth)" }
+                ],
+                "Jackfruit": [
+                    { day: 1, task: "Planting (plant jackfruit sapling in a sunny spot with well-draining soil, spacing at least 15 feet apart)" },
+                    { day: 2, task: "Watering (keep soil moist but not waterlogged, especially during the first few weeks)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch around the base to retain moisture and prevent weed growth)" },
+                    { day: 4, task: "Checking soil moisture (ensure soil stays damp but not too wet)" },
+                    { day: 5, task: "Weeding (remove any weeds near the sapling to avoid nutrient competition)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, caterpillars, or mealybugs)" },
+                    { day: 8, task: "Fertilizing (apply a balanced fertilizer or organic compost to promote growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any dead or damaged leaves and branches to encourage healthy growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Checking growth (observe new leaf and branch development)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (add more mulch if needed to maintain moisture)" },
+                    { day: 16, task: "Fertilizing (use a nitrogen-rich fertilizer to boost leafy growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (look for signs of fungal or bacterial infections)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (trim any overcrowded or unwanted branches to shape tree growth)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking soil health (ensure soil is loose, well-draining, and rich in organic matter)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (add compost or organic fertilizer to support root and fruit development)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Checking tree structure (make sure the tree is strong and branches are healthy)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Monitoring for pests (inspect for any new insect activity on leaves and fruit)" },
+                    { day: 30, task: "Pruning (remove any weak or damaged branches to maintain tree health)" }
+                ],
+                "Durian": [
+                    { day: 1, task: "Planting (plant durian sapling in well-draining, slightly acidic soil with full sunlight exposure)" },
+                    { day: 2, task: "Watering (ensure soil is kept moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch around the base to retain moisture and regulate soil temperature)" },
+                    { day: 4, task: "Checking soil moisture (ensure soil remains damp, especially during early stages)" },
+                    { day: 5, task: "Weeding (remove weeds around the tree to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for pests like aphids, mealybugs, or scale insects)" },
+                    { day: 8, task: "Fertilizing (apply a balanced fertilizer or organic compost to promote healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any damaged or dead branches to promote stronger growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new leaves and branch development)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to retain moisture and reduce weeds)" },
+                    { day: 16, task: "Fertilizing (apply a nitrogen-rich fertilizer to encourage leaf and stem growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Monitoring for diseases (inspect leaves for fungal infections or yellowing)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (trim any overcrowded branches to ensure even growth)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect the trunk and leaves for insect damage)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (add compost or organic fertilizer to boost root and fruit development)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring tree structure (ensure branches are growing evenly and healthy)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking for pests (inspect for any insect infestation on leaves and branches)" },
+                    { day: 30, task: "Pruning (remove any weak or damaged branches and leaves to maintain tree health)" }
+                ],
+                "Guava": [
+                    { day: 1, task: "Planting (plant guava sapling in well-draining, slightly acidic soil with full sunlight exposure)" },
+                    { day: 2, task: "Watering (keep the soil consistently moist, but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply mulch around the base to retain moisture and regulate soil temperature)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil is damp, but not too wet)" },
+                    { day: 5, task: "Weeding (remove weeds around the base to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect leaves for aphids, scale insects, and mealybugs)" },
+                    { day: 8, task: "Fertilizing (apply balanced fertilizer to promote strong growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (trim any dead or damaged branches to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Checking leaf development (monitor for new leaves and healthy growth)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to maintain moisture and keep weeds down)" },
+                    { day: 16, task: "Fertilizing (use a nitrogen-rich fertilizer for healthy leafy growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect leaves for fungal infections or yellowing)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove any overcrowded or damaged branches to encourage airflow)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect for insect damage, especially under leaves)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (apply compost or organic fertilizer to support root and fruit development)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for fruit development (look for small guava forming)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking tree structure (ensure the tree is healthy and well-supported)" },
+                    { day: 30, task: "Pruning (remove any weak or dead branches to maintain tree health)" }
+                ],
+                "Lychee": [
+                    { day: 1, task: "Planting (plant lychee sapling in well-draining, slightly acidic soil with full sunlight exposure)" },
+                    { day: 2, task: "Watering (keep the soil consistently moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch around the base to retain moisture and keep roots cool)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil remains damp but not too wet)" },
+                    { day: 5, task: "Weeding (remove any weeds that may compete for nutrients around the sapling)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, mealybugs, and scale insects)" },
+                    { day: 8, task: "Fertilizing (apply balanced fertilizer to promote healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (trim any dead or damaged leaves and branches to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new leaves and signs of healthy growth)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (add more mulch if necessary to maintain moisture and suppress weeds)" },
+                    { day: 16, task: "Fertilizing (apply a nitrogen-rich fertilizer to boost leaf and stem growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for fungal or bacterial infections on leaves)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove any weak or overcrowded branches to encourage healthy development)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect the leaves for insect damage and treat if necessary)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (use organic compost or balanced fertilizer to support growth)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring fruit development (check for small lychee forming, if the tree is mature enough)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking tree structure (ensure tree is well-supported and growing evenly)" },
+                    { day: 30, task: "Pruning (remove any damaged or old branches to maintain healthy growth)" }
+                ],
+                "Dragonfruit": [
+                    { day: 1, task: "Planting (plant dragonfruit cutting in well-draining soil with full sunlight exposure and support structure like a trellis)" },
+                    { day: 2, task: "Watering (keep the soil moist but not waterlogged; avoid overwatering)" },
+                    { day: 3, task: "Mulching (apply mulch around the base to retain moisture and reduce weed growth)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil is slightly dry on the surface before watering again)" },
+                    { day: 5, task: "Weeding (remove any weeds around the plant to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, mealybugs, and scale insects)" },
+                    { day: 8, task: "Fertilizing (apply balanced, slow-release fertilizer to encourage healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove dead or damaged branches to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new stems and healthy root development)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to keep moisture levels consistent)" },
+                    { day: 16, task: "Fertilizing (apply a phosphorus-rich fertilizer to encourage flowering and fruiting)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for any signs of fungal or bacterial infections)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (trim excess growth to maintain shape and structure)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect the stems and leaves for any damage or insect infestation)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (use organic compost or balanced fertilizer to boost overall plant health)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for flower buds (check for flower buds starting to form on the stems)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure the plant is securely attached to the trellis and growing evenly)" },
+                    { day: 30, task: "Pruning (remove any old, weak, or overcrowded branches to allow better airflow and light penetration)" }
+                ],
+                "Mandarin Orange": [
+                    { day: 1, task: "Planting (plant mandarin orange sapling in well-draining, slightly acidic soil with full sunlight exposure)" },
+                    { day: 2, task: "Watering (keep the soil moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply mulch around the base to retain moisture and regulate soil temperature)" },
+                    { day: 4, task: "Checking soil moisture (ensure soil is moist, but not too wet or dry)" },
+                    { day: 5, task: "Weeding (remove any weeds that may compete for nutrients around the sapling)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, whiteflies, or spider mites)" },
+                    { day: 8, task: "Fertilizing (apply balanced, slow-release fertilizer to promote healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (trim any dead or damaged branches to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new leaves and healthy growth)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to keep moisture consistent and prevent weeds)" },
+                    { day: 16, task: "Fertilizing (apply a nitrogen-rich fertilizer to promote leaf growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for any fungal infections, especially on leaves)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove excess growth to maintain a balanced shape and improve airflow)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect the tree for any signs of pest damage, especially on new shoots)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (use a citrus-specific fertilizer to support fruit development)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for flower buds (check for signs of flowers forming, indicating fruiting time)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure the tree is growing evenly and is well-supported)" },
+                    { day: 30, task: "Pruning (remove any weak or dead branches to allow better airflow and sunlight penetration)" }
+                ],
+                "Soursop": [
+                    { day: 1, task: "Planting (plant soursop sapling in well-draining, slightly acidic soil with full sunlight exposure)" },
+                    { day: 2, task: "Watering (keep the soil consistently moist, but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply mulch around the base to retain moisture and regulate temperature)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil is moist, but not overly wet or dry)" },
+                    { day: 5, task: "Weeding (remove any weeds around the base to prevent nutrient competition)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, scale insects, and caterpillars)" },
+                    { day: 8, task: "Fertilizing (apply a balanced, slow-release fertilizer to support healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any dead or damaged branches to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new leaves and signs of healthy development)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to maintain moisture and suppress weed growth)" },
+                    { day: 16, task: "Fertilizing (apply organic compost or a nitrogen-rich fertilizer to encourage leaf growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for fungal or bacterial infections on leaves)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove any excessive growth or crowded branches to improve airflow)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect for damage caused by insects like mealybugs and aphids)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (use a balanced fertilizer with micronutrients to support overall growth)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for flowers (check for flowers developing, indicating fruiting soon)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure the tree is growing evenly and well-supported)" },
+                    { day: 30, task: "Pruning (remove any damaged or overcrowded branches to maintain a healthy shape)" }
+                ],
+                "Cantaloupe": [
+                    { day: 1, task: "Planting (sow cantaloupe seeds directly into well-draining soil or in containers with full sunlight exposure, spacing seeds about 2-3 feet apart)" },
+                    { day: 2, task: "Watering (keep the soil consistently moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply mulch around the plants to retain moisture and suppress weed growth)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil remains moist but not soggy)" },
+                    { day: 5, task: "Weeding (remove any weeds around the plants to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, cucumber beetles, and other pests)" },
+                    { day: 8, task: "Fertilizing (apply a balanced, slow-release fertilizer to encourage healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any damaged or dead leaves to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new shoots and healthy growth)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to help retain moisture and regulate temperature)" },
+                    { day: 16, task: "Fertilizing (apply a nitrogen-rich fertilizer to encourage leafy growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for powdery mildew or fungal infections on leaves)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove excess vines to promote better airflow and healthy fruit development)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect for aphids, mites, and other insect damage)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (apply a potassium-rich fertilizer to encourage fruiting)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for flowers (check for signs of flowers blooming, indicating fruiting soon)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure the plants are growing evenly and have enough space)" },
+                    { day: 30, task: "Pruning (remove any damaged or overcrowded vines to encourage fruit growth)" }
+                ],
+                "Honeydew Melon": [
+                    { day: 1, task: "Planting (sow honeydew melon seeds directly into well-draining soil or in containers with full sunlight exposure, spacing seeds about 2-3 feet apart)" },
+                    { day: 2, task: "Watering (keep the soil consistently moist but not waterlogged)" },
+                    { day: 3, task: "Mulching (apply mulch around the plants to retain moisture and suppress weed growth)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil is moist but not soggy)" },
+                    { day: 5, task: "Weeding (remove any weeds around the plants to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for aphids, cucumber beetles, and other common pests)" },
+                    { day: 8, task: "Fertilizing (apply a balanced, slow-release fertilizer to promote healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any damaged or dead leaves to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new shoots and healthy growth)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to help retain moisture and regulate temperature)" },
+                    { day: 16, task: "Fertilizing (apply a nitrogen-rich fertilizer to encourage leaf growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for powdery mildew or fungal infections on leaves)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove excess vines to improve airflow and support healthy fruit development)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (inspect for aphids, spider mites, or any other pests)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (apply a potassium-rich fertilizer to support fruiting)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for flowers (check for flowers starting to bloom, signaling the beginning of fruiting)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure vines are spreading properly and aren't overcrowded)" },
+                    { day: 30, task: "Pruning (remove any damaged or overcrowded vines to encourage fruit growth)" }
+                ],
+                "Lime": [
+                    { day: 1, task: "Planting (plant lime tree in well-draining soil, in a sunny spot with adequate space for growth)" },
+                    { day: 2, task: "Watering (keep soil moist, but not soggy, as lime trees prefer slightly dry conditions once established)" },
+                    { day: 3, task: "Mulching (apply a layer of mulch around the base of the tree to help retain moisture and prevent weed growth)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil remains evenly moist, especially during dry spells)" },
+                    { day: 5, task: "Weeding (remove any weeds around the tree to ensure no competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for pests like aphids, spider mites, and scale insects)" },
+                    { day: 8, task: "Fertilizing (apply a balanced, slow-release fertilizer to support healthy growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any damaged or yellowing leaves to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new leaf and shoot growth, as well as overall tree health)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh the mulch layer to maintain moisture retention)" },
+                    { day: 16, task: "Fertilizing (apply a nitrogen-rich fertilizer to promote healthy leaf growth)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for fungal or bacterial infections on the leaves and branches)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove excess branches and leaves to improve airflow and light penetration)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (look for common pests like aphids or spider mites on the new growth)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (apply a potassium-rich fertilizer to support fruiting and flower development)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for flowers (check for early signs of lime blossoms)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure the tree is growing evenly and remains supported)" },
+                    { day: 30, task: "Pruning (remove any dead or overcrowded branches to encourage healthy growth)" }
+                ],
+                "Coconut": [
+                    { day: 1, task: "Planting (plant a coconut seed or sprout in well-draining soil in a sunny location, ensuring it’s about 3-4 feet deep)" },
+                    { day: 2, task: "Watering (keep the soil moist, ensuring it is not waterlogged)" },
+                    { day: 3, task: "Mulching (apply mulch around the base to help retain moisture and protect the root system)" },
+                    { day: 4, task: "Checking soil moisture (ensure the soil is consistently moist but not soaking wet)" },
+                    { day: 5, task: "Weeding (remove any weeds around the coconut sapling to prevent competition for nutrients)" },
+                    { day: 6, task: "Watering" },
+                    { day: 7, task: "Checking for pests (inspect for common pests like scale insects or mealybugs)" },
+                    { day: 8, task: "Fertilizing (apply a slow-release, balanced fertilizer to promote healthy root and leaf growth)" },
+                    { day: 9, task: "Watering" },
+                    { day: 10, task: "Pruning (remove any dead or yellowing leaves to encourage new growth)" },
+                    { day: 11, task: "Watering" },
+                    { day: 12, task: "Weeding" },
+                    { day: 13, task: "Monitoring growth (check for new shoots and healthy growth)" },
+                    { day: 14, task: "Watering" },
+                    { day: 15, task: "Mulching (refresh mulch layer to help retain moisture and regulate temperature)" },
+                    { day: 16, task: "Fertilizing (apply a nutrient-rich fertilizer to enhance growth, especially for root development)" },
+                    { day: 17, task: "Watering" },
+                    { day: 18, task: "Checking for diseases (inspect for signs of fungal infections or yellowing of leaves)" },
+                    { day: 19, task: "Weeding" },
+                    { day: 20, task: "Watering" },
+                    { day: 21, task: "Pruning (remove any excess growth or dead leaves to improve airflow around the plant)" },
+                    { day: 22, task: "Watering" },
+                    { day: 23, task: "Checking for pests (look for damage from pests like aphids, mites, or coconut beetles)" },
+                    { day: 24, task: "Watering" },
+                    { day: 25, task: "Fertilizing (apply a balanced fertilizer to encourage strong frond and trunk growth)" },
+                    { day: 26, task: "Weeding" },
+                    { day: 27, task: "Monitoring for growth (observe any new fronds or signs of fruit development, though it may take longer to see fruit)" },
+                    { day: 28, task: "Watering" },
+                    { day: 29, task: "Checking plant structure (ensure the sapling is growing straight and strong)" },
+                    { day: 30, task: "Pruning (remove any damaged or overcrowded leaves to encourage better growth)" }
+                ]
+            };
+// Get the finalized crop names from the selected crop container
+// Ensure selectedCrops contains valid crop names
+// Ensure selectedCrops contains valid crop na
+
+            console.log(selectedCropNames); // Check if this array contains the expected crops
+
+// Function to render tasks for a selected day
+            const renderTasks = (date) => {
+                taskList.innerHTML = ""; // Clear current tasks
+                const dayTasks = tasks[date] || []; // Get tasks for the selected date
+
+                // Check if tasks exist for the selected day
+                if (dayTasks.length === 0) {
+                    const noTasksMessage = document.createElement("li");
+                    noTasksMessage.textContent = "No tasks for this day!";
+                    taskList.appendChild(noTasksMessage);
+                }
+
+                // Add each task to the task list
+                dayTasks.forEach(task => {
+                    const taskItem = document.createElement("li");
+                    taskItem.textContent = task;
+                    taskList.appendChild(taskItem);
+                });
+            };
+
+// Function to generate the calendar
+            const generateCalendar = () => {
+                monthsContainer.innerHTML = "";  // Clear previous calendar
+
+                // Correct number of days in the current month
+                const daysInMonth = new Date(2025, currentMonthIndex + 1, 0).getDate();
+                const firstDayOfMonth = new Date(2025, currentMonthIndex, 1).getDay();  // Get first day of the month (Sunday = 0, Monday = 1, etc.)
+
+                let dayCount = 0;
+
+                // Clear any previous task data
+                tasks = {};
+
+                // Initialize empty tasks for each day of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    tasks[`${monthNames[currentMonthIndex]} ${day}, 2025`] = [];
+                }
+
+                // Populate tasks based on crop schedules
+                selectedCropNames.forEach(crop => {
+                    const cropSchedule = CropSchedules[crop];
+                    if (cropSchedule) {
+                        cropSchedule.forEach(schedule => {
+                            const taskDate = `${monthNames[currentMonthIndex]} ${schedule.day}, 2025`;
+                            if (tasks[taskDate]) {
+                                // Ensure no duplicate tasks for the same day
+                                if (!tasks[taskDate].find(task => task.includes(crop))) {
+                                    tasks[taskDate].push(`${crop}: ${schedule.task}`);
+                                }
+                            }
+                        });
+                    }
+                });
+
+                // Create the calendar days
+                for (let i = 0; i < 42; i++) { // Adjust loop to handle full weeks (6 rows max)
+                    const dayElement = document.createElement("div");
+                    dayElement.classList.add("day");
+
+                    // If it's the first month and a valid day, show the day
+                    if (i >= firstDayOfMonth && dayCount < daysInMonth) {
+                        const day = ++dayCount;
+                        dayElement.textContent = day;
+
+                        // Add event listener to each day
+                        dayElement.addEventListener("click", () => {
+                            const selectedDate = `${monthNames[currentMonthIndex]} ${day}, 2025`;
+                            selectedDateSpan.textContent = selectedDate;
+                            taskContainer.style.display = "block";
+                            renderTasks(selectedDate);  // Render tasks for selected date
+                        });
+
+                        // Append the day to the calendar container
+                        monthsContainer.appendChild(dayElement);
+                    } else {
+                        // Handle extra days when the month ends before 30 (padding)
+                        dayElement.classList.add("empty-day");
+                        monthsContainer.appendChild(dayElement);
+                    }
+                }
+            };
+
+// Event listener for the "Generate Calendar" button
+            generateButton.addEventListener("click", () => {
+                calendarContainer.style.display = "block";
+                generateCalendar();
+            });
+
+// Event listeners for navigating months
+            prevMonthBtn.addEventListener("click", () => {
+                currentMonthIndex = (currentMonthIndex === 0) ? 11 : currentMonthIndex - 1;
+                monthHeader.textContent = monthNames[currentMonthIndex];
+                generateCalendar();
+            });
+
+            nextMonthBtn.addEventListener("click", () => {
+                currentMonthIndex = (currentMonthIndex === 11) ? 0 : currentMonthIndex + 1;
+                monthHeader.textContent = monthNames[currentMonthIndex];
+                generateCalendar();
+            });
+
+// Set initial month header
+            monthHeader.textContent = monthNames[currentMonthIndex];
+
+// Ensure calendar generates on page load if required
+            generateCalendar();
+
+        });
+    </script>
+
+
 
     <footer class="custom-footer">
         <div class="footer-content">

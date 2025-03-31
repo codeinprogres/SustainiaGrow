@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
@@ -45,8 +45,20 @@ def program():
     return render_template('program.html')
 
 @app.route('/login', methods=['GET'])
-def login_page():  # Rename to login_page to avoid conflict with Flask-Login's 'login' function
-    return render_template('login.html')  # Ensure you have a login.html file
+def login_page():
+    messages = get_flashed_messages(with_categories=True)
+
+    # Filter out duplicate "Please log in to access this page."
+    unique_messages = []
+    seen_messages = set()
+
+    for category, message in messages:
+        if message not in seen_messages:
+            seen_messages.add(message)
+            unique_messages.append((category, message))
+
+    return render_template('login.html', messages=unique_messages)
+
 
 @app.route('/market')
 def market():
@@ -70,44 +82,30 @@ def pricing():
     return render_template('pricing.html')
 
 # ------------------- Chat API -------------------
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    try:
-        user_message = request.json.get('message')
-        if not user_message:
-            return jsonify({'message': 'Message is required.'}), 400
 
-        bot_response = get_openai_response(user_message)
-        return jsonify({'message': bot_response}), 200
-    except Exception as e:
-        print(f"Error handling chat message: {e}")
-        return jsonify({'message': 'Server error. Please try again later.'}), 500
+from flask import session  # Import session to clear flashed messages
 
-# ------------------- Authentication Routes -------------------
 @app.route('/auth', methods=['POST'])
 def auth():
     if request.method == 'POST':
-        if 'signup' in request.form:
-            username = request.form['username']
-            password = request.form['password']
+        username = request.form['username']
+        password = request.form['password']
 
+        if 'signup' in request.form:  # Signup logic
             existing_user = User.query.filter_by(username=username).first()
             if existing_user:
                 flash('Username already exists. Try another one.', 'danger')
-                return redirect(url_for('index'))
+                return redirect(url_for('login_page'))  # Redirect to login page
 
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             new_user = User(username=username, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
 
-            flash('Account created successfully! Please log in.', 'success')
-            return redirect(url_for('login_page'))  # Redirect to login page after signup
+            flash('Successfully signed up! Please log in.', 'success')
+            return redirect(url_for('login_page'))  # Redirect to login page
 
-        elif 'login' in request.form:
-            username = request.form['username']
-            password = request.form['password']
-
+        elif 'login' in request.form:  # Login logic
             user = User.query.filter_by(username=username).first()
             if user and bcrypt.check_password_hash(user.password, password):
                 login_user(user)
@@ -115,16 +113,18 @@ def auth():
                 return redirect(url_for('dashboard'))
             else:
                 flash('Invalid username or password', 'danger')
+                return redirect(url_for('login_page'))  # Stay on login page if failed
 
-    return redirect(url_for('login_page'))  # Redirect to login page if something goes wrong
+    return redirect(url_for('login_page'))  # Redirect if something goes wrong
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
+    session.clear()  # Clears all flashed messages
     flash('You have been logged out.', 'info')
     return redirect(url_for('login_page'))  # Redirect to login page after logout
-
 
 # ------------------- Run the Flask App -------------------
 if __name__ == '__main__':
