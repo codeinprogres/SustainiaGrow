@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .account-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px #00eaff;
+            width: 50%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h1, h2 {
+            color: #00eaff;
+            text-shadow: 0 0 10px #00eaff;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #00eaff;
+            text-align: left;
+            color: #fff;
+        }
+
+        th {
+            background: rgba(0, 200, 255, 0.3);
+            text-shadow: 0 0 5px #00eaff;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(90deg, #00eaff, #0077ff);
+            color: #121212;
+            padding: 12px 24px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 10px #00eaff;
+        }
+
+        .button:hover {
+            background: linear-gradient(90deg, #0077ff, #00eaff);
+            box-shadow: 0 0 20px #00eaff;
+        }
+    </style>
+</head>
+<body>
+<div class="account-container">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <h2>Account Information</h2>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email if user.email else "Not provided" }}</p>
+
+    <h2>Pricing Information</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Plan</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for plan, price in pricing.items() %}
+        <tr>
+            <td>{{ plan }}</td>
+            <td>{{ price }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Manage Subscription</h2>
+    <a href="/pricing" class="button">Go to Pricing Page</a>
+</div>
+</body>
+</html>

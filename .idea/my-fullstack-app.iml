@@ -16,5 +16,7 @@
     <orderEntry type="library" name="Python 3.8 (my-fullstack-app) interpreter library" level="application" />
     <orderEntry type="library" name="justgage" level="application" />
     <orderEntry type="library" name="raphael" level="application" />
+    <orderEntry type="library" name="jquery-3.6.0" level="application" />
+    <orderEntry type="library" name="three.js" level="application" />
   </component>
 </module>

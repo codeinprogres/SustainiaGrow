@@ -208,7 +208,7 @@
 <body class="fade-in">
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">
+        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -224,9 +224,12 @@
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
             <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My profile</a></li>
         </ul>
+
     </div>
 </header>
+
 <div id="chatbot-popup">
     <div id="chatbot-icon" class="chatbot-logo">
         <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">

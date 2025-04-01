@@ -18,8 +18,10 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login_page'  # Change the view name to login_page
 
 # 🔹 OpenAI API Configuration (Optional)
-OPENAI_API_KEY = 'your_openai_api_key'  # Replace this!
+OPENAI_API_KEY = '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'  # Replace with your actual OpenAI API Key
+
 OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
+
 
 # ------------------- User Model -------------------
 class User(db.Model, UserMixin):
@@ -83,6 +85,45 @@ def pricing():
 
 # ------------------- Chat API -------------------
 
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    try:
+        user_message = request.json.get('message')
+        if not user_message:
+            return jsonify({'message': 'Message is required.'}), 400
+
+        bot_response = get_openai_response(user_message)
+        return jsonify({'message': bot_response}), 200
+    except Exception as e:
+        print(f"Error handling chat message: {e}")
+        return jsonify({'message': 'Server error. Please try again later.'}), 500
+
+
+
+def get_openai_response(user_message):
+    try:
+        response = requests.post(
+            OPENAI_API_URL,
+            json={
+                'model': 'gpt-4',
+                'messages': [{'role': 'user', 'content': user_message}],
+            },
+            headers={
+                'Authorization': f'Bearer {OPENAI_API_KEY}',
+                'Content-Type': 'application/json',
+            },
+        )
+
+        if response.status_code != 200:
+            raise Exception(f"OpenAI request failed with status code {response.status_code}")
+
+        data = response.json()
+        bot_message = data['choices'][0]['message']['content']
+        return bot_message
+    except requests.exceptions.RequestException as e:
+        print(f"Request error: {e}")
+        return "Sorry, I couldn't process your request."
+
 from flask import session  # Import session to clear flashed messages
 
 @app.route('/auth', methods=['POST'])
@@ -126,6 +167,20 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login_page'))  # Redirect to login page after logout
 
+@app.route('/my_account')
+@login_required
+def my_account():
+    # Retrieve the current user details
+    user = current_user
+    # Sample pricing-related data (can be adjusted according to your pricing model)
+    pricing_details = {
+        "Basic Plan": "$9.99/month",
+        "Premium Plan": "$19.99/month",
+        "Enterprise Plan": "$49.99/month"
+    }
+
+    # Pass the user details and pricing info to the template
+    return render_template('my_account.html', user=user, pricing=pricing_details)
 # ------------------- Run the Flask App -------------------
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -276,6 +276,9 @@
         }
     </style>
 </head>
+
+
+<!-- Main content -->
 <body class="prog-background">
 <header class="navbar">
     <div class="navbar-container">
@@ -295,9 +298,61 @@
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
             <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My profile</a></li>
         </ul>
+
     </div>
 </header>
+
+
+<!-- Sidebar (Only visible when user is logged in) -->
+
+<style>
+    /* Sidebar Styling */
+    .sidebar {
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: -250px; /* Initially hidden */
+        height: 100%;
+        background-color: #333;
+        color: white;
+        padding: 20px;
+        transition: left 0.3s;
+    }
+
+    .sidebar-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #sidebar button {
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Content Styling */
+    .content {
+        margin-left: 270px;
+        padding: 20px;
+    }
+
+    /* Show the sidebar when logged in */
+    .logged-in #sidebar {
+        left: 0;
+    }
+
+</style>
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+</script>
+
 <style>
     .custom-header {
         position: relative;
@@ -601,7 +656,7 @@
                 <button class="add-entry-btn" onclick="addEntry()">Add Crop Data</button>
             </div>
             <div class="entries" id="entries"></div>
-            <button class="graph-btn" onclick="generateGraph()">Generate Graph</button>
+            <button class="graph-btn" onclick="generateGraph()">Visualized Model Of Entry Data:</button>
             <canvas id="entryGraph" width="100%" height="300"></canvas>
         </div>
     </div>
@@ -636,6 +691,23 @@
                     <option value="temperate">Temperate</option>
                     <option value="tropical">Tropical</option>
                     <option value="arid">Arid</option>
+                    <option value="polar">Polar</option>
+                    <option value="subtropical">Subtropical</option>
+                    <option value="mountain">Mountain</option>
+                    <option value="mediterranean">Mediterranean</option>
+                    <option value="desert">Desert</option>
+                    <option value="savanna">Savanna</option>
+                    <option value="rainforest">Rainforest</option>
+                    <option value="grassland">Grassland</option>
+                    <option value="steppe">Steppe</option>
+                    <option value="highland">Highland</option>
+                    <option value="humidcontinental">Humid Continental</option>
+                    <option value="marinewestcoast">Marine West Coast</option>
+                    <option value="humidsubtropical">Humid Subtropical</option>
+                    <option value="tundra">Tundra</option>
+                    <option value="tropicalmonsoon">Tropical Monsoon</option>
+                    <option value="colddesert">Cold Desert</option>
+                    <option value="boreal">Boreal</option>
                 </select>
 
                 <button id="generate-rotation" class="generate-rotation-btn">Generate Crop Rotation</button>
@@ -657,16 +729,14 @@
     <div class="section-content">
         <div class="container">
             <div class="form-container">
-                <input type="text" id="location" placeholder="Enter Your Location (e.g., New York)">
+                <input type="text" id="location" placeholder="Enter Your City (e.g. Everett)">
                 <button id="getWeatherData">Get Crop Suggestions</button>
             </div>
 
             <div class="result" id="result">
-                <!-- Display crop suggestions here -->
             </div>
 
             <div class="schedule" id="schedule">
-                <!-- Display crop rotation and schedule here -->
             </div>
         </div>    </div>
 </section>
@@ -821,7 +891,6 @@
                 }
             });
 
-            // Finalize selection button
             finalizeButton.addEventListener("click", () => {
                 selectedCropNames = Array.from(selectedCropContainer.children).map(item =>
                     item.querySelector("span").textContent
@@ -829,7 +898,6 @@
                 console.log("Selected Crop Names:", selectedCropNames);
 
 
-                // Fix here: alert crops finalized with the correct list
                 if (selectedCropNames.length > 0) {
                     alert(`Crops finalized: ${selectedCropNames.join(", ")}`);
                 } else {
@@ -837,14 +905,12 @@
                 }
             });
 
-            // Add crop to the selected section and remove from available crops
             const addCropToSelected = (cropName, cropItem) => {
                 if (selectedCropContainer.children.length >= 10) {
                     alert("You can only select up to 10 crops.");
                     return;
                 }
 
-                // Get the index of the crop in the available crops list and store it in the map
                 const index = Array.from(availableCrops.children).indexOf(cropItem);
                 cropPositions.set(cropName, index);
 
@@ -1424,8 +1490,26 @@
             const cropRotations = {
                 temperate: ["Wheat", "Corn", "Soybeans", "Barley", "Oats", "Alfalfa"],
                 tropical: ["Rice", "Maize", "Sugarcane", "Coconut", "Bananas"],
-                arid: ["Barley", "Wheat", "Chickpeas", "Cotton", "Date Palms"]
+                arid: ["Barley", "Wheat", "Chickpeas", "Cotton", "Date Palms"],
+                polar: ["Cabbage", "Kale", "Spinach", "Potatoes", "Carrots"],
+                subtropical: ["Pineapple", "Avocado", "Oranges", "Mango", "Tomatoes"],
+                mountain: ["Potatoes", "Barley", "Oats", "Wheat", "Lettuce"],
+                mediterranean: ["Olives", "Grapes", "Tomatoes", "Figs", "Herbs (like Thyme and Rosemary)"],
+                desert: ["Cactus", "Date Palms", "Agave", "Figs", "Lettuce (desert varieties)"],
+                savanna: ["Maize", "Sorghum", "Groundnuts", "Cassava", "Cucumbers"],
+                rainforest: ["Bananas", "Cocoa", "Pineapples", "Rice", "Sugarcane"],
+                grassland: ["Wheat", "Barley", "Soybeans", "Oats", "Sunflower"],
+                steppe: ["Wheat", "Barley", "Cotton", "Sunflower", "Sorghum"],
+                highland: ["Potatoes", "Barley", "Beans", "Cabbage", "Peas"],
+                humidcontinental: ["Corn", "Wheat", "Soybeans", "Oats", "Cabbage"],
+                marinewestcoast: ["Lettuce", "Spinach", "Potatoes", "Cabbage", "Carrots"],
+                humidsubtropical: ["Rice", "Tomatoes", "Sugarcane", "Peanuts", "Oranges"],
+                tundra: ["Potatoes", "Cabbage", "Kale", "Spinach", "Turnips"],
+                tropicalmonsoon: ["Rice", "Maize", "Coconut", "Bananas", "Papaya"],
+                colddesert: ["Alfalfa", "Barley", "Wheat", "Lettuce", "Chickpeas"],
+                boreal: ["Potatoes", "Cabbage", "Carrots", "Kale", "Beets"]
             };
+
 
             let recommendedCrops = cropRotations[climateZone];
 
@@ -1519,7 +1603,7 @@
         getWeatherDataButton.addEventListener('click', async () => {
             const location = locationInput.value;
             if (!location) {
-                alert('Please enter a location');
+                alert('Please enter a city or region name');
                 return;
             }
 
@@ -1697,6 +1781,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 20px;
+
         }
 
         .graph-btn:hover {
@@ -1710,6 +1795,11 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;  /* Centers the canvas horizontally */
+            align-items: center;      /* Centers the canvas vertically */
+            height: 360px;            /* Makes the container take up the full height of the viewport */
+            width: 100%;
         }
     </style>
 
@@ -1755,6 +1845,10 @@
         // Function to generate or update the graph using Chart.js
         function generateGraph() {
             const ctx = document.getElementById('entryGraph').getContext('2d');
+
+            const canvas = document.getElementById('entryGraph');
+            canvas.width = window.innerWidth * 0.8; // Sets the width to 80% of the viewport width
+            canvas.height = 400; // You can adjust the height as needed
 
             // If the chart already exists, destroy it and re-render with updated data
             if (chartInstance) {
@@ -5134,7 +5228,8 @@
 
             console.log(selectedCropNames); // Check if this array contains the expected crops
 
-// Function to render tasks for a selected day
+
+
             const renderTasks = (date) => {
                 taskList.innerHTML = ""; // Clear current tasks
                 const dayTasks = tasks[date] || []; // Get tasks for the selected date
@@ -5154,7 +5249,53 @@
                 });
             };
 
-// Function to generate the calendar
+            const analyzeTaskOverlap = (selectedCrops) => {
+                const taskKeywords = ["water", "fertili", "plant", "harvest", "prune", "till", "weed", "mulch"];
+
+                const taskOverlap = {}; // Track overlapping tasks by day
+
+                // Loop through each selected crop and populate taskOverlap
+                selectedCrops.forEach(crop => {
+                    const cropSchedule = CropSchedules[crop];
+
+                    cropSchedule.forEach(schedule => {
+                        const taskDate = `${monthNames[currentMonthIndex]} ${schedule.day}, 2025`;
+                        const taskDescription = schedule.task.toLowerCase();
+
+                        // Check if task description contains any key task keyword
+                        const matchingKeyword = taskKeywords.find(keyword => taskDescription.includes(keyword));
+
+                        if (matchingKeyword) {
+                            // Add task to the taskOverlap object
+                            if (!taskOverlap[taskDate]) {
+                                taskOverlap[taskDate] = {};
+                            }
+                            if (!taskOverlap[taskDate][matchingKeyword]) {
+                                taskOverlap[taskDate][matchingKeyword] = [];
+                            }
+                            taskOverlap[taskDate][matchingKeyword].push(crop);
+                        }
+                    });
+                });
+
+                // Analyze task overlap for the threshold
+                let warningCount = 0;
+                Object.keys(taskOverlap).forEach(date => {
+                    Object.keys(taskOverlap[date]).forEach(task => {
+                        if (taskOverlap[date][task].length > 5) {
+                            warningCount++;
+                        }
+                    });
+                });
+
+                if (warningCount >= 20) {
+                    return `⚠️ Warning: More than 6 crops share the same task (e.g., watering or fertilizing) on ${warningCount} days. This may lead to overuse of resources and inefficient crop management. Please consider adjusting your schedule.`;
+                }
+
+                // If no overlap issues, return nothing to avoid disruption
+                return "";  // No message if everything is fine
+            };
+
             const generateCalendar = () => {
                 monthsContainer.innerHTML = "";  // Clear previous calendar
 
@@ -5217,7 +5358,14 @@
             };
 
 // Event listener for the "Generate Calendar" button
+
             generateButton.addEventListener("click", () => {
+                console.log("Selected Crops:", selectedCropNames); // Debugging
+                const taskOverlapFeedback = analyzeTaskOverlap(selectedCropNames);
+
+                if (taskOverlapFeedback) {
+                    alert(taskOverlapFeedback);
+                }
                 calendarContainer.style.display = "block";
                 generateCalendar();
             });
@@ -5242,6 +5390,8 @@
             generateCalendar();
 
         });
+
+
     </script>
 
 
