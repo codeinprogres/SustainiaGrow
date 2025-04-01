@@ -174,9 +174,9 @@ def my_account():
     user = current_user
     # Sample pricing-related data (can be adjusted according to your pricing model)
     pricing_details = {
-        "Basic Plan": "$9.99/month",
-        "Premium Plan": "$19.99/month",
-        "Enterprise Plan": "$49.99/month"
+        "Basic Plan": "$0/month",
+        "Premium Plan": "$29/month",
+        "Enterprise Plan": "$79/month"
     }
 
     # Pass the user details and pricing info to the template

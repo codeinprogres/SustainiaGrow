@@ -3,101 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account</title>
+    <title>SustainaCore - Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            scroll-behavior: smooth;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+        ;
         }
 
-        .account-container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px #00eaff;
-            width: 50%;
-            text-align: center;
-            backdrop-filter: blur(10px);
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
-        h1, h2 {
-            color: #00eaff;
-            text-shadow: 0 0 10px #00eaff;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #00eaff;
-            text-align: left;
-            color: #fff;
-        }
-
-        th {
-            background: rgba(0, 200, 255, 0.3);
-            text-shadow: 0 0 5px #00eaff;
-        }
-
-        .button {
-            display: inline-block;
-            background: linear-gradient(90deg, #00eaff, #0077ff);
-            color: #121212;
-            padding: 12px 24px;
-            margin-top: 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 10px #00eaff;
-        }
-
-        .button:hover {
-            background: linear-gradient(90deg, #0077ff, #00eaff);
-            box-shadow: 0 0 20px #00eaff;
+        .parallax {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
-<body>
-<div class="account-container">
-    <h1>Welcome, {{ user.username }}!</h1>
-    <h2>Account Information</h2>
-    <p><strong>Username:</strong> {{ user.username }}</p>
-    <p><strong>Email:</strong> {{ user.email if user.email else "Not provided" }}</p>
+<body class=" bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white font-sans">
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/program.js') }}"></script>
 
-    <h2>Pricing Information</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Plan</th>
-            <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for plan, price in pricing.items() %}
-        <tr>
-            <td>{{ plan }}</td>
-            <td>{{ price }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<header class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+            <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
+        </a>
+        <button class="navbar-toggle" id="navbar-toggle">
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <ul class="navbar-list" id="navbar-list">
+            <li><a href="/" class="navbar-item">Home</a></li>
+            <li><a href="/program" class="navbar-item">Services</a></li>
+            <li><a href="/contact" class="navbar-item">Contact</a></li>
+            <li><a href="/pricing" class="navbar-item">Pricing</a></li>
+            <li><a href="/market" class="navbar-item">Marketplace</a></li>
+            <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
+            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My profile</a></li>
+        </ul>
 
-    <h2>Manage Subscription</h2>
-    <a href="/pricing" class="button">Go to Pricing Page</a>
+    </div>
+</header>
+<!--START CODE HERE: -->
+
+
+
+
+<!--START CODE HERE: -->
+<div class="flex justify-center items-center min-h-screen">
+    <div class="w-full max-w-2xl bg-gradient-to-br from-gray-800 via-gray-900 to-black shadow-xl rounded-xl p-8 border border-blue-500/50 backdrop-blur-md">
+        <h1 class="text-4xl font-extrabold text-blue-400 text-center mb-6">Welcome, {{ user.username }}!</h1>
+
+        <div class="border border-blue-500/40 p-6 rounded-lg bg-black/20">
+            <h2 class="text-2xl font-semibold text-blue-300 mb-4">Account Information</h2>
+            <p class="text-lg"><span class="text-blue-400 font-medium">Username:</span> {{ user.username }}</p>
+            <p class="text-lg"><span class="text-blue-400 font-medium">Email:</span> {{ user.email if user.email else "Not provided" }}</p>
+        </div>
+
+        <div class="border border-blue-500/40 p-6 rounded-lg bg-black/20 mt-6">
+            <h2 class="text-2xl font-semibold text-blue-300 mb-4">Pricing Information</h2>
+            <table class="w-full text-left border-collapse text-lg">
+                <thead>
+                <tr class="text-blue-400 border-b border-blue-500">
+                    <th class="p-3">Plan</th>
+                    <th class="p-3">Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for plan, price in pricing.items() %}
+                <tr class="border-b border-gray-700 hover:bg-gray-800">
+                    <td class="p-3">{{ plan }}</td>
+                    <td class="p-3 text-blue-300">{{ price }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-8 flex justify-center">
+            <a href="/pricing" class="px-6 py-3 text-lg font-semibold rounded-lg bg-blue-500 hover:bg-blue-600 shadow-lg transition-all duration-300">
+                Manage Subscription
+            </a>
+        </div>
+    </div>
 </div>
+<!--END HERE-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--END HERE-->
+<!-- Footer -->
+<footer class="custom-footer mt-0">
+    <div class="footer-content">
+        <h2 class="font-bold text-3xl leading-snug">
+            Ready to upgrade your farm?<br>Start your subscription today.
+        </h2>
+        <a class="cta-button" href="/pricing">Get started</a>
+        <nav class="flex flex-wrap justify-center text-lg font-medium">
+            <div><a href="/">Home</a></div>
+            <div><a href="/program">Services</a></div>
+            <div><a href="/contact">Contact</a></div>
+            <div><a href="/pricing">Pricing</a></div>
+            <div><a href="/marketplace">Marketplace</a></div>
+            <div><a href="/dashboard">Dashboard</a></div>
+        </nav>
+        <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
+    </div>
+</footer>
+
+<!-- Chart.js Script -->
+
 </body>
 </html>

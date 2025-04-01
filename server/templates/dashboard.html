@@ -103,6 +103,99 @@
             margin: auto;
             background: transparent;
         }
+        #weather-info {
+            background: linear-gradient(145deg, #1a2a44, #0f1c33);
+            border: 1px solid #3a4f6f;
+            border-radius: 12px;
+            padding: 20px 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Header Styling */
+        #weather-info h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Table Container to Center Table */
+        .weather-table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Table Styles */
+        .weather-table {
+            width: 100%;
+            max-width: 500px;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        /* Table Header */
+        .weather-table th {
+            background: linear-gradient(135deg, #1f3a5c, #162a46);
+            padding: 12px;
+            font-size: 14px;
+            color: #dbe3ed;
+            text-transform: uppercase;
+            border-bottom: 2px solid #3a4f6f;
+            text-align: center;
+        }
+
+        /* Table Data Rows */
+        .weather-table td {
+            padding: 12px;
+            font-size: 14px;
+            border-bottom: 1px solid #3a4f6f;
+            background: linear-gradient(145deg, #14283f, #0f1c33);
+            color: #cbd5e1;
+            text-align: center;
+        }
+
+        /* Loading State */
+        .weather-table td#temperature,
+        .weather-table td#humidity,
+        .weather-table td#precipitation,
+        .weather-table td#climate-region {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Pulse Animation for Loading */
+        @keyframes pulse {
+            0% {
+                background-color: rgba(43, 68, 96, 0.3);
+            }
+            50% {
+                background-color: rgba(43, 68, 96, 0.5);
+            }
+            100% {
+                background-color: rgba(43, 68, 96, 0.3);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #weather-info {
+                padding: 15px 20px;
+            }
+
+            .weather-table th,
+            .weather-table td {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
 
         .month-header {
             background-color: #2980b9;
@@ -278,7 +371,6 @@
 </head>
 
 
-<!-- Main content -->
 <body class="prog-background">
 <header class="navbar">
     <div class="navbar-container">
@@ -559,7 +651,7 @@
     }
 </style>
 
-<section class="program-section" id="farmplan">
+<section class="program-section justify-center" id="farmplan">
     <div class="section-header">
         <h2 class="section-title">Farm Planner Tool</h2>
         <p class="section-description">Optimize your farm's efficiency with real-time data tracking, including an analog temperature meter and barometer. Ensure your crops receive the best conditions for sustainable growth.</p>
@@ -567,12 +659,35 @@
     <div class="divtop">
         <div class="farmtop">
             <div class="progtop">
-                <div id="farm-planner" class="farm-planner">
+                <div id="farm-planner" class="farm-planner ">
                     <h2 class="planner-title">🌱 Farm Planner Tool</h2>
                     <p class="planner-subtitle">Enter your address to get started:</p>
                     <div class="input-container">
                         <input type="text" id="address-input" class="planner-input" placeholder="Enter your address" />
                         <button id="find-location" class="planner-button">Find My Location</button>
+                    </div>
+                    <div id="weather-info" class="weather-info">
+                        <h3>Weather Information</h3>
+                        <div class="weather-table-container">
+                            <table class="weather-table">
+                                <thead>
+                                <tr>
+                                    <th>Temperature (°C)</th>
+                                    <th>Humidity (%)</th>
+                                    <th>Precipitation</th>
+                                    <th>Region</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td id="temperature">Loading...</td>
+                                    <td id="humidity">Loading...</td>
+                                    <td id="precipitation">Loading...</td>
+                                    <td id="climate-region">Loading...</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <div id="map-container" class="map-container">
@@ -598,27 +713,7 @@
                         <button id="finalize-crops" class="finalize-button">Finalize Selection</button>
                     </div>
 
-                    <div id="weather-info" class="weather-info">
-                        <h3>Weather Information</h3>
-                        <table class="weather-table">
-                            <thead>
-                            <tr>
-                                <th>Temperature (°C)</th>
-                                <th>Humidity (%)</th>
-                                <th>Precipitation</th>
-                                <th>Region</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td id="temperature">Loading...</td>
-                                <td id="humidity">Loading...</td>
-                                <td id="precipitation">Loading...</td>
-                                <td id="climate-region">Loading...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
 
                     <button id="generate-calendar" class="button">Generate 365-Day Farming Plan</button>
 
