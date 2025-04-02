@@ -8,11 +8,122 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Roboto:wght@400;500;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .glass-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .glass-container .btn {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 40px;
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .glass-container .btn a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(200, 222, 255, 0.05);
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 5px;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            overflow: hidden;
+            color: white;
+            font-weight:400px;
+            z-index: 1;
+            transition: 0.5s;
+            backdrop-filter: blur(10px);
+            font-size: 1.1rem;
+        }
+        .glass-container .btn:hover a {
+            letter-spacing: 1.5px;
+        }
+        .glass-container .btn a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+            transform: skewX(45deg) translate(0);
+            transition: 0.5s;
+            filter: blur(0px);
+        }
+        .glass-container .btn:hover a::before {
+            transform: skewX(45deg) translate(150px);
+        }
+        .glass-container .btn::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translatex(-50%);
+            width: 20px;
+            background: black;
+            border-radius: 6px;
+            transition: 0.5s;
+            transition-delay: 0.5;
+        }
+        .glass-container .btn:hover::before {
+            bottom: 0;
+            height: 50%;
+            width: 60%;
+            border-radius: 20px;
+        }
+
+        .glass-container .btn::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translatex(-50%);
+            top: 0px;
+            width: 30px;
+            height: 6px;
+            background: black;
+            border-radius: 6px;
+            transition: 0.5s;
+            transition-delay: 0.5;
+        }
+        .glass-container .btn:hover::after {
+            top: 0;
+            height: 50%;
+            width: 60%;
+            border-radius: 20px;
+        }
+        .glass-container .btn:nth-child(1)::before,
+        .glass-container .btn:nth-child(1)::after {
+            background: black;
+        }
+
         body {
             scroll-behavior: smooth;
             opacity: 0;
             animation: fadeIn 1.5s ease-out forwards;
-;
+        ;
         }
 
         @keyframes fadeIn {
@@ -37,7 +148,7 @@
 
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -60,28 +171,28 @@
 </header>
 
 
-<!-- Hero Section -->
 <section class="h-screen parallax bg-cover bg-center mb-0"
          style="background-image: url('https://vectorglobe.com/wp-content/uploads/2024/06/What-Are-the-Benefits-of-Sustainability.jpg');">
     <div class="flex items-center justify-center h-full bg-black bg-opacity-60">
         <div class="text-center text-white px-4">
             <h1 class="text-6xl font-bold mb-6">Welcome to SustainaCore</h1>
             <p class="text-lg mb-6">Innovating for a sustainable future through technology and intelligence.</p>
-            <a href="#explore" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition">Explore More</a>
+            <div class="glass-container">
+                <div class="btn"><a href="#explore">EXPLORE MORE</a></div>
+
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Features Section -->
 <section id="explore" class="py-[270px] bg-black text-center relative mb-0" style="background-image: url('https://images.huffingtonpost.com/2016-07-03-1467520631-3019058-heathrow_175811473829350.jpg'); background-repeat: no-repeat; background-size: cover;">
-    <!-- Dark Overlay -->
     <div class="absolute inset-0 bg-black opacity-50"></div>
 
     <div class="relative z-10 max-w-6xl mx-auto px-4">
         <h2 class="text-5xl font-bold text-white mb-12">Our Vision</h2>
         <p class="text-xl text-white mb-12">Empowering individuals and businesses with cutting-edge tools to drive sustainability and efficiency. We aim to provide smart, innovative solutions that make a lasting impact on the world.</p>
         <div class="grid md:grid-cols-3 gap-12">
-            <div class="p-8 bg-white text-black rounded-lg shadow-xl hover:shadow-2xl transition">
+            <div class="p-8 bg-white text-black rounded-lg shadow-xl hover: transition">
                 <h3 class="text-3xl font-semibold text-black mb-6">AI-Powered Insights</h3>
                 <p class="text-black">Harness AI-driven analytics for smarter, greener decisions. Our tools provide actionable insights that allow businesses to reduce waste, optimize resources, and improve efficiency.</p>
             </div>
@@ -97,22 +208,18 @@
     </div>
 </section>
 
-<!-- Data Visualization Section -->
-<section class="py-[270px] bg-gray-800 text-center relative mb-0" id="methods" style="background-image: url('https://sustainable.kmutt.ac.th/wp-content/uploads/2023/12/DALL%C2%B7E-2024-01-13-19.40.16-Create-a-horizontal-FULL-HD-cover-image-for-an-article-titled-Sustainable-Horizons_-Navigating-the-Path-Towards-a-Greener-2024.-The-image-should-ill.png'); background-repeat: no-repeat; background-size: cover;">
-    <!-- Dark Overlay -->
+<section class="py-[270px] bg-gray-800 text-center relative mb-0" id="methods" style="background-image: url('https://www.chapmantaylor.com/uploads/Yangpu_221206_115240.jpg'); background-repeat: no-repeat; background-size: cover;">
     <div class="absolute inset-0 bg-black opacity-50"></div>
 
     <div class="relative z-10 max-w-6xl mx-auto px-4">
         <h2 class="text-4xl font-bold text-white mb-12">Our Methods</h2>
         <p class="text-lg text-gray-300 mb-8">We utilize cutting-edge technologies and intelligent analytics to drive our sustainable initiatives.</p>
         <div class="grid md:grid-cols-2 gap-8">
-            <!-- Infographic 1 -->
             <div class="p-6 bg-gradient-to-br from-green-700 to-gray-800 rounded-lg shadow-lg hover:shadow-2xl transition">
                 <h3 class="text-2xl font-semibold text-green-400 mb-4">Sustainability Metrics</h3>
                 <p class="text-gray-300 mb-4">Real-time tracking of sustainability performance across key metrics.</p>
                 <canvas id="sustainabilityChart" class="w-full h-64"></canvas>
             </div>
-            <!-- Infographic 2 -->
             <div class="p-6 bg-gradient-to-br from-green-700 to-gray-800 rounded-lg shadow-lg hover:shadow-2xl transition">
                 <h3 class="text-2xl font-semibold text-green-400 mb-4">Efficiency Growth</h3>
                 <p class="text-gray-300 mb-4">Analyzing resource usage to showcase growth in operational efficiency.</p>
@@ -122,7 +229,6 @@
     </div>
 </section>
 <script>
-    // Sustainability Metrics Chart (Futuristic Sustainability Colors)
     var ctx1 = document.getElementById('sustainabilityChart').getContext('2d');
     var sustainabilityChart = new Chart(ctx1, {
         type: 'line',
@@ -131,10 +237,10 @@
             datasets: [{
                 label: 'Sustainability Score',
                 data: [45, 56, 67, 74, 85, 92, 100],
-                backgroundColor: 'rgba(39, 174, 96, 0.2)', // Futuristic green (energy efficient)
-                borderColor: 'rgba(39, 174, 96, 1)', // Strong green (sustainability)
+                backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                borderColor: 'rgba(39, 174, 96, 1)',
                 borderWidth: 3,
-                pointBackgroundColor: 'rgba(39, 174, 96, 1)', // Green
+                pointBackgroundColor: 'rgba(39, 174, 96, 1)',
                 tension: 0.4
             }]
         },
@@ -144,26 +250,25 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#fff' // white ticks for contrast
+                        color: '#fff'
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#fff' // white ticks for contrast
+                        color: '#fff'
                     }
                 }
             },
             plugins: {
                 legend: {
                     labels: {
-                        color: '#fff' // white text for legend
+                        color: '#fff'
                     }
                 }
             }
         }
     });
 
-    // Efficiency Growth Chart (Futuristic High-tech Sustainability Colors)
     var ctx2 = document.getElementById('efficiencyChart').getContext('2d');
     var efficiencyChart = new Chart(ctx2, {
         type: 'bar',
@@ -173,16 +278,16 @@
                 label: 'Efficiency Growth (%)',
                 data: [10, 20, 35, 45],
                 backgroundColor: [
-                    'rgba(0, 230, 255, 0.8)', // Electric cyan (futuristic energy)
-                    'rgba(0, 255, 100, 0.8)', // Neon green (eco-friendly)
-                    'rgba(255, 158, 0, 0.8)', // Bright orange (energy efficiency)
-                    'rgba(133, 0, 255, 0.8)' // Futuristic purple (high-tech)
+                    'rgba(0, 230, 255, 0.8)',
+                    'rgba(0, 255, 100, 0.8)',
+                    'rgba(255, 158, 0, 0.8)',
+                    'rgba(133, 0, 255, 0.8)'
                 ],
                 borderColor: [
-                    'rgba(0, 230, 255, 1)', // Electric cyan border
-                    'rgba(0, 255, 100, 1)', // Neon green border
-                    'rgba(255, 158, 0, 1)', // Bright orange border
-                    'rgba(133, 0, 255, 1)' // Futuristic purple border
+                    'rgba(0, 230, 255, 1)',
+                    'rgba(0, 255, 100, 1)',
+                    'rgba(255, 158, 0, 1)',
+                    'rgba(133, 0, 255, 1)'
                 ],
                 borderWidth: 2
             }]
@@ -193,19 +298,19 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        color: '#fff' // white ticks for contrast
+                        color: '#fff'
                     }
                 },
                 x: {
                     ticks: {
-                        color: '#fff' // white ticks for contrast
+                        color: '#fff'
                     }
                 }
             },
             plugins: {
                 legend: {
                     labels: {
-                        color: '#fff' // white text for legend
+                        color: '#fff'
                     }
                 }
             }
@@ -213,7 +318,6 @@
     });
 </script>
 
-<!-- Footer -->
 <footer class="custom-footer mt-0">
     <div class="footer-content">
         <h2 class="font-bold text-3xl leading-snug">
@@ -231,8 +335,6 @@
         <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
 </footer>
-
-<!-- Chart.js Script -->
 
 </body>
 </html>

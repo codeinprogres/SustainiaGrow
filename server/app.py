@@ -183,4 +183,4 @@ def my_account():
     return render_template('my_account.html', user=user, pricing=pricing_details)
 # ------------------- Run the Flask App -------------------
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)

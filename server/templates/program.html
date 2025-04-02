@@ -16,6 +16,109 @@
             background-size: cover;
             background-position: center;
         }
+
+        .glass-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .glass-container .btn {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 40px;
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .glass-container .btn a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(200, 222, 255, 0.05);
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 5px;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            overflow: hidden;
+            color: white;
+            font-weight:400px;
+            z-index: 1;
+            transition: 0.5s;
+            backdrop-filter: blur(10px);
+            font-size: 1.1rem;
+        }
+        .glass-container .btn:hover a {
+            letter-spacing: 1.5px;
+        }
+        .glass-container .btn a::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+            transform: skewX(45deg) translate(0);
+            transition: 0.5s;
+            filter: blur(0px);
+        }
+        .glass-container .btn:hover a::before {
+            transform: skewX(45deg) translate(150px);
+        }
+        .glass-container .btn::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translatex(-50%);
+            width: 20px;
+            background: black;
+            border-radius: 6px;
+            transition: 0.5s;
+            transition-delay: 0.5;
+        }
+        .glass-container .btn:hover::before {
+            bottom: 0;
+            height: 50%;
+            width: 60%;
+            border-radius: 20px;
+        }
+
+        .glass-container .btn::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translatex(-50%);
+            top: 0px;
+            width: 30px;
+            height: 6px;
+            background: black;
+            border-radius: 6px;
+            transition: 0.5s;
+            transition-delay: 0.5;
+        }
+        .glass-container .btn:hover::after {
+            top: 0;
+            height: 50%;
+            width: 60%;
+            border-radius: 20px;
+        }
+        .glass-container .btn:nth-child(1)::before,
+        .glass-container .btn:nth-child(1)::after {
+            background: black;
+        }
+
     </style>
 </head>
 
@@ -24,7 +127,7 @@
 <script src="{{ url_for('static', filename='js/program.js') }}"></script>
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -66,7 +169,10 @@
         <div class="text-center text-white px-4">
             <h1 class="text-5xl font-bold mb-4">Empowering Sustainability, One Innovation at a Time</h1>
             <p class="text-lg mb-6">Explore our services designed to revolutionize sustainability through cutting-edge technology and data-driven solutions.</p>
-            <a href="#services" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-lg transition">Explore Services</a>
+            <div class="glass-container">
+                <div class="btn"><a href="#services">EXPLORE SERVICES</a></div>
+
+            </div>
         </div>
     </div>
 </section>
@@ -106,29 +212,19 @@
         <div class="max-w-6xl mx-auto px-4 text-center text-white">
             <h2 class="text-4xl font-bold mb-8">Why Choose Us</h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-6">
+                <div class="bg-gradient-to-br from-blue-950 to-black p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
                     <h3 class="text-2xl font-semibold mb-4 text-blue-400">Eco-Innovation</h3>
                     <p class="text-gray-300">Leverage the latest sustainable technologies.</p>
                 </div>
-                <div class="p-6">
+                <div class="bg-gradient-to-br from-blue-950 to-black p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
                     <h3 class="text-2xl font-semibold mb-4 text-blue-400">AI-Powered Insights</h3>
                     <p class="text-gray-300">Make data-driven decisions with confidence.</p>
                 </div>
-                <div class="p-6">
+                <div class="bg-gradient-to-br from-blue-950 to-black p-6 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition">
                     <h3 class="text-2xl font-semibold mb-4 text-blue-400">Expert Support</h3>
                     <p class="text-gray-300">Guidance from sustainability experts.</p>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- Sustainability Insights (API Data) -->
-<section id="insights" class="py-20 bg-gray-900">
-    <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center text-white mb-12">Sustainability Insights</h2>
-        <div id="insights-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- API Data Will Be Injected Here -->
         </div>
     </div>
 </section>
