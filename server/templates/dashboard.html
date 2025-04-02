@@ -2595,31 +2595,41 @@
 </style>
 
 <script>
+    let efficiencyChart; // Store chart instance
+
     document.getElementById('calculate-btn').addEventListener('click', function() {
         const totalArea = parseFloat(document.getElementById('total-area').value);
         const cropYield = parseFloat(document.getElementById('crop-yield').value);
         const waterUsage = parseFloat(document.getElementById('water-usage').value);
 
-        if (isNaN(totalArea) || isNaN(cropYield) || isNaN(waterUsage)) {
-            alert('Please enter valid numbers for all fields.');
+        if (isNaN(totalArea) || isNaN(cropYield) || isNaN(waterUsage) || totalArea <= 0 || waterUsage <= 0) {
+            alert('Please enter valid positive numbers for all fields.');
             return;
         }
 
-        const yieldPerAcre = cropYield;
-        const waterEfficiency = cropYield / waterUsage;
+        // Efficiency calculations
+        const yieldPerAcre = cropYield / totalArea; // Yield per acre
+        const waterEfficiency = (cropYield / waterUsage) * 100; // Efficiency as percentage
 
-        document.getElementById('yield-result').textContent = yieldPerAcre.toFixed(2);
-        document.getElementById('water-efficiency').textContent = waterEfficiency.toFixed(2);
+        // Display results
+        document.getElementById('yield-result').textContent = yieldPerAcre.toFixed(2) + " units/acre";
+        document.getElementById('water-efficiency').textContent = waterEfficiency.toFixed(2) + "% efficiency";
 
         document.getElementById('efficiency-result').style.display = 'block';
 
+        // Destroy previous chart if it exists
+        if (efficiencyChart) {
+            efficiencyChart.destroy();
+        }
+
+        // Create or update the Chart.js graph
         const ctx = document.getElementById('efficiencyChart').getContext('2d');
-        new Chart(ctx, {
+        efficiencyChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Yield per Acre', 'Water Efficiency'],
                 datasets: [{
-                    label: 'Farm Efficiency',
+                    label: 'Farm Efficiency (%)',
                     data: [yieldPerAcre, waterEfficiency],
                     backgroundColor: ['#4CAF50', '#FF9800'],
                     borderColor: ['#388e3c', '#F57C00'],
@@ -2637,6 +2647,7 @@
             }
         });
     });
+
 </script>
 
 <div class="precipitation-wrapper">
