@@ -2595,7 +2595,7 @@
 </style>
 
 <script>
-    let efficiencyChart; // Store chart instance
+    let efficiencyChart;
 
     document.getElementById('calculate-btn').addEventListener('click', function() {
         const totalArea = parseFloat(document.getElementById('total-area').value);
@@ -2607,22 +2607,18 @@
             return;
         }
 
-        // Efficiency calculations
-        const yieldPerAcre = cropYield / totalArea; // Yield per acre
-        const waterEfficiency = (cropYield / waterUsage) * 100; // Efficiency as percentage
+        const yieldPerAcre = cropYield / totalArea;
+        const waterEfficiency = (cropYield / waterUsage) * 100;
 
-        // Display results
         document.getElementById('yield-result').textContent = yieldPerAcre.toFixed(2) + " units/acre";
         document.getElementById('water-efficiency').textContent = waterEfficiency.toFixed(2) + "% efficiency";
 
         document.getElementById('efficiency-result').style.display = 'block';
 
-        // Destroy previous chart if it exists
         if (efficiencyChart) {
             efficiencyChart.destroy();
         }
 
-        // Create or update the Chart.js graph
         const ctx = document.getElementById('efficiencyChart').getContext('2d');
         efficiencyChart = new Chart(ctx, {
             type: 'bar',
