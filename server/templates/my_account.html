@@ -51,7 +51,7 @@
 
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -66,18 +66,13 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My Profile</a></li>
             <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
-            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My profile</a></li>
         </ul>
 
     </div>
 </header>
-<!--START CODE HERE: -->
 
-
-
-
-<!--START CODE HERE: -->
 <div class="flex justify-center items-center min-h-screen">
     <div class="w-full max-w-2xl bg-gradient-to-br from-gray-800 via-gray-900 to-black shadow-xl rounded-xl p-8 border border-blue-500/50 backdrop-blur-md">
         <h1 class="text-4xl font-extrabold text-blue-400 text-center mb-6">Welcome, {{ user.username }}!</h1>
@@ -115,57 +110,7 @@
         </div>
     </div>
 </div>
-<!--END HERE-->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--END HERE-->
-<!-- Footer -->
 <footer class="custom-footer mt-0">
     <div class="footer-content">
         <h2 class="font-bold text-3xl leading-snug">
@@ -183,8 +128,6 @@
         <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
 </footer>
-
-<!-- Chart.js Script -->
 
 </body>
 </html>

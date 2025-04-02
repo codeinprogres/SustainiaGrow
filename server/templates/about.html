@@ -38,14 +38,6 @@
             overflow: hidden;
         }
 
-        /* Animation for Pulse Stars */
-        @keyframes pulseStars {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        /* Main Header Section */
         header {
             text-align: center;
             background: rgba(0, 0, 0, 0.85);
@@ -77,14 +69,14 @@
             opacity: 0.85;
         }
 
-        /* Header Text Glow Animation */
+
         @keyframes textGlow {
             0% { text-shadow: 0 0 35px rgba(255, 255, 255, 0.6), 0 0 65px rgba(0, 255, 255, 0.8); }
             50% { text-shadow: 0 0 55px rgba(255, 255, 255, 0.8), 0 0 85px rgba(0, 255, 255, 1); }
             100% { text-shadow: 0 0 35px rgba(255, 255, 255, 0.6), 0 0 65px rgba(0, 255, 255, 0.8); }
         }
 
-        /* Section Titles */
+
         h2 {
             font-size: 3rem;
             margin: 40px 0;
@@ -101,7 +93,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Team Section */
         .team-section {
             padding: 100px 10%;
             background: #1a2a44;
@@ -161,7 +152,7 @@
             margin-top: 5px;
         }
 
-        /* Vision Section */
+
         .vision-section {
             padding: 120px 15%;
             background: #1e2c4b;
@@ -192,7 +183,7 @@
 <body>
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -229,10 +220,8 @@
     </div>
 </div>
 
-<!-- Background Cosmic Effect -->
 <div class="background"></div>
 
-<!-- Main Header -->
 <header style="position: relative; top: -5rem;">
     <img
             style="width: 100vw; position: absolute; top: 0; left: 0; z-index: 1; "
@@ -255,9 +244,6 @@
     </div>
 </header>
 
-
-
-<!-- Vision Section -->
 <div class="vision-section" style="margin-top: 30rem;">
     <h2 style="text-align: center;">Our Vision</h2>
     <p style="text-align: center;">
@@ -265,7 +251,6 @@
     </p>
 </div>
 
-<!-- Footer -->
 <footer class="custom-footer">
     <div class="footer-content">
         <h2 class="font-bold text-3xl leading-snug">
@@ -283,7 +268,6 @@
         <p class="copyright">© 2025 SUSTAINACORE, ALL RIGHTS RESERVED</p>
     </div>
 </footer>
-
 
 </body>
 </html>

@@ -18,7 +18,7 @@
         }
 
         .custom-footer {
-            margin-top: auto;  /* Pushes the footer to the bottom */
+            margin-top: auto;
         }
 
         .pricing-section {
@@ -39,8 +39,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);  /* Black overlay with 50% opacity */
-            z-index: -1;  /* Ensure it stays behind the content */
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: -1;
         }
 
         .pricing-background {
@@ -60,7 +60,6 @@
                 opacity: 1;
             }
         }
-
 
         .pricing-container {
             max-width: 1280px;
@@ -91,21 +90,21 @@
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: 1fr;  /* Default to one column */
+            grid-template-columns: 1fr;
             gap: 32px;
             padding: 20px;
-            justify-content: center;  /* Center items on the main axis */
+            justify-content: center;
         }
 
         @media (min-width: 640px) {
             .pricing-grid {
-                grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (min-width: 1024px) {
             .pricing-grid {
-                grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -197,8 +196,6 @@
             background-image: linear-gradient(to right, #2563eb, #7e22ce);
         }
 
-
-
     </style>
     <script>
     </script>
@@ -208,7 +205,7 @@
 <body class="fade-in">
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -223,8 +220,8 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My Profile</a></li>
             <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
-            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My profile</a></li>
         </ul>
 
     </div>

@@ -200,7 +200,7 @@
 <body class="body-background">
 <header class="navbar">
     <div class="navbar-container">
-        <a href="/" class="navbar-logo-link">  <!-- Added a new CSS call that will be used for the href  -->
+        <a href="/" class="navbar-logo-link">
             <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="SustainaCore Logo" class="navbar-logo">
         </a>
         <button class="navbar-toggle" id="navbar-toggle">
@@ -215,8 +215,8 @@
             <li><a href="/pricing" class="navbar-item">Pricing</a></li>
             <li><a href="/market" class="navbar-item">Marketplace</a></li>
             <li><a href="/dashboard" class="navbar-item">Dashboard</a></li>
+            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My Profile</a></li>
             <li><a href="{{ url_for('logout') }}" class="navbar-item">Logout</a></li>
-            <li><a href="{{ url_for('my_account') }}" class="navbar-item">My profile</a></li>
         </ul>
 
     </div>
