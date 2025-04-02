@@ -239,7 +239,7 @@ ul {
     padding: 10px;
 }
 
-#chatbot-input {
+#chatbot-input {!important
     flex: 1;
     padding: 8px;
     border: 1px solid #ddd;
@@ -260,9 +260,9 @@ ul {
     background-color: #1b5e20;
 }
 
-.user-message {
+.user-message {!important;
     background-color: #d4f1f4;
-    color: #000;
+    color: #000; !important;
     padding: 8px;
     margin: 5px;
     border-radius: 5px;
@@ -666,7 +666,7 @@ body {
     background: #2a5298;
 }
 .farm-planner {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(135deg, #20475c, #0d1c35, #000000);
     color: #ffffff;
     padding: 40px;
     border-radius: 15px;
@@ -688,7 +688,36 @@ body {
     width: 100%;
     max-width: 100%;
 }
+/* Media Queries for Responsiveness */
+@media (max-width: 1440px) {
+    .farm-planner {
+        position: relative;
+        padding: 30px; /* Reduce padding for smaller screens */
+        width: 670px; /* Increase width to 1000px for screens up to 1200px */
 
+    }
+}
+
+@media (max-width: 992px) {
+    .farm-planner {
+        padding: 25px; /* Adjust padding for medium-sized screens */
+        max-width: 800px; /* Ensure it doesn't exceed a smaller width */
+    }
+}
+
+@media (max-width: 768px) {
+    .farm-planner {
+        padding: 20px; /* Further reduce padding for mobile */
+        max-width: 100%; /* Allow it to take up the full width */
+    }
+}
+
+@media (max-width: 480px) {
+    .farm-planner {
+        padding: 15px; /* Minimal padding on very small screens */
+        max-width: 100%; /* Full width for mobile devices */
+    }
+}
 
 .planner-title {
     font-size: 2.5rem;
@@ -859,6 +888,7 @@ body {
     margin-left: 0; /* Reset margin */
     margin-right: 0;
     padding: 0; /* Reset padding */
+    overflow-x: hidden;
 }
 
 @keyframes backgroundMove {
@@ -1258,7 +1288,7 @@ section {
     margin-bottom: 40px;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
     .cart {
         margin: 2rem;
     }
@@ -1682,7 +1712,7 @@ nav
         flex-direction: row;
         justify-content: space-between;
 
-        transition: color $speed ease;
+        transition: color$speed ease;
 
         .thunder &
         {

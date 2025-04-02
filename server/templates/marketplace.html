@@ -11,6 +11,7 @@
             background: linear-gradient(135deg, #0f172a, #1e293b);
             margin: 0;
             padding: 0;
+
         }
 
         a {
@@ -36,6 +37,19 @@
             background-position: center;
             position: relative;
             margin-bottom: -30px;
+
+            /* Fade-in effect */
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .background-overlay {
@@ -207,6 +221,21 @@
 
     </div>
 </header>
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
+
 <section class="marketplace">
     <div class="marketplace-header">
         <h2>Marketplace</h2>

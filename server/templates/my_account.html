@@ -34,6 +34,20 @@
 <body class=" bg-gradient-to-br from-gray-900 via-blue-950 to-black text-white font-sans">
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <script src="{{ url_for('static', filename='js/program.js') }}"></script>
+<div id="chatbot-popup">
+    <div id="chatbot-icon" class="chatbot-logo">
+        <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Chatbot Logo">
+    </div>
+    <div id="chatbot" class="chatbot-container hidden">
+        <div id="chatbot-header" class="chatbot-header">SustainaCore Assistant</div>
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div class="chatbot-input-container">
+            <label for="chatbot-input" class="visually-hidden"></label>
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." />
+            <button id="chatbot-send">Send</button>
+        </div>
+    </div>
+</div>
 
 <header class="navbar">
     <div class="navbar-container">

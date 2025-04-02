@@ -4,26 +4,24 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_bcrypt import Bcrypt
 import requests
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-# 🔹 App Configuration
-app.config['SECRET_KEY'] = 'your_secret_key'  # Change this!
+app.config['SECRET_KEY'] = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
-# 🔹 Database & Authentication Setup
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login_page'  # Change the view name to login_page
+login_manager.login_view = 'login_page'
 
-# 🔹 OpenAI API Configuration (Optional)
-OPENAI_API_KEY = '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'  # Replace with your actual OpenAI API Key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions'
 
-
-# ------------------- User Model -------------------
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -33,11 +31,17 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# 🔹 Initialize DB if not exists
 with app.app_context():
     db.create_all()
 
-# ------------------- Routes -------------------
+@app.route('/get-GM-api-key')
+def get_gm_api_key():
+    return jsonify({"OPENAI_GM_KEY": os.getenv("OPENAI_GM_KEY")})
+
+@app.route('/get-OM-api-key')
+def get_om_api_key():
+    return jsonify({"OPENAI_OM_KEY": os.getenv("OPENAI_OM_KEY")})
+
 @app.route('/')
 def index():
     return render_template('index.html', user=current_user)
@@ -50,7 +54,6 @@ def program():
 def login_page():
     messages = get_flashed_messages(with_categories=True)
 
-    # Filter out duplicate "Please log in to access this page."
     unique_messages = []
     seen_messages = set()
 
@@ -60,7 +63,6 @@ def login_page():
             unique_messages.append((category, message))
 
     return render_template('login.html', messages=unique_messages)
-
 
 @app.route('/market')
 def market():
@@ -82,23 +84,6 @@ def contact():
 @app.route('/pricing')
 def pricing():
     return render_template('pricing.html')
-
-# ------------------- Chat API -------------------
-
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    try:
-        user_message = request.json.get('message')
-        if not user_message:
-            return jsonify({'message': 'Message is required.'}), 400
-
-        bot_response = get_openai_response(user_message)
-        return jsonify({'message': bot_response}), 200
-    except Exception as e:
-        print(f"Error handling chat message: {e}")
-        return jsonify({'message': 'Server error. Please try again later.'}), 500
-
-
 
 def get_openai_response(user_message):
     try:
@@ -124,7 +109,20 @@ def get_openai_response(user_message):
         print(f"Request error: {e}")
         return "Sorry, I couldn't process your request."
 
-from flask import session  # Import session to clear flashed messages
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    try:
+        user_message = request.json.get('message')
+        if not user_message:
+            return jsonify({'message': 'Message is required.'}), 400
+
+        bot_response = get_openai_response(user_message)
+        return jsonify({'message': bot_response}), 200
+    except Exception as e:
+        print(f"Error handling chat message: {e}")
+        return jsonify({'message': 'Server error. Please try again later.'}), 500
+
+from flask import session
 
 @app.route('/auth', methods=['POST'])
 def auth():
@@ -132,11 +130,11 @@ def auth():
         username = request.form['username']
         password = request.form['password']
 
-        if 'signup' in request.form:  # Signup logic
+        if 'signup' in request.form:
             existing_user = User.query.filter_by(username=username).first()
             if existing_user:
                 flash('Username already exists. Try another one.', 'danger')
-                return redirect(url_for('login_page'))  # Redirect to login page
+                return redirect(url_for('login_page'))
 
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             new_user = User(username=username, password=hashed_password)
@@ -144,9 +142,9 @@ def auth():
             db.session.commit()
 
             flash('Successfully signed up! Please log in.', 'success')
-            return redirect(url_for('login_page'))  # Redirect to login page
+            return redirect(url_for('login_page'))
 
-        elif 'login' in request.form:  # Login logic
+        elif 'login' in request.form:
             user = User.query.filter_by(username=username).first()
             if user and bcrypt.check_password_hash(user.password, password):
                 login_user(user)
@@ -154,33 +152,31 @@ def auth():
                 return redirect(url_for('dashboard'))
             else:
                 flash('Invalid username or password', 'danger')
-                return redirect(url_for('login_page'))  # Stay on login page if failed
+                return redirect(url_for('login_page'))
 
-    return redirect(url_for('login_page'))  # Redirect if something goes wrong
-
+    return redirect(url_for('login_page'))
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    session.clear()  # Clears all flashed messages
+    session.clear()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('login_page'))  # Redirect to login page after logout
+    return redirect(url_for('login_page'))
 
 @app.route('/my_account')
 @login_required
 def my_account():
-    # Retrieve the current user details
+
     user = current_user
-    # Sample pricing-related data (can be adjusted according to your pricing model)
+
     pricing_details = {
         "Basic Plan": "$0/month",
         "Premium Plan": "$29/month",
         "Enterprise Plan": "$79/month"
     }
 
-    # Pass the user details and pricing info to the template
     return render_template('my_account.html', user=user, pricing=pricing_details)
-# ------------------- Run the Flask App -------------------
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)

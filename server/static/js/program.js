@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Ensure that the map and weather data are loaded
+
     const loadMap = (lat, lng) => {
         const mapElement = document.getElementById("map");
         if (mapElement) {
@@ -15,8 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Map container not found.");
         }
     };
+    let apiKey
+    fetch('/get-OM-api-key')
+        .then(response => response.json())
+        .then(data => {
+            apiKey = data.OPENAI_OM_KEY;
+            console.log("API Key:", apiKey);
+        })
+        .catch(error => console.error("Error fetching API Key:", error));
 
-    const apiKey = '23a5c90ba6c2d09d9332b206ff2d8459';
     const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
     const fetchWeatherData = (lat, lon) => {
@@ -55,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const storeWeatherInfo = (data) => {
-        // Store weather data in a global variable for reuse
+
         window.weatherInfo = {
             temperature: data.main.temp,
             humidity: data.main.humidity,
@@ -65,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('Stored Weather Info:', window.weatherInfo);
     };
 
-    // Geocode Address
     const geocodeAddress = (address) => {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address }, (results, status) => {
@@ -85,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
         else alert("Please enter an address.");
     });
 
-    // Generate 30-Day Plan
     document.getElementById("section-title").addEventListener("click", () => {
         const selectedCrops = Array.from(document.querySelectorAll("#crop-options input:checked")).map(
             (checkbox) => checkbox.value
@@ -96,25 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // const calendarContainer = document.getElementById("calendar-container");
-        // const calendar = document.getElementById("calendar");
-        // calendar.innerHTML = ""; // Clear previous plan
-        //
-        // selectedCrops.forEach((crop) => {
-        //     const cropPlan = document.createElement("div");
-        //     cropPlan.classList.add("crop-plan");
-        //     cropPlan.innerHTML = `
-        //         <h4>${crop}</h4>
-        //         <p><strong>Watering Schedule:</strong> Water every 2 days.</p>
-        //         <p><strong>Harvest Time:</strong> Harvest in 30 days.</p>
-        //         <p><strong>Ideal Temperature:</strong> 65-75°F.</p>
-        //         <p><strong>Additional Tips:</strong> Ensure good soil drainage.</p>
-        //     `;
-        //     calendar.appendChild(cropPlan);
-        // });
-
-        // calendarContainer.classList.remove("hidden");
     });
 
-    // Removed FullCalendar functionality
 });

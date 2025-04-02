@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Navbar Toggle
+
     document.getElementById('navbar-toggle').addEventListener('click', function () {
         const navbarList = document.getElementById('navbar-list');
         navbarList.classList.toggle('show');
     });
 
-    // Chatbot Toggle
     const chatbotIcon = document.getElementById('chatbot-icon');
     const chatbotContainer = document.getElementById('chatbot');
 
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Chatbot icon or container not found.');
     }
 
-    // Chatbot Messaging
     const sendButton = document.getElementById('chatbot-send');
     const userInput = document.getElementById('chatbot-input');
     const messagesDiv = document.getElementById('chatbot-messages');
@@ -50,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: inputValue }),
-            });
+            })
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
